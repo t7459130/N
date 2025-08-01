@@ -4,17 +4,17 @@ import Head from 'next/head';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
 
-import Sellyourcar from '../Sellyourcar';
-import Inventory from '../Inventory';
-import Testimonials from '../Testimonials';
-import OtherServices from '../OtherServices';
-import NewsAndEvents from '../NewsAndEvents';
-import ContactUs from '../ContactUs';
-import CarDetail from '../CarDetail';
+import Sellyourcar from '../components/Sellyourcar';
+import Inventory from '../components/Inventory';
+import Testimonials from '../components/Testimonials';
+import OtherServices from '../components/OtherServices';
+import NewsAndEvents from '../components/NewsAndEvents';
+import ContactUs from '../components/ContactUs';
+import CarDetail from '../components/CarDetail';
 
 import { AdminProvider, useAdmin } from '../AdminContext';
-import AddCarPage from '../AddCarPage';
-import SearchOverlay from '../SearchOverlay';
+import AddCarPage from '../components/AddCarPage';
+import SearchOverlay from '../components/SearchOverlay';
 
 function AppContent() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
