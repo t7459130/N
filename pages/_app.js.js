@@ -1,5 +1,5 @@
 // pages/_app.js
-import '../styles/App.css';
+import '../styles/main.css';
 import { AdminProvider } from '../AdminContext';
 
 export default function MyApp({ Component, pageProps }) {
