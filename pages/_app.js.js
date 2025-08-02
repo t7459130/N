@@ -1,12 +1,11 @@
+// pages/_app.js
 import '../styles/main.css';
-import { AdminProvider } from '../components/AdminContext'; // adjust path if needed
+import { AdminProvider } from '../components/AdminContext';
 
-function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
     <AdminProvider>
       <Component {...pageProps} />
     </AdminProvider>
   );
 }
-
-export default MyApp;

@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState } from 'react';
+// components/AdminContext.js
+import { createContext, useContext, useState } from 'react';
 
 const AdminContext = createContext();
 
-export function AdminProvider({ children }) {
+export const AdminProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const loginAsAdmin = (password) => {
@@ -22,8 +23,6 @@ export function AdminProvider({ children }) {
       {children}
     </AdminContext.Provider>
   );
-}
+};
 
-export function useAdmin() {
-  return useContext(AdminContext);
-}
+export const useAdmin = () => useContext(AdminContext);
