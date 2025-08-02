@@ -666,3 +666,15 @@ h3 {
 .description {
   margin-top: 20px;
 }
+
+/* styles/globals.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #000; /* Or your theme */
+  color: #fff;      /* Example */
+  font-family: sans-serif;
+}

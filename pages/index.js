@@ -12,7 +12,7 @@ import NewsAndEvents from '../components/NewsAndEvents';
 import ContactUs from '../components/ContactUs';
 import CarDetail from '../components/CarDetail';
 
-import { AdminProvider, useAdmin } from '../AdminContext';
+import { AdminProvider, useAdmin } from '../components/AdminContext';
 import AddCarPage from '../components/AddCarPage';
 import SearchOverlay from '../components/SearchOverlay';
 
@@ -170,13 +170,13 @@ function AppContent() {
         <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/inventory">Inventory</Link></li>
+            <li><Link href="/Inventory">Inventory</Link></li>
             <li><Link href="/about">About Us</Link></li>
             <li><Link href="/contact">Contact Us</Link></li>
             <li><Link href="/sell">Sell Your Car</Link></li>
-            <li><Link href="/news">News and Events</Link></li>
-            <li><Link href="/services">Other Services</Link></li>
-            <li><Link href="/testimonials">Testimonials</Link></li>
+            <li><Link href="/NewsAndEvents">News and Events</Link></li>
+            <li><Link href="/OtherServicess">Other Services</Link></li>
+            <li><Link href="/Testimonials">Testimonials</Link></li>
             {isAdmin && <li><Link href="/admin/add-car">Add Car (Admin)</Link></li>}
           </ul>
         </nav>
@@ -209,13 +209,11 @@ function AppContent() {
             {cars.map((car) => (
               <div key={car.id} className="car-card">
                 <Link href={`/car/${car.id}`}>
-                  <a>
-                    <img src={car.images[0]} alt={`${car.make} ${car.model}`} />
-                    <div className="car-details">
-                      <h3>{car.year} {car.make} {car.model}</h3>
-                      <p>Price: £{car.price}</p>
-                    </div>
-                  </a>
+                  <img src={car.images[0]} alt={`${car.make} ${car.model}`} />
+                  <div className="car-details">
+                    <h3>{car.year} {car.make} {car.model}</h3>
+                    <p>Price: £{car.price}</p>
+                  </div>
                 </Link>
               </div>
             ))}
