@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useAdmin } from './components/AdminContext';
-import CarForm from './components/CarForm';
+import { useAdmin } from '../components/AdminContext';
+import CarForm from '../components/CarForm';
 
 const AddCarPage = () => {
   const { isAdmin, loginAsAdmin, logout } = useAdmin();
