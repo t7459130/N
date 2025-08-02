@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { getUploadUrl } from '@vercel/blob';
 
 function CarForm({ onAddCar }) {
   const [carData, setCarData] = useState({
@@ -24,17 +23,22 @@ function CarForm({ onAddCar }) {
       const uploadedUrls = [];
 
       for (const file of files) {
-        // Get upload URL for each file
-        const { url, token, uploadUrl } = await getUploadUrl({ name: file.name });
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'carscars'); // Your Cloudinary unsigned upload preset
 
-        await fetch(uploadUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type },
-          body: file,
+        const res = await fetch('https://api.cloudinary.com/v1_1/dgwbnya5f/image/upload', {
+          method: 'POST',
+          body: formData,
         });
 
-        // Store the public URL (without query params)
-        uploadedUrls.push(url.split('?')[0]);
+        const data = await res.json();
+
+        if (data.error) {
+          throw new Error(data.error.message);
+        }
+
+        uploadedUrls.push(data.secure_url);
       }
 
       setCarData((prev) => ({
@@ -93,9 +97,9 @@ function CarForm({ onAddCar }) {
       <label>Upload Images</label>
       <input type="file" accept="image/*" multiple onChange={handleFileInput} disabled={uploading} />
       {uploading && <p>Uploading images...</p>}
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: 10 }}>
         {carData.images.map((url, idx) => (
-          <img key={idx} src={url} alt={`Car ${idx}`} style={{ width: 100, marginRight: 10 }} />
+          <img key={idx} src={url} alt={`Car ${idx}`} style={{ width: 100, marginRight: 10, marginBottom: 10 }} />
         ))}
       </div>
 

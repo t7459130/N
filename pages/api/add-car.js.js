@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-// Enable built-in JSON parsing
+// Next.js built-in JSON parser enabled by default, but config is explicit here
 export const config = {
   api: {
     bodyParser: true,
@@ -21,30 +21,32 @@ export default async function handler(req, res) {
       description, images
     } = req.body;
 
-    if (!make || !model || !year || !price || !images?.length) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    // Basic validation: required fields + images array must exist and have length
+    if (!make || !model || !year || !price || !Array.isArray(images) || images.length === 0) {
+      return res.status(400).json({ error: 'Missing required fields or images' });
     }
 
     const client = new MongoClient(uri);
     await client.connect();
+
     const db = client.db();
     const cars = db.collection('cars');
 
     const newCar = {
       make,
       model,
-      variant,
-      year: parseInt(year, 10),
-      price: parseFloat(price),
-      transmission,
-      fuelType,
-      mileage,
-      bodyStyle,
-      colour,
-      engineSize,
-      fuelEconomy,
-      description,
-      images, // These are already Blob URLs from Vercel
+      variant: variant || '',
+      year: Number(year),
+      price: Number(price),
+      transmission: transmission || '',
+      fuelType: fuelType || '',
+      mileage: mileage || '',
+      bodyStyle: bodyStyle || '',
+      colour: colour || '',
+      engineSize: engineSize || '',
+      fuelEconomy: fuelEconomy || '',
+      description: description || '',
+      images, // Should be array of Cloudinary URLs from frontend
       createdAt: new Date(),
     };
 
@@ -52,8 +54,8 @@ export default async function handler(req, res) {
     await client.close();
 
     res.status(201).json({ message: 'Car saved', id: result.insertedId });
-  } catch (err) {
-    console.error('DB error:', err);
+  } catch (error) {
+    console.error('DB error:', error);
     res.status(500).json({ error: 'Database error' });
   }
 }
