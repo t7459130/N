@@ -1,6 +1,6 @@
 // pages/_app.js
 import React from 'react';
-import '../styles/globals.css'; // Only if you have global styles
+import '../styles/main.css'; // Only if you have global styles
 import { AdminContextProvider } from '../components/AdminContext'; // Adjust the path if needed
 
 function MyApp({ Component, pageProps }) {
