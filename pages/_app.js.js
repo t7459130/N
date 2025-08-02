@@ -1,5 +1,5 @@
 // pages/_app.js
-import '../styles/globals.css';
+import '../styles/main.css';
 import { AdminProvider } from '../components/AdminContext';  // Import your provider
 
 function MyApp({ Component, pageProps }) {
