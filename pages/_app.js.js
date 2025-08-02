@@ -1,4 +1,3 @@
-// pages/_app.js
 import '../styles/main.css';
 import { AdminProvider } from '../components/AdminContext'; // adjust path if needed
 
