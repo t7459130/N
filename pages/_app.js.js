@@ -1,13 +1,12 @@
 // pages/_app.js
-import React from 'react';
-import '../styles/main.css'; // Only if you have global styles
-import { AdminContextProvider } from '../components/AdminContext'; // Adjust the path if needed
+import '../styles/globals.css';
+import { AdminProvider } from '../components/AdminContext';  // Import your provider
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AdminContextProvider>
+    <AdminProvider>     {/* Wrap whole app here */}
       <Component {...pageProps} />
-    </AdminContextProvider>
+    </AdminProvider>
   );
 }
 
