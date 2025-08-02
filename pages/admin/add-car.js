@@ -5,4 +5,6 @@ const AddCarPageContent = dynamic(() => import('../../components/AddCarPageConte
   ssr: false,
 });
 
-export default AddCarPageContent;
+export default function AddCarPage() {
+  return <AddCarPageContent />;
+}

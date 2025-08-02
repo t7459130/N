@@ -1,12 +1,15 @@
 // components/AddCarPageContent.js
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAdmin } from './AdminContext';
-import CarForm from './CarForm';
 
-const AddCarPageContent = () => {
+export default function AddCarPageContent() {
   const { isAdmin, loginAsAdmin, logout } = useAdmin();
   const [passwordInput, setPasswordInput] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [clientReady, setClientReady] = useState(false);
+
+  useEffect(() => {
+    setClientReady(true);
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -15,26 +18,7 @@ const AddCarPageContent = () => {
     setPasswordInput('');
   };
 
-  const handleAddCar = async (formData) => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/add-car', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error('Failed to add car');
-      const result = await response.json();
-      alert('Car added successfully!');
-    } catch (error) {
-      alert('Error adding car');
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!clientReady) return null;
 
   if (!isAdmin) {
     return (
@@ -54,13 +38,10 @@ const AddCarPageContent = () => {
   }
 
   return (
-    <div className="add-car-page">
+    <div>
+      <h2>Add Car Page</h2>
       <button onClick={logout}>Logout</button>
-      <h2>Add New Car to Inventory</h2>
-      {loading && <p>Saving car...</p>}
-      <CarForm onAddCar={handleAddCar} />
+      {/* your car form goes here */}
     </div>
   );
-};
-
-export default AddCarPageContent;
+}
