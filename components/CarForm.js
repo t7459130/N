@@ -1,6 +1,5 @@
-// CarForm.js
 import React, { useState } from 'react';
-import { upload } from '@vercel/blob';
+import { createBlobUploadUrl } from '@vercel/blob/client';
 
 function CarForm({ onAddCar }) {
   const [carData, setCarData] = useState({
@@ -23,10 +22,19 @@ function CarForm({ onAddCar }) {
 
     try {
       const uploadedUrls = [];
+
       for (let file of files) {
-        const blob = await upload(file.name, file, { access: 'public' });
-        uploadedUrls.push(blob.url);
+        const { url, uploadUrl } = await createBlobUploadUrl();
+
+        await fetch(uploadUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type },
+          body: file,
+        });
+
+        uploadedUrls.push(url);
       }
+
       setCarData((prev) => ({
         ...prev,
         images: [...prev.images, ...uploadedUrls],

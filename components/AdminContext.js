@@ -1,11 +1,10 @@
-// AdminContext.js
 import React, { createContext, useContext, useState } from 'react';
 
 const AdminContext = createContext();
 
 export const useAdmin = () => useContext(AdminContext);
 
-export const AdminProvider = ({ children }) => {
+export const AdminContextProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const loginAsAdmin = (password) => {
