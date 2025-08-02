@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createBlobUploadUrl } from '@vercel/blob/client';
+import { getUploadUrl } from '@vercel/blob/client';
 
 function CarForm({ onAddCar }) {
   const [carData, setCarData] = useState({
@@ -17,14 +17,15 @@ function CarForm({ onAddCar }) {
   };
 
   const handleFileInput = async (e) => {
-    const files = e.target.files;
+    const files = Array.from(e.target.files);
     setUploading(true);
 
     try {
       const uploadedUrls = [];
 
-      for (let file of files) {
-        const { url, uploadUrl } = await createBlobUploadUrl();
+      for (const file of files) {
+        // Get upload URL for each file
+        const { url, token, uploadUrl } = await getUploadUrl({ name: file.name });
 
         await fetch(uploadUrl, {
           method: 'PUT',
@@ -32,7 +33,8 @@ function CarForm({ onAddCar }) {
           body: file,
         });
 
-        uploadedUrls.push(url);
+        // Store the public URL (without query params)
+        uploadedUrls.push(url.split('?')[0]);
       }
 
       setCarData((prev) => ({
