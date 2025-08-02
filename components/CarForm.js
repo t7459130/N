@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getUploadUrl } from '@vercel/blob/client';
+import { getUploadUrl } from '@vercel/blob';
 
 function CarForm({ onAddCar }) {
   const [carData, setCarData] = useState({
