@@ -5,7 +5,13 @@ const AdminContext = createContext(null);
 export const AdminProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const loginAsAdmin = (pw) => {...};
+  const loginAsAdmin = (pw) => {
+    // Simple placeholder logic — replace with real auth
+    if (pw === 'admin123') {
+      setIsAdmin(true);
+    }
+  };
+
   const logout = () => setIsAdmin(false);
 
   return (

@@ -13,7 +13,7 @@ import ContactUs from '../components/ContactUs';
 import CarDetail from '../components/CarDetail';
 
 import { AdminProvider, useAdmin } from '../components/AdminContext';
-import AddCarPage from '../components/AddCarPage';
+import AddCarPage from '../components/AddCarPageContent';
 import SearchOverlay from '../components/SearchOverlay';
 
 function AppContent() {
@@ -170,7 +170,7 @@ function AppContent() {
         <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/Inventory">Inventory</Link></li>
+            <li><Link href="/inventory">Inventory</Link></li>
             <li><Link href="/about">About Us</Link></li>
             <li><Link href="/contact">Contact Us</Link></li>
             <li><Link href="/sell">Sell Your Car</Link></li>
