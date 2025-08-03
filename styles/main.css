@@ -673,8 +673,4 @@ h3 {
   padding: 0;
   box-sizing: border-box;
 }
-body {
-  background: #000; /* Or your theme */
-  color: #fff;      /* Example */
-  font-family: sans-serif;
-}
+

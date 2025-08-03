@@ -1,13 +1,14 @@
-// SearchOverlay.js
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import Image from 'next/image';
 
 const filterOptions = {
   transmission: ['Automatic', 'Manual'],
   fuelType: ['Petrol', 'Diesel', 'Electric', 'Hybrid'],
   bodyStyle: ['Sedan', 'Coupe', 'SUV', 'Hatchback', 'Convertible'],
-  colour: [], // dynamic
+  colour: [], // will be set dynamically
+  year: [], // dynamic from cars
+  make: [], // dynamic from cars
+  model: [], // dynamic from cars
 };
 
 function SearchOverlay({ cars, isOpen, onClose }) {
@@ -18,6 +19,9 @@ function SearchOverlay({ cars, isOpen, onClose }) {
     fuelType: new Set(),
     bodyStyle: new Set(),
     colour: new Set(),
+    year: new Set(),
+    make: new Set(),
+    model: new Set(),
   });
 
   const toggleFilter = (category, value) => {
@@ -30,12 +34,20 @@ function SearchOverlay({ cars, isOpen, onClose }) {
 
   const applyFilters = (car) => {
     return Object.entries(filters).every(([cat, set]) =>
-      set.size === 0 || set.has(car[cat])
+      set.size === 0 || set.has(car[cat]?.toString())
     );
   };
 
+  // Dynamically fill colours, years, makes, models from cars
+  filterOptions.colour = [...new Set(cars.map((c) => c.colour).filter(Boolean))];
+  filterOptions.year = [...new Set(cars.map((c) => c.year).filter(Boolean))].sort((a, b) => b - a);
+  filterOptions.make = [...new Set(cars.map((c) => c.make).filter(Boolean))];
+  filterOptions.model = [...new Set(cars.map((c) => c.model).filter(Boolean))];
+
   const filtered = cars
-    .filter((car) => `${car.make} ${car.model}`.toLowerCase().includes(searchInput.toLowerCase()))
+    .filter((car) =>
+      `${car.make} ${car.model}`.toLowerCase().includes(searchInput.toLowerCase())
+    )
     .filter(applyFilters)
     .sort((a, b) => {
       if (sortBy === 'price') return a.price - b.price;
@@ -45,12 +57,11 @@ function SearchOverlay({ cars, isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const uniqueColours = [...new Set(cars.map((c) => c.colour).filter(Boolean))];
-  filterOptions.colour = uniqueColours;
-
   return (
     <div className="search-overlay">
-      <button className="close-btn" onClick={onClose}><FaTimes size={20} /></button>
+      <button className="close-btn" onClick={onClose}>
+        <FaTimes size={20} />
+      </button>
 
       <div className="search-header">
         <input
@@ -59,7 +70,9 @@ function SearchOverlay({ cars, isOpen, onClose }) {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
         />
-        <button className="filter-btn">Filter</button>
+        <button className="search-btn" onClick={() => { /* trigger filtering if needed */ }}>
+          Search
+        </button>
         <button className="sort-btn">
           Sort By
           <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -78,8 +91,8 @@ function SearchOverlay({ cars, isOpen, onClose }) {
               <label key={val}>
                 <input
                   type="checkbox"
-                  checked={filters[cat].has(val)}
-                  onChange={() => toggleFilter(cat, val)}
+                  checked={filters[cat].has(val.toString())}
+                  onChange={() => toggleFilter(cat, val.toString())}
                 />
                 {val}
               </label>
@@ -92,20 +105,20 @@ function SearchOverlay({ cars, isOpen, onClose }) {
         <h3>Latest Arrivals</h3>
         <div className="car-listings">
           {filtered.slice(0, 10).map((car) => (
-            <div key={car.id} className="car-card">
+            <div key={car.id || car._id} className="car-card">
               {car.images?.[0] ? (
-                <Image
+                <img
                   src={car.images[0]}
                   alt={`${car.make} ${car.model}`}
-                  width={400}
-                  height={250}
-                  objectFit="cover"
+                  style={{ width: 400, height: 250, objectFit: 'cover' }}
                 />
               ) : (
                 <div style={{ width: 400, height: 250, backgroundColor: '#ccc' }} />
               )}
               <div className="car-details">
-                <h4>{car.year} {car.make} {car.model}</h4>
+                <h4>
+                  {car.year} {car.make} {car.model}
+                </h4>
                 <p>£{car.price}</p>
               </div>
             </div>

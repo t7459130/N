@@ -1,42 +1,57 @@
-// Inventory.js
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Layout from '../components/Layout';
 
-const carsInventory = [
-  { id: 1, make: 'Tesla', model: 'Model S', year: 2021, price: '$80,000', image: '/images/car1.jpg', link: '/car1' },
-  { id: 2, make: 'BMW', model: 'i8', year: 2020, price: '$120,000', image: '/images/car2.jpg', link: '/car2' },
-  { id: 3, make: 'Audi', model: 'R8', year: 2019, price: '$150,000', image: '/images/car3.jpg', link: '/car3' },
-  // Add more cars here if needed
-];
+export default function Inventory() {
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const Inventory = () => {
+  const fetchCars = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/cars');
+      if (!res.ok) throw new Error('Failed to fetch cars');
+      const data = await res.json();
+      setCars(data);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
   return (
-    <div className="inventory">
-      <h2>Our Inventory</h2>
-      <div className="car-listings">
-        {carsInventory.map((car) => (
-          <div key={car.id} className="car-card">
-            <Link href={car.link} passHref>
-              <a>
-                <Image 
-                  src={car.image} 
-                  alt={`${car.make} ${car.model}`} 
-                  width={400} 
-                  height={250} 
-                  objectFit="cover"
-                />
-              </a>
-            </Link>
-            <div className="car-details">
-              <h3>{car.year} {car.make} {car.model}</h3>
-              <p>Price: {car.price}</p>
-            </div>
+    <Layout>
+      <div style={{ padding: '2rem', maxWidth: 1200, margin: 'auto' }}>
+        <h1>Inventory</h1>
+        {loading ? (
+          <p>Loading cars...</p>
+        ) : cars.length === 0 ? (
+          <p>No cars available</p>
+        ) : (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+            {cars.map((car) => (
+              <div key={car._id} style={{ border: '1px solid #ccc', borderRadius: 8, width: 260, padding: 12 }}>
+                <Link href={`/car/${car._id}`}>
+                  <a style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <img
+                      src={car.images?.[0] || '/placeholder.png'}
+                      alt={`${car.make} ${car.model}`}
+                      style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 6 }}
+                    />
+                    <h3 style={{ margin: '10px 0 5px' }}>{car.make} {car.model}</h3>
+                    <p>£{car.price}</p>
+                  </a>
+                </Link>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
-    </div>
+    </Layout>
   );
-};
-
-export default Inventory;
+}

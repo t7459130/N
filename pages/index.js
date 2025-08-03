@@ -1,4 +1,3 @@
-// pages/index.js
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
@@ -25,18 +24,8 @@ function AppContent() {
   const { isAdmin } = useAdmin();
 
   const logoBatches = [
-    [
-      '/images/ferrari.png',
-      '/images/lamborghini.png',
-      '/images/rolls.png',
-      '/images/bentley.png',
-    ],
-    [
-      '/images/aston.png',
-      '/images/pagani.png',
-      '/images/bugatti.png',
-      '/images/mercedes.png',
-    ],
+    ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
+    ['/images/aston.png', '/images/pagani.png', '/images/bugatti.png', '/images/mercedes.png'],
   ];
 
   const footerLogos = [
@@ -51,48 +40,8 @@ function AppContent() {
     '/images/rolls.png',
   ];
 
-  const [cars, setCars] = useState([
-    {
-      id: 1,
-      make: 'Tesla',
-      model: 'Model S',
-      year: 2021,
-      price: '80000',
-      transmission: 'Automatic',
-      fuelType: 'Electric',
-      mileage: '15000',
-      bodyStyle: 'Sedan',
-      colour: 'Red',
-      images: ['/images/car1.jpg'],
-    },
-    {
-      id: 2,
-      make: 'BMW',
-      model: 'i8',
-      year: 2020,
-      price: '120000',
-      transmission: 'Automatic',
-      fuelType: 'Hybrid',
-      mileage: '8000',
-      bodyStyle: 'Coupe',
-      colour: 'Blue',
-      images: ['/images/car2.jpg'],
-    },
-    {
-      id: 3,
-      make: 'Audi',
-      model: 'R8',
-      year: 2019,
-      price: '150000',
-      transmission: 'Manual',
-      fuelType: 'Petrol',
-      mileage: '5000',
-      bodyStyle: 'Coupe',
-      colour: 'Black',
-      engineSize: '5.2L',
-      images: ['/images/car3.jpg'],
-    },
-  ]);
+  const [cars, setCars] = useState([]);
+  const [loadingCars, setLoadingCars] = useState(true);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -118,13 +67,26 @@ function AppContent() {
     return () => clearInterval(interval2);
   }, []);
 
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const res = await fetch('/api/cars');
+        if (!res.ok) throw new Error('Failed to fetch cars');
+        const data = await res.json();
+        setCars(data.reverse()); // newest first
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingCars(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
+
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const openSearch = () => setIsSearchOpen(true);
   const closeSearch = () => setIsSearchOpen(false);
-
-  const addCar = (newCar) => {
-    setCars((prev) => [...prev, { ...newCar, id: Date.now() }]);
-  };
 
   return (
     <div className="app">
@@ -150,11 +112,7 @@ function AppContent() {
           <button onClick={openSearch} className="search-btn">
             <FaSearch size={20} />
           </button>
-          <button
-            className={`menu-btn ${isMenuOpen ? 'open' : ''}`}
-            onClick={toggleMenu}
-            style={{ zIndex: 1001 }}
-          >
+          <button className={`menu-btn ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu} style={{ zIndex: 1001 }}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
@@ -170,12 +128,12 @@ function AppContent() {
         <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/inventory">Inventory</Link></li>
-            <li><Link href="/about">About Us</Link></li>
+            <li><Link href="/Inventory">Inventory</Link></li>
+            <li><Link href="/About">About Us</Link></li>
             <li><Link href="/contact">Contact Us</Link></li>
-            <li><Link href="/sell">Sell Your Car</Link></li>
+            <li><Link href="/Sellyourcar">Sell Your Car</Link></li>
             <li><Link href="/NewsAndEvents">News and Events</Link></li>
-            <li><Link href="/OtherServicess">Other Services</Link></li>
+            <li><Link href="/OtherServices">Other Services</Link></li>
             <li><Link href="/Testimonials">Testimonials</Link></li>
             {isAdmin && <li><Link href="/admin/add-car">Add Car (Admin)</Link></li>}
           </ul>
@@ -205,19 +163,23 @@ function AppContent() {
 
         <section className="latest-arrivals">
           <h2>Latest Arrivals</h2>
-          <div className="car-listings">
-            {cars.map((car) => (
-              <div key={car.id} className="car-card">
-                <Link href={`/car/${car.id}`}>
-                  <img src={car.images[0]} alt={`${car.make} ${car.model}`} />
-                  <div className="car-details">
-                    <h3>{car.year} {car.make} {car.model}</h3>
-                    <p>Price: £{car.price}</p>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
+          {loadingCars ? (
+            <p>Loading latest arrivals...</p>
+          ) : (
+            <div className="car-listings">
+              {cars.slice(0, 6).map((car) => (
+                <div key={car._id} className="car-card">
+                  <Link href={`/car/${car._id}`}>
+                    <img src={car.images?.[0] || '/placeholder.png'} alt={`${car.make} ${car.model}`} />
+                    <div className="car-details">
+                      <h3>{car.year} {car.make} {car.model}</h3>
+                      <p>Price: £{car.price}</p>
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 
