@@ -1,5 +1,5 @@
 // pages/_app.js
-import '../styles/main.css'; // <-- This import is critical
+import '../styles/main.css'; // 
 import { AdminProvider } from '../components/AdminContext';
 
 export default function MyApp({ Component, pageProps }) {
