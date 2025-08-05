@@ -12,9 +12,13 @@ export default function Inventory() {
       const res = await fetch('/api/cars');
       if (!res.ok) throw new Error('Failed to fetch cars');
       const data = await res.json();
-      setCars(data);
+
+      // 🔥 Fix: use data.cars if it exists and is an array
+      const carList = Array.isArray(data.cars) ? data.cars : data;
+      setCars(carList);
     } catch (e) {
       console.error(e);
+      setCars([]);
     } finally {
       setLoading(false);
     }
@@ -28,6 +32,7 @@ export default function Inventory() {
     <Layout>
       <div style={{ padding: '2rem', maxWidth: 1200, margin: 'auto' }}>
         <h1>Inventory</h1>
+
         {loading ? (
           <p>Loading cars...</p>
         ) : cars.length === 0 ? (
@@ -35,7 +40,16 @@ export default function Inventory() {
         ) : (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
             {cars.map((car) => (
-              <div key={car._id} style={{ border: '1px solid #ccc', borderRadius: 8, width: 260, padding: 12 }}>
+              <div
+                key={car._id}
+                style={{
+                  border: '1px solid #ccc',
+                  borderRadius: 8,
+                  width: 260,
+                  padding: 12,
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                }}
+              >
                 <Link href={`/car/${car._id}`}>
                   <a style={{ textDecoration: 'none', color: 'inherit' }}>
                     <img
@@ -43,8 +57,10 @@ export default function Inventory() {
                       alt={`${car.make} ${car.model}`}
                       style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 6 }}
                     />
-                    <h3 style={{ margin: '10px 0 5px' }}>{car.make} {car.model}</h3>
-                    <p>£{car.price}</p>
+                    <h3 style={{ margin: '10px 0 5px' }}>
+                      {car.year} {car.make} {car.model}
+                    </h3>
+                    <p>£{car.price?.toLocaleString()}</p>
                   </a>
                 </Link>
               </div>

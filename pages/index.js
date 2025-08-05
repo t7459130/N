@@ -73,9 +73,12 @@ function AppContent() {
         const res = await fetch('/api/cars');
         if (!res.ok) throw new Error('Failed to fetch cars');
         const data = await res.json();
-        setCars(data.reverse()); // newest first
+
+        const carList = Array.isArray(data.cars) ? data.cars : [];
+        setCars(carList.reverse()); // Show newest first
       } catch (err) {
-        console.error(err);
+        console.error('Error loading cars:', err);
+        setCars([]);
       } finally {
         setLoadingCars(false);
       }
@@ -193,7 +196,7 @@ function AppContent() {
             />
           </div>
           <div className="footer-details">
-            <p>Nabils Surrey Supercar Website</p>
+            <p>Nabil's Surrey Supercar Website</p>
             <p>Surrey, England, UK</p>
             <p>0777777777</p>
             <p>
@@ -203,13 +206,12 @@ function AppContent() {
           </div>
           <div className="footer-links">
             <Link href="/inventory">Current Stock</Link>
-            <Link href="/sell">Sell Your Car</Link>
+            <Link href="/Sellyourcar">Sell Your Car</Link>
             <Link href="/sold">Previously Sold</Link>
             <Link href="/contact">Contact Us</Link>
-            <Link href="/luxury-cars">Luxury Cars</Link>
+            <Link href="/inventory">Luxury Cars</Link>
             <p>&copy; 2025 All Rights Reserved</p>
             <div className="footer-legal">
-              <Link href="/sitemap">Sitemap</Link> |{' '}
               <Link href="/cookie-policy">Cookie Policy</Link> |{' '}
               <Link href="/privacy-policy">Privacy Policy</Link> |{' '}
               <Link href="/complaints-procedure">Complaints Procedure</Link> |{' '}
