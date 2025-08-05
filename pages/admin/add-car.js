@@ -9,7 +9,7 @@ export default function AddCarPage() {
       <CarForm
         onAddSuccess={() => {
           alert('Car added successfully! Redirecting to inventory.');
-          window.location.href = '/inventory';
+          window.location.href = '/Inventory';
         }}
       />
     </div>
