@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
+import { FaBars, FaTimes, FaPhone } from 'react-icons/fa';
 import Head from 'next/head';
 import { useAdmin } from './AdminContext';
 
@@ -86,15 +86,40 @@ export default function Layout({ children }) {
       <main>{children}</main>
 
       <footer className="footer">
-        <div className="footer-logo">
-          <img src={footerLogos[currentFooterLogoIndex]} alt="footer brand" className="footer-logo-img" />
+        <div className="footer-content">
+          <div className="footer-logo">
+            <img
+              src={footerLogos[currentFooterLogoIndex]}
+              alt={`Footer Logo ${currentFooterLogoIndex}`}
+              className="footer-logo-img"
+            />
+          </div>
+          <div className="footer-details">
+            <p>Nabils Surrey Supercar Website</p>
+            <p>Surrey, England, UK</p>
+            <p>0777777777</p>
+            <p>
+              We are authorised and regulated by the Financial Conduct Authority (FCA)
+              under FRN 660610. We are a credit broker, not a lender.
+            </p>
+          </div>
+          <div className="footer-links">
+            <Link href="/inventory">Current Stock</Link>
+            <Link href="/Sellyourcar">Sell Your Car</Link>
+            <Link href="/sold">Previously Sold</Link>
+            <Link href="/contact">Contact Us</Link>
+            <Link href="/inventory">Luxury Cars</Link>
+            <p>&copy; 2025 All Rights Reserved</p>
+            <div className="footer-legal">
+              <Link href="/cookie-policy">Cookie Policy</Link> |{' '}
+              <Link href="/privacy-policy">Privacy Policy</Link> |{' '}
+              <Link href="/complaints-procedure">Complaints Procedure</Link> |{' '}
+              <Link href="/modern-slavery">Modern Slavery Statement</Link>
+            </div>
+          </div>
         </div>
-        <p>Nabils Surrey Supercar Website</p>
-        <p>Surrey, England, UK</p>
-        <p>0777777777</p>
-        <p>Authorised and regulated by the FCA. Credit broker, not lender.</p>
-        <p>&copy; 2025 All rights reserved</p>
       </footer>
     </>
   );
 }
+
