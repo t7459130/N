@@ -6,7 +6,7 @@ export default function About() {
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
         <h1>About Us</h1>
         <img
-          src="public/images/carwallpaper6.jpg"
+          src="images/carwallpaper6.jpg"
           alt="About us banner"
           style={{
             width: '100%',
