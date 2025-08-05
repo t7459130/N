@@ -1,5 +1,7 @@
-// src/NewsAndEvents.js
+// pages/NewsAndEvents.js (make sure it's under /pages directory)
+
 import React from 'react';
+import Layout from '../components/Layout';
 
 const eventsData = [
   {
@@ -51,4 +53,11 @@ const NewsAndEvents = () => {
   );
 };
 
-export default NewsAndEvents;
+// 👇 Wrap the component with Layout
+export default function NewsAndEventsPage() {
+  return (
+    <Layout>
+      <NewsAndEvents />
+    </Layout>
+  );
+}

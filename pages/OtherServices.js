@@ -1,5 +1,7 @@
-// src/OtherServices.js
+// pages/OtherServices.js (ensure it's in the /pages directory)
+
 import React from 'react';
+import Layout from '../components/Layout';
 
 const servicesData = [
   {
@@ -45,4 +47,11 @@ const OtherServices = () => {
   );
 };
 
-export default OtherServices;
+// 👇 Wrap with Layout
+export default function OtherServicesPage() {
+  return (
+    <Layout>
+      <OtherServices />
+    </Layout>
+  );
+}

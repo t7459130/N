@@ -1,6 +1,7 @@
-// src/SellYourCar.js
+// pages/SellYourCar.js (ensure it's in the /pages directory)
 
 import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 const SellYourCar = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ const SellYourCar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here, like sending the data to your server or API
+    // TODO: Connect this to backend submission logic
     console.log('Form submitted:', formData);
   };
 
@@ -117,4 +118,11 @@ const SellYourCar = () => {
   );
 };
 
-export default SellYourCar;
+// 👇 Wrap with Layout
+export default function SellYourCarPage() {
+  return (
+    <Layout>
+      <SellYourCar />
+    </Layout>
+  );
+}

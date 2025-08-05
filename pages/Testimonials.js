@@ -1,5 +1,7 @@
-// src/Testimonials.js
+// pages/Testimonials.js (move to /pages if it's currently in /src)
+
 import React from 'react';
+import Layout from '../components/Layout';
 
 const testimonialsData = [
   {
@@ -50,4 +52,11 @@ const Testimonials = () => {
   );
 };
 
-export default Testimonials;
+// 👇 Wrap with Layout
+export default function TestimonialsPage() {
+  return (
+    <Layout>
+      <Testimonials />
+    </Layout>
+  );
+}

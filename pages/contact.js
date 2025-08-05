@@ -1,14 +1,15 @@
-// src/ContactUs.js
+// pages/contact.js (if this is a page, it should live in /pages directory)
+
 import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 const ContactUs = () => {
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle email subscription logic here
     alert(`Subscribed with email: ${email}`);
-    setEmail(''); // Clear the input field after submission
+    setEmail('');
   };
 
   return (
@@ -33,4 +34,11 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs;
+// 👇 Wrap with Layout
+export default function ContactPageWrapper() {
+  return (
+    <Layout>
+      <ContactUs />
+    </Layout>
+  );
+}
