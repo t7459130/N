@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 
 export const config = {
   api: {
@@ -17,9 +17,53 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const allCars = await cars.find().sort({ createdAt: -1 }).toArray();
+      // Extract filters & search params from query
+      const {
+        search,
+        sortBy,
+        transmission,
+        fuelType,
+        bodyStyle,
+        colour,
+        year,
+        make,
+        model,
+      } = req.query;
+
+      // Build MongoDB filter object
+      const filter = {};
+
+      if (transmission) filter.transmission = { $in: transmission.split(',') };
+      if (fuelType) filter.fuelType = { $in: fuelType.split(',') };
+      if (bodyStyle) filter.bodyStyle = { $in: bodyStyle.split(',') };
+      if (colour) filter.colour = { $in: colour.split(',') };
+
+      if (year) {
+        // convert to numbers
+        const years = year.split(',').map((y) => Number(y));
+        filter.year = { $in: years };
+      }
+
+      if (make) filter.make = { $in: make.split(',') };
+      if (model) filter.model = { $in: model.split(',') };
+
+      if (search) {
+        filter.$or = [
+          { make: { $regex: search, $options: 'i' } },
+          { model: { $regex: search, $options: 'i' } },
+        ];
+      }
+
+      // Sorting
+      let sort = {};
+      if (sortBy === 'year') sort.year = -1;
+      else if (sortBy === 'price') sort.price = 1;
+      else sort.createdAt = -1; // latest arrivals by default
+
+      const allCars = await cars.find(filter).sort(sort).limit(50).toArray();
+
       await client.close();
-      return res.status(200).json(allCars);
+      return res.status(200).json({ cars: allCars });
     } catch (err) {
       console.error(err);
       await client.close();
@@ -30,12 +74,24 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const {
-        make, model, variant, year, price, transmission, fuelType,
-        mileage, bodyStyle, colour, engineSize, fuelEconomy,
-        description, images
+        make,
+        model,
+        variant,
+        year,
+        price,
+        transmission,
+        fuelType,
+        mileage,
+        bodyStyle,
+        colour,
+        engineSize,
+        fuelEconomy,
+        description,
+        images,
       } = req.body;
 
       if (!make || !model || !year || !price || !Array.isArray(images) || images.length === 0) {
+        await client.close();
         return res.status(400).json({ error: 'Missing required fields or images' });
       }
 
