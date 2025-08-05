@@ -1,6 +1,6 @@
 // pages/add-car.js
 import dynamic from 'next/dynamic';
-const CarForm = dynamic(() => import('../components/CarForm'), { ssr: false });
+const CarForm = dynamic(() => import('../../components/CarForm'), { ssr: false });
 
 export default function AddCarPage() {
   return (
