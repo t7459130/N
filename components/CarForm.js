@@ -26,18 +26,25 @@ function CarForm({ onAddSuccess }) {
       for (let file of files) {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', 'carscars'); // your preset
-        formData.append('cloud_name', 'dgwbnya5f');   // your cloud name
+        formData.append('upload_preset', 'carscars'); // must be UNSIGNED preset
 
-        const res = await fetch('https://api.cloudinary.com/v1_1/dgwbnya5f/image/upload', {
-          method: 'POST',
-          body: formData,
-        });
+        const res = await fetch(
+          'https://api.cloudinary.com/v1_1/dgwbnya5f/image/upload',
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
 
         const data = await res.json();
+        console.log('Cloudinary response:', data);
+
+        if (!res.ok) {
+          throw new Error(data.error?.message || 'Image upload failed');
+        }
 
         if (!data.secure_url) {
-          throw new Error('Upload failed');
+          throw new Error('No image URL returned from Cloudinary');
         }
 
         uploadedUrls.push(data.secure_url);
@@ -61,12 +68,14 @@ function CarForm({ onAddSuccess }) {
       alert("Please fill in required fields.");
       return;
     }
+
     if (carData.images.length === 0) {
       alert('Please upload at least one image');
       return;
     }
 
     setSubmitting(true);
+
     try {
       const res = await fetch('/api/cars', {
         method: 'POST',
@@ -74,12 +83,14 @@ function CarForm({ onAddSuccess }) {
         body: JSON.stringify(carData),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to add car');
+        throw new Error(data.error || 'Failed to add car');
       }
 
       alert('Car added successfully!');
+
       setCarData({
         make: '', model: '', variant: '', year: '', price: '',
         transmission: '', fuelType: '', mileage: '', bodyStyle: '',
@@ -90,6 +101,7 @@ function CarForm({ onAddSuccess }) {
       if (typeof onAddSuccess === 'function') {
         onAddSuccess();
       }
+
     } catch (error) {
       alert('Error: ' + error.message);
     } finally {
@@ -104,6 +116,7 @@ function CarForm({ onAddSuccess }) {
       <input name="variant" value={carData.variant} onChange={handleChange} placeholder="Variant" />
       <input name="year" type="number" value={carData.year} onChange={handleChange} placeholder="Year" required />
       <input name="price" type="number" value={carData.price} onChange={handleChange} placeholder="Price" required />
+
       <input name="transmission" value={carData.transmission} onChange={handleChange} placeholder="Transmission" />
       <input name="fuelType" value={carData.fuelType} onChange={handleChange} placeholder="Fuel Type" />
       <input name="mileage" value={carData.mileage} onChange={handleChange} placeholder="Mileage" />
@@ -111,6 +124,7 @@ function CarForm({ onAddSuccess }) {
       <input name="colour" value={carData.colour} onChange={handleChange} placeholder="Colour" />
       <input name="engineSize" value={carData.engineSize} onChange={handleChange} placeholder="Engine Size" />
       <input name="fuelEconomy" value={carData.fuelEconomy} onChange={handleChange} placeholder="Fuel Economy" />
+
       <textarea
         name="description"
         value={carData.description}
@@ -120,12 +134,24 @@ function CarForm({ onAddSuccess }) {
       />
 
       <label>Upload Images</label>
-      <input type="file" accept="image/*" multiple onChange={handleFileInput} disabled={uploading} />
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleFileInput}
+        disabled={uploading}
+      />
+
       {uploading && <p>Uploading images...</p>}
 
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: 10 }}>
         {carData.images.map((url, idx) => (
-          <img key={idx} src={url} alt={`Car ${idx}`} style={{ width: 100, marginRight: 10, borderRadius: 6 }} />
+          <img
+            key={idx}
+            src={url}
+            alt={`Car ${idx}`}
+            style={{ width: 100, marginRight: 10, borderRadius: 6 }}
+          />
         ))}
       </div>
 
