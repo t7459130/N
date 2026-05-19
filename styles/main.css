@@ -576,6 +576,7 @@ h3 {
     position: relative; /* for absolute children */
     padding: 10px 15px;
     height: 50px; /* fixed header height for alignment */
+    background-color: #808080; /* grey */
   }
 
   .header-left {
