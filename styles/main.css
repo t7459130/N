@@ -676,3 +676,96 @@ h3 {
   box-sizing: border-box;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  padding: 15px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-side {
+  display: flex;
+  gap: 25px;
+  width: 35%;
+}
+
+.nav-left {
+  justify-content: flex-start;
+}
+
+.nav-right {
+  justify-content: flex-end;
+}
+
+.nav-side a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.nav-side a:hover {
+  color: white;
+}
+
+.logo-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.desktop-logo {
+  width: 70px;
+  margin: 0 5px;
+  object-fit: contain;
+}
+
+/* MOBILE */
+.mobile-header {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  .nav-side,
+  .desktop-logo-bar {
+    display: none;
+  }
+
+  .mobile-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mobile-logo {
+    width: 90px;
+    height: auto;
+  }
+
+  .header-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .search-btn,
+  .menu-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .call-me {
+    color: white;
+  }
+}

@@ -98,50 +98,65 @@ function AppContent() {
         <link rel="icon" href="/images/ferrari.png" />
       </Head>
 
-      <header className="header" style={{ position: 'relative' }}>
-        <div className="header-left">
-          <a href="tel:1234567890" className="call‑me">
-            <FaPhone size={20} />
-          </a>
-        </div>
+      <header className="header">
 
-        <div className="logo-bar desktop-logo-bar">
-          {logoBatches[currentBatchIndex].map((logo, idx) => (
-            <img key={idx} src={logo} alt={`Logo batch ${currentBatchIndex} - ${idx}`} className="desktop-logo" />
-          ))}
-        </div>
+  {/* LEFT NAV */}
+  <div className="nav-side nav-left">
+    <Link href="/">HOME</Link>
+    <Link href="/inventory">Current Stock</Link>
+    <Link href="/Sellyourcar">Sell your car</Link>
+  </div>
 
-        <div className="header‑icons">
-          <button onClick={openSearch} className="search-btn">
-            <FaSearch size={20} />
-          </button>
-          <button className={`menu-btn ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu} style={{ zIndex: 1001 }}>
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
+  {/* CENTER LOGOS */}
+  <div className="logo-bar desktop-logo-bar">
+    {logoBatches[currentBatchIndex].map((logo, idx) => (
+      <img
+        key={idx}
+        src={logo}
+        alt={`Logo ${idx}`}
+        className="desktop-logo"
+      />
+    ))}
+  </div>
 
-        <div className="logo-bar mobile-logo-bar">
-          <img
-            src={footerLogos[currentFooterLogoIndex]}
-            alt={`Footer logo ${currentFooterLogoIndex}`}
-            className="mobile-logo"
-          />
-        </div>
+  {/* RIGHT NAV */}
+  <div className="nav-side nav-right">
+    <Link href="/NewsAndEvents">Insights</Link>
+    <Link href="/About">About Us</Link>
+    <Link href="/contact">Contact Us</Link>
+  </div>
 
-        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-          <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/Inventory">Inventory</Link></li>
-            <li><Link href="/About">About Us</Link></li>
-            <li><Link href="/contact">Contact Us</Link></li>
-            <li><Link href="/Sellyourcar">Sell Your Car</Link></li>
-            <li><Link href="/NewsAndEvents">News and Events</Link></li>
-            <li><Link href="/OtherServices">Other Services</Link></li>
-            <li><Link href="/Testimonials">Testimonials</Link></li>
-            {isAdmin && <li><Link href="/admin/add-car">Add Car (Admin)</Link></li>}
-          </ul>
-        </nav>
-      </header>
+  {/* MOBILE HEADER */}
+  <div className="mobile-header">
+
+    <a href="tel:1234567890" className="call-me">
+      <FaPhone size={20} />
+    </a>
+
+    <div className="logo-bar mobile-logo-bar">
+      <img
+        src={footerLogos[currentFooterLogoIndex]}
+        alt="Mobile Logo"
+        className="mobile-logo"
+      />
+    </div>
+
+    <div className="header-icons">
+      <button onClick={openSearch} className="search-btn">
+        <FaSearch size={20} />
+      </button>
+
+      <button
+        className={`menu-btn ${isMenuOpen ? 'open' : ''}`}
+        onClick={toggleMenu}
+      >
+        {isMenuOpen ? <FaTimes /> : <FaBars />}
+      </button>
+    </div>
+
+  </div>
+
+</header>
 
       <section className="banner">
         <img src="/images/carwallpaper.webp" alt="Banner" className="banner-image" />
