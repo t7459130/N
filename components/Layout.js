@@ -47,41 +47,96 @@ export default function Layout({ children }) {
         <link rel="icon" href="/images/ferrari.png" />
       </Head>
 
-      <header className="header">
-        <div className="header-left">
-          <a href="tel:1234567890"><FaPhone /></a>
-        </div>
+      <header className="header" style={{ position: 'relative' }}>
 
-        <div className="logo-bar desktop-logo-bar">
-          {logoBatches[currentBatchIndex].map((logo, idx) => (
-            <img key={idx} src={logo} alt="brand" className="desktop-logo" />
-          ))}
-        </div>
+  {/* LEFT SIDE */}
+  <div className="header-left">
 
-        <div className="header-icons">
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="menu-btn">
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
+    {/* PHONE */}
+    <a href="tel:1234567890" className="call-me">
+      <FaPhone size={20} />
+    </a>
 
-        <div className="logo-bar mobile-logo-bar">
-          <img src={footerLogos[currentFooterLogoIndex]} alt="rotating" className="mobile-logo" />
-        </div>
+    {/* LEFT NAV LINKS */}
+    <div className="desktop-nav nav-left">
+      <Link href="/">HOME</Link>
+      <Link href="/inventory">Current Stock</Link>
+      <Link href="/Sellyourcar">Sell your car</Link>
+    </div>
 
-        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-          <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/inventory">Inventory</Link></li>
-            <li><Link href="/About">About Us</Link></li>
-            <li><Link href="/contact">Contact Us</Link></li>
-            <li><Link href="/Sellyourcar">Sell Your Car</Link></li>
-            <li><Link href="/NewsAndEvents">News and Events</Link></li>
-            <li><Link href="/OtherServices">Other Services</Link></li>
-            <li><Link href="/Testimonials">Testimonials</Link></li>
-            {isAdmin && <li><Link href="/admin/add-car">Add Car</Link></li>}
-          </ul>
-        </nav>
-      </header>
+  </div>
+
+  {/* CENTER LOGOS */}
+  <div className="logo-bar desktop-logo-bar">
+    {logoBatches[currentBatchIndex].map((logo, idx) => (
+      <img
+        key={idx}
+        src={logo}
+        alt={`Logo batch ${currentBatchIndex} - ${idx}`}
+        className="desktop-logo"
+      />
+    ))}
+  </div>
+
+  {/* RIGHT SIDE */}
+  <div className="header-icons">
+
+    {/* RIGHT NAV LINKS */}
+    <div className="desktop-nav nav-right">
+      <Link href="/NewsAndEvents">Insights</Link>
+      <Link href="/About">About Us</Link>
+      <Link href="/contact">Contact Us</Link>
+    </div>
+
+    {/* SEARCH */}
+    <button onClick={openSearch} className="search-btn">
+      <FaSearch size={20} />
+    </button>
+
+    {/* MENU */}
+    <button
+      className={`menu-btn ${isMenuOpen ? 'open' : ''}`}
+      onClick={toggleMenu}
+      style={{ zIndex: 1001 }}
+    >
+      {isMenuOpen ? <FaTimes /> : <FaBars />}
+    </button>
+
+  </div>
+
+  {/* MOBILE CENTER LOGO */}
+  <div className="logo-bar mobile-logo-bar">
+    <img
+      src={footerLogos[currentFooterLogoIndex]}
+      alt={`Footer logo ${currentFooterLogoIndex}`}
+      className="mobile-logo"
+    />
+  </div>
+
+  {/* MOBILE / FULLSCREEN MENU */}
+  <nav
+    ref={menuRef}
+    className={`nav-menu ${isMenuOpen ? 'active' : ''}`}
+  >
+    <ul>
+      <li><Link href="/">Home</Link></li>
+      <li><Link href="/Inventory">Inventory</Link></li>
+      <li><Link href="/About">About Us</Link></li>
+      <li><Link href="/contact">Contact Us</Link></li>
+      <li><Link href="/Sellyourcar">Sell Your Car</Link></li>
+      <li><Link href="/NewsAndEvents">News and Events</Link></li>
+      <li><Link href="/OtherServices">Other Services</Link></li>
+      <li><Link href="/Testimonials">Testimonials</Link></li>
+
+      {isAdmin && (
+        <li>
+          <Link href="/admin/add-car">Add Car (Admin)</Link>
+        </li>
+      )}
+    </ul>
+  </nav>
+
+</header>
 
       <main>{children}</main>
 
