@@ -111,7 +111,7 @@ function AppContent() {
     {/* LEFT NAV LINKS */}
     <div className="desktop-nav nav-left">
       <Link href="/">HOME</Link>
-      <Link href="/inventory">Current Stock</Link>
+      <Link href="/Inventory">Current Stock</Link>
       <Link href="/Sellyourcar">Sell your car</Link>
     </div>
 
@@ -255,7 +255,7 @@ function AppContent() {
             <Link href="/Sellyourcar">Sell Your Car</Link>
             <Link href="/sold">Previously Sold</Link>
             <Link href="/contact">Contact Us</Link>
-            <Link href="/inventory">Luxury Cars</Link>
+            <Link href="/Inventory">Luxury Cars</Link>
             <p>&copy; 2025 All Rights Reserved</p>
             <div className="footer-legal">
               <Link href="/cookie-policy">Cookie Policy</Link> |{' '}
