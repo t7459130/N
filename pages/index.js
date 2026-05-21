@@ -221,8 +221,25 @@ function AppContent() {
                   <Link href={`/car/${car._id}`}>
                     <img src={car.images?.[0] || '/placeholder.png'} alt={`${car.make} ${car.model}`} />
                     <div className="car-details">
-                      <h3>{car.year} {car.make} {car.model}</h3>
-                      <p>Price: £{car.price}</p>
+                       <h3>
+                             {car.year} {car.make} {car.model}
+                       </h3>
+
+                       <p className="car-price">
+                             £{Number(car.price).toLocaleString()}
+                       </p>
+
+                       <p className="car-info">
+                              {car.mileage?.toLocaleString()} miles
+                       </p>
+
+                       <p className="car-info">
+                              {car.colour || car.color}
+                       </p>
+
+                       <p className="car-info">
+                              {car.year}
+                       </p>
                     </div>
                   </Link>
                 </div>
