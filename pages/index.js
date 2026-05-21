@@ -196,7 +196,42 @@ function AppContent() {
           <p>Discover our exclusive range of luxury cars.</p>
         </div>
       </section>
+      <section className="welcome-section">
+          <div className="welcome-container">
 
+          <h2>
+             Welcome to <br />
+          <span>Nabil’s Surrey Supercars</span>
+          </h2>
+
+           <p>
+             We are a family-run independent luxury car dealership based in Surrey,
+             specialising in a carefully curated collection of supercars, luxury SUVs,
+             prestige vehicles, and high-performance automobiles.
+          </p>
+
+          <p>
+               Founded through a lifelong passion for exceptional engineering and
+               automotive excellence, Nabil’s Surrey Supercars is dedicated to offering
+               only the finest vehicles presented to the very highest standards.
+          </p>
+
+           <p>
+            We pride ourselves on delivering a professional, discreet, and seamless
+            experience for every client. Whether you are purchasing your dream
+            supercar, selling a cherished vehicle, or sourcing something truly rare,
+            our goal is to make the entire process enjoyable, transparent, and secure.
+           </p>
+
+            <p>
+            With specialist knowledge, attention to detail, and genuine enthusiasm
+            for luxury motoring, we strive to build long-term relationships with our
+            clients and provide a level of service that reflects the exclusivity of
+            the vehicles we represent.
+            </p>
+
+          </div>
+      </section>
       <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={closeSearch} />
 
       <main>
