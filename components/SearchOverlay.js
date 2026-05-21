@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaTimes, FaFilter } from 'react-icons/fa';
+import Link from 'next/link';
 import axios from 'axios';
 
 const filterOptionsStatic = {
@@ -23,72 +24,112 @@ function SearchOverlay({ isOpen, onClose }) {
   const [sortBy, setSortBy] = useState('latest');
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const [dynamicOptions, setDynamicOptions] = useState({
     colour: [],
     year: [],
     make: [],
     model: [],
   });
+
   const [showFilters, setShowFilters] = useState(false);
 
-  // Debounce timer ref
   const debounceTimer = useRef(null);
 
   const toggleFilter = (cat, val) => {
     setFilters((prev) => {
       const newSet = new Set(prev[cat]);
-      if (newSet.has(val)) newSet.delete(val);
-      else newSet.add(val);
-      return { ...prev, [cat]: newSet };
+
+      if (newSet.has(val)) {
+        newSet.delete(val);
+      } else {
+        newSet.add(val);
+      }
+
+      return {
+        ...prev,
+        [cat]: newSet,
+      };
     });
   };
 
   const buildQueryParams = () => {
     const params = {};
+
     for (const cat in filters) {
       if (filters[cat].size > 0) {
         params[cat] = Array.from(filters[cat]).join(',');
       }
     }
+
     if (searchInput.trim()) {
       params.search = searchInput.trim();
     }
+
     if (sortBy) {
       params.sortBy = sortBy;
     }
+
     return params;
   };
 
   const fetchCars = async () => {
     setLoading(true);
+
     try {
       const params = buildQueryParams();
-      const { data } = await axios.get('/api/cars', { params });
-      setCars(data.cars || []);
-      setDynamicOptions({
-        colour: [...new Set(data.cars.map(c => c.colour).filter(Boolean))],
-        year: [...new Set(data.cars.map(c => c.year).filter(Boolean))].sort((a,b) => b - a),
-        make: [...new Set(data.cars.map(c => c.make).filter(Boolean))],
-        model: [...new Set(data.cars.map(c => c.model).filter(Boolean))],
+
+      const { data } = await axios.get('/api/cars', {
+        params,
       });
+
+      setCars(data.cars || []);
+
+      setDynamicOptions({
+        colour: [
+          ...new Set(
+            data.cars.map((c) => c.colour || c.color).filter(Boolean)
+          ),
+        ],
+
+        year: [
+          ...new Set(
+            data.cars.map((c) => c.year).filter(Boolean)
+          ),
+        ].sort((a, b) => b - a),
+
+        make: [
+          ...new Set(
+            data.cars.map((c) => c.make).filter(Boolean)
+          ),
+        ],
+
+        model: [
+          ...new Set(
+            data.cars.map((c) => c.model).filter(Boolean)
+          ),
+        ],
+      });
+
     } catch (err) {
       console.error('Failed to fetch cars:', err);
       setCars([]);
     }
+
     setLoading(false);
   };
 
-  // Fetch cars on filter/sort changes or when overlay opens, debounce search input
   useEffect(() => {
     if (!isOpen) return;
 
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
 
     debounceTimer.current = setTimeout(() => {
       fetchCars();
     }, 300);
 
-    // Cleanup debounce on unmount or dependencies change
     return () => clearTimeout(debounceTimer.current);
 
   }, [filters, searchInput, sortBy, isOpen]);
@@ -97,6 +138,7 @@ function SearchOverlay({ isOpen, onClose }) {
 
   return (
     <div className="search-overlay">
+
       <button className="close-btn" onClick={onClose}>
         <FaTimes size={24} />
       </button>
@@ -104,20 +146,20 @@ function SearchOverlay({ isOpen, onClose }) {
       <h2>Search Cars</h2>
 
       <div className="search-header">
+
         <input
           type="text"
           placeholder="Search by make or model..."
           value={searchInput}
-          onChange={e => setSearchInput(e.target.value)}
+          onChange={(e) => setSearchInput(e.target.value)}
           className="search-input"
           autoFocus
         />
 
         <select
           value={sortBy}
-          onChange={e => setSortBy(e.target.value)}
+          onChange={(e) => setSortBy(e.target.value)}
           className="sort-select"
-          aria-label="Sort By"
         >
           <option value="latest">Latest</option>
           <option value="year">Year (new to old)</option>
@@ -127,86 +169,152 @@ function SearchOverlay({ isOpen, onClose }) {
         <button
           className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
           onClick={() => setShowFilters(!showFilters)}
-          aria-expanded={showFilters}
-          aria-controls="filter-panel"
         >
           <FaFilter style={{ marginRight: 6 }} />
           Filters
         </button>
+
       </div>
 
       {showFilters && (
-        <div className="filter-panel" id="filter-panel">
-          {/* Static filters */}
+        <div className="filter-panel">
+
           {Object.entries(filterOptionsStatic).map(([cat, opts]) => (
             <div key={cat} className="filter-group">
-              <h4>{cat.charAt(0).toUpperCase() + cat.slice(1)}</h4>
-              {opts.map(val => (
+
+              <h4>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </h4>
+
+              {opts.map((val) => (
                 <label key={val} className="filter-label">
+
                   <input
                     type="checkbox"
                     checked={filters[cat].has(val)}
                     onChange={() => toggleFilter(cat, val)}
                   />
+
                   {val}
+
                 </label>
               ))}
+
             </div>
           ))}
 
-          {/* Dynamic filters */}
-          {['colour', 'year', 'make', 'model'].map(cat => (
+          {['colour', 'year', 'make', 'model'].map((cat) => (
             <div key={cat} className="filter-group">
-              <h4>{cat.charAt(0).toUpperCase() + cat.slice(1)}</h4>
-              {dynamicOptions[cat].length === 0 && <p className="no-options">No options</p>}
-              {dynamicOptions[cat].map(val => (
+
+              <h4>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </h4>
+
+              {dynamicOptions[cat].length === 0 && (
+                <p className="no-options">No options</p>
+              )}
+
+              {dynamicOptions[cat].map((val) => (
                 <label key={val} className="filter-label">
+
                   <input
                     type="checkbox"
                     checked={filters[cat].has(val.toString())}
-                    onChange={() => toggleFilter(cat, val.toString())}
+                    onChange={() =>
+                      toggleFilter(cat, val.toString())
+                    }
                   />
+
                   {val}
+
                 </label>
               ))}
+
             </div>
           ))}
+
         </div>
       )}
 
       <div className="latest-arrivals-overlay">
+
         <h3>Latest Arrivals</h3>
+
         {loading ? (
           <p>Loading cars...</p>
+
         ) : cars.length === 0 ? (
+
           <p>No cars found matching your criteria.</p>
+
         ) : (
+
           <div className="car-listings">
+
             {cars.map((car) => (
-              <div key={car._id} className="car-card">
-                {car.images?.length > 0 ? (
-                  <img
-                    src={car.images[0]}
-                    alt={`${car.make} ${car.model}`}
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="placeholder-image" />
-                )}
-                <div className="car-details">
-                  <h4>{car.year} {car.make} {car.model}</h4>
-                  <p>£{car.price?.toLocaleString()}</p>
+
+              <Link
+                key={car._id}
+                href={`/car/${car._id}`}
+                className="car-card-link"
+                onClick={onClose}
+              >
+
+                <div className="car-card">
+
+                  {car.images?.length > 0 ? (
+
+                    <img
+                      src={car.images[0]}
+                      alt={`${car.make} ${car.model}`}
+                      loading="lazy"
+                    />
+
+                  ) : (
+
+                    <div className="placeholder-image" />
+
+                  )}
+
+                  <div className="car-details">
+
+                    <h4>
+                      {car.year} {car.make} {car.model}
+                    </h4>
+
+                    <p className="price">
+                      £{Number(car.price).toLocaleString()}
+                    </p>
+
+                    <p>
+                      {car.mileage?.toLocaleString()} miles
+                    </p>
+
+                    <p>
+                      {car.colour || car.color}
+                    </p>
+
+                  </div>
+
                 </div>
-              </div>
+
+              </Link>
+
             ))}
+
           </div>
+
         )}
+
       </div>
 
       <style jsx>{`
         .search-overlay {
           position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
           background: white;
           padding: 20px;
           overflow-y: auto;
@@ -256,24 +364,22 @@ function SearchOverlay({ isOpen, onClose }) {
         .filter-toggle-btn {
           display: flex;
           align-items: center;
-          background-color: #0070f3;
+          background-color: #000;
           color: white;
           border: none;
           padding: 10px 16px;
           font-size: 16px;
           cursor: pointer;
           border-radius: 4px;
-          transition: background-color 0.25s ease;
-          user-select: none;
-          min-width: 110px;
+          transition: 0.3s;
         }
 
         .filter-toggle-btn:hover {
-          background-color: #005bb5;
+          background-color: #222;
         }
 
         .filter-toggle-btn.active {
-          background-color: #004494;
+          background-color: #444;
         }
 
         .filter-panel {
@@ -303,13 +409,6 @@ function SearchOverlay({ isOpen, onClose }) {
           margin-bottom: 6px;
           cursor: pointer;
           font-size: 14px;
-          user-select: none;
-        }
-
-        .no-options {
-          font-size: 14px;
-          color: #888;
-          font-style: italic;
         }
 
         .latest-arrivals-overlay h3 {
@@ -320,21 +419,26 @@ function SearchOverlay({ isOpen, onClose }) {
           display: flex;
           flex-wrap: wrap;
           gap: 20px;
-          justify-content: flex-start;
+        }
+
+        .car-card-link {
+          text-decoration: none;
+          color: inherit;
         }
 
         .car-card {
           width: 300px;
           border: 1px solid #ddd;
           border-radius: 6px;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
           overflow: hidden;
           background: #fff;
-          transition: box-shadow 0.2s ease;
+          transition: 0.3s ease;
           cursor: pointer;
         }
+
         .car-card:hover {
-          box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+          transform: translateY(-4px);
+          box-shadow: 0 8px 18px rgba(0,0,0,0.15);
         }
 
         .car-card img {
@@ -351,32 +455,54 @@ function SearchOverlay({ isOpen, onClose }) {
         }
 
         .car-details {
-          padding: 10px;
-        }
-        .car-details h4 {
-          margin: 6px 0;
-          font-weight: 600;
-        }
-        .car-details p {
-          margin: 0;
-          color: #555;
-          font-weight: 500;
+          padding: 12px;
         }
 
-        @media (max-width: 600px) {
+        .car-details h4 {
+          margin-bottom: 10px;
+          font-size: 18px;
+        }
+
+        .car-details p {
+          margin: 4px 0;
+          color: #555;
+        }
+
+        .price {
+          font-weight: bold;
+          color: #000;
+          font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+
+          .search-overlay {
+            width: 95vw;
+            padding: 16px;
+          }
+
           .search-header {
             flex-direction: column;
-            gap: 10px;
+            align-items: stretch;
           }
+
           .filter-panel {
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
           }
+
           .car-listings {
             justify-content: center;
           }
+
+          .car-card {
+            width: 100%;
+            max-width: 350px;
+          }
+
         }
       `}</style>
+
     </div>
   );
 }
