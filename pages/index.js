@@ -236,15 +236,56 @@ function AppContent() {
 
       <main>
         <section className="about-us">
-          <div className="about-content">
-            <img src="/images/car1.jpg" alt="About Us" className="about-image" />
-            <div className="about-text">
-              <h2>About Us</h2>
-              <p>Welcome to our car dealership. We offer the best selection of luxury cars.</p>
-            </div>
-          </div>
-        </section>
 
+  <div className="about-wrapper">
+
+    {/* LEFT SIDE IMAGE */}
+    <div className="about-image-container">
+      <img
+        src="/images/car1.jpg"
+        alt="About Us"
+        className="about-image"
+      />
+    </div>
+
+    {/* RIGHT SIDE CONTENT */}
+    <div className="about-text-container">
+
+      <h2>About Us</h2>
+
+          <p>
+            Nabil’s Surrey Supercars is a specialist independent luxury car dealership
+            based in Surrey, offering an exclusive selection of prestige, performance,
+            and supercars.
+          </p>
+
+           <p>
+             We are passionate about delivering exceptional vehicles alongside a
+             professional and personal customer experience tailored to every client.
+           </p>
+
+           {/* HORIZONTAL BUTTONS */}
+           <div className="about-links">
+
+           <Link href="/Inventory" className="about-btn">
+            Current Stock
+           </Link>
+
+           <Link href="/NewsAndEvents" className="about-btn">
+             News & Events
+           </Link>
+
+           <Link href="/Sellyourcar" className="about-btn">
+             Sell Your Car
+           </Link>
+
+           </div>
+
+          </div>
+
+         </div>
+
+        </section>
         <section className="latest-arrivals">
           <h2>Latest Arrivals</h2>
           {loadingCars ? (
