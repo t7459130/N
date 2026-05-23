@@ -1028,84 +1028,76 @@ h3 {
   }
 }
 
-.latest-arrivals {
-  padding: 60px 30px;
-}
-
-.latest-arrivals h2 {
-  text-align: center;
-  font-size: 42px;
-  margin-bottom: 40px;
-}
-
 .car-listings {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 30px;
+  margin-top: 40px;
+}
+
+.car-card-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .car-card {
-  background: white;
+  background: #111;
+  border-radius: 18px;
   overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 
-.car-link {
-  text-decoration: none !important;
-  color: black !important;
-  display: block;
+.car-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
 }
 
-.car-link:hover {
-  text-decoration: none !important;
-  color: black !important;
+.car-image-wrapper {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
 }
 
 .car-image {
   width: 100%;
-  height: 320px;
+  height: 100%;
   object-fit: cover;
-  display: block;
+  transition: transform 0.4s ease;
+}
+
+.car-card:hover .car-image {
+  transform: scale(1.05);
 }
 
 .car-details {
-  padding: 20px 10px;
+  padding: 20px;
 }
 
-.car-details h3 {
-  font-size: 28px;
+.car-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
   margin-bottom: 12px;
-  font-weight: 600;
-  color: black;
-  text-decoration: none;
 }
 
 .car-price {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: bold;
-  margin-bottom: 15px;
-  color: black;
+  color: #d4af37;
+  margin-bottom: 18px;
 }
 
-.car-info-row {
+.car-specs {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   flex-wrap: wrap;
-  font-size: 16px;
-  color: #444;
 }
 
-@media (max-width: 768px) {
-
-  .car-listings {
-    grid-template-columns: 1fr;
-  }
-
-  .car-image {
-    height: 250px;
-  }
-
-  .car-details h3 {
-    font-size: 22px;
-  }
-
+.car-specs span {
+  background: #1f1f1f;
+  color: #ddd;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
 }
