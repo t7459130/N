@@ -1027,3 +1027,85 @@ h3 {
     line-height: 1.8;
   }
 }
+
+.latest-arrivals {
+  padding: 60px 30px;
+}
+
+.latest-arrivals h2 {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 40px;
+}
+
+.car-listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 30px;
+}
+
+.car-card {
+  background: white;
+  overflow: hidden;
+}
+
+.car-link {
+  text-decoration: none !important;
+  color: black !important;
+  display: block;
+}
+
+.car-link:hover {
+  text-decoration: none !important;
+  color: black !important;
+}
+
+.car-image {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.car-details {
+  padding: 20px 10px;
+}
+
+.car-details h3 {
+  font-size: 28px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: black;
+  text-decoration: none;
+}
+
+.car-price {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: black;
+}
+
+.car-info-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 16px;
+  color: #444;
+}
+
+@media (max-width: 768px) {
+
+  .car-listings {
+    grid-template-columns: 1fr;
+  }
+
+  .car-image {
+    height: 250px;
+  }
+
+  .car-details h3 {
+    font-size: 22px;
+  }
+
+}
