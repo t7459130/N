@@ -3,93 +3,99 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 
+import { AdminProvider } from '../components/AdminContext';
 import SearchOverlay from '../components/SearchOverlay';
 
-export default function Home() {
-
+function HomeContent() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const [cars, setCars] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingCars, setLoadingCars] = useState(true);
 
-  const [logoBatchIndex, setLogoBatchIndex] = useState(0);
+  const [soldImages, setSoldImages] = useState([]);
+  const [soldIndex, setSoldIndex] = useState(0);
+
   const [mobileLogoIndex, setMobileLogoIndex] = useState(0);
 
   const menuRef = useRef(null);
 
-  const logoBatches = [
-    ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
-    ['/images/aston.png', '/images/pagani.png', '/images/bugatti.png', '/images/mercedes.png'],
+  const logoRow = [
+    '/images/ferrari.png',
+    '/images/lamborghini.png',
+    '/images/rolls.png',
+    '/images/bentley.png',
   ];
 
-  const allLogos = logoBatches.flat();
-
-  const navLeft = [
-    { name: 'Home', link: '/' },
-    { name: 'Stock', link: '/Inventory' },
-    { name: 'Sell', link: '/Sellyourcar' },
+  const mobileLogos = [
+    '/images/ferrari.png',
+    '/images/lamborghini.png',
+    '/images/rolls.png',
+    '/images/bentley.png',
+    '/images/aston.png',
+    '/images/bugatti.png',
   ];
 
-  const navRight = [
-    { name: 'Insights', link: '/NewsAndEvents' },
-    { name: 'About', link: '/About' },
-    { name: 'Contact', link: '/contact' },
-  ];
+  const footerLogos = logoRow;
 
-  /* ================= LOGO ROTATION ================= */
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLogoBatchIndex((p) => (p + 1) % logoBatches.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMobileLogoIndex((p) => (p + 1) % allLogos.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  /* ================= FETCH CARS (MONGODB RESTORED) ================= */
-  useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const res = await fetch('/api/cars');
-        const data = await res.json();
-        setCars(Array.isArray(data.cars) ? data.cars : []);
-      } catch (err) {
-        console.error(err);
-        setCars([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCars();
-  }, []);
-
-  /* ================= CLOSE MENU ================= */
+  /* MENU CLOSE OUTSIDE CLICK */
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  /* MOBILE LOGO ROTATION */
+  useEffect(() => {
+    const i = setInterval(() => {
+      setMobileLogoIndex((p) => (p + 1) % mobileLogos.length);
+    }, 2500);
+    return () => clearInterval(i);
+  }, []);
+
+  /* SOLD CAROUSEL */
+  useEffect(() => {
+    fetch('/api/images')
+      .then((res) => res.json())
+      .then(setSoldImages)
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!soldImages.length) return;
+    const i = setInterval(() => {
+      setSoldIndex((p) => (p + 1) % soldImages.length);
+    }, 3500);
+    return () => clearInterval(i);
+  }, [soldImages]);
+
+  /* CARS */
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/cars');
+        const data = await res.json();
+        setCars(Array.isArray(data.cars) ? data.cars : []);
+      } catch {
+        setCars([]);
+      } finally {
+        setLoadingCars(false);
+      }
+    };
+    load();
+  }, []);
+
   return (
     <div className="app">
-
       <Head>
-        <title>Surrey Supercars</title>
+        <title>Car Dealership</title>
       </Head>
 
-      {/* ================= HEADER ================= */}
+      {/* HEADER */}
       <header className="header">
 
         {/* LEFT */}
@@ -98,106 +104,111 @@ export default function Home() {
             <FaPhone />
           </a>
 
-          <div className="desktop-nav left-nav">
-            {navLeft.map((n) => (
-              <Link key={n.name} href={n.link}>{n.name}</Link>
-            ))}
-          </div>
+          <nav className="nav-left">
+            <Link href="/">Home</Link>
+            <Link href="/Inventory">Stock</Link>
+            <Link href="/Sellyourcar">Sell</Link>
+          </nav>
         </div>
 
-        {/* CENTER LOGOS */}
-        <div className="logo-bar">
-          {logoBatches[logoBatchIndex].map((logo, i) => (
-            <img key={i} src={logo} className="desktop-logo" />
+        {/* CENTER LOGO ROW (4 LOGOS STATIC) */}
+        <div className="logo-row">
+          {logoRow.map((l, i) => (
+            <img key={i} src={l} className="logo-small" />
           ))}
         </div>
 
-        {/* RIGHT */}
-        <div className="header-icons">
+        {/* RIGHT NAV */}
+        <div className="header-right">
+          <nav className="nav-right">
+            <Link href="/NewsAndEvents">Insights</Link>
+            <Link href="/About">About</Link>
+            <Link href="/contact">Contact</Link>
+          </nav>
 
-          <div className="desktop-nav right-nav">
-            {navRight.map((n) => (
-              <Link key={n.name} href={n.link}>{n.name}</Link>
-            ))}
-          </div>
-
-          <button className="search-btn" onClick={() => setIsSearchOpen(true)}>
+          <button onClick={() => setIsSearchOpen(true)}>
             <FaSearch />
           </button>
 
-          <button className="menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         {/* MOBILE LOGO */}
-        <div className="mobile-logo-bar">
-          <img src={allLogos[mobileLogoIndex]} className="mobile-logo" />
+        <div className="mobile-logo">
+          <img src={mobileLogos[mobileLogoIndex]} />
         </div>
 
         {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-          <ul>
-            {[...navLeft, ...navRight].map((n) => (
-              <li key={n.name}>
-                <Link href={n.link}>{n.name}</Link>
-              </li>
-            ))}
-          </ul>
+        <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
-
       </header>
 
-      {/* ================= HERO ================= */}
+      {/* BANNER */}
       <section className="banner">
-        <img src="/images/carwallpaper.webp" className="banner-image" />
+        <img src="/images/carwallpaper.webp" />
         <div className="banner-text">
-          <h1>Surrey Supercars</h1>
-          <p>Luxury • Performance • Prestige</p>
+          <h1>Luxury Car Dealership</h1>
         </div>
       </section>
 
-      {/* ================= ABOUT ================= */}
+      {/* WELCOME */}
       <section className="welcome-section">
-        <h2>About Us</h2>
-        <p>Luxury car specialists based in the UK.</p>
+        <h2>Welcome to Our Dealership</h2>
+        <p>Luxury vehicles, premium service.</p>
       </section>
 
-      {/* ================= SOLD ================= */}
-      <section className="about-us">
+      {/* SOLD */}
+      <section className="sold-section">
         <h2>Previously Sold</h2>
-        <p>View our past luxury vehicles.</p>
-        <Link href="/sold" className="about-btn">View Sold</Link>
+        {soldImages.length > 0 && (
+          <img src={soldImages[soldIndex]} className="sold-image" />
+        )}
       </section>
 
-      {/* ================= INVENTORY (MONGODB FIXED) ================= */}
-      <section className="latest-arrivals">
-        <h2>Latest Inventory</h2>
+      {/* INVENTORY */}
+      <section className="inventory">
+        <h2>Latest Arrivals</h2>
 
-        {loading ? (
-          <p>Loading cars...</p>
+        {loadingCars ? (
+          <p>Loading...</p>
         ) : (
-          <div className="car-listings">
-            {cars.slice(0, 6).map((car) => (
-              <div key={car._id} className="car-card">
-                <Link href={`/car/${car._id}`}>
-                  <img src={car.images?.[0] || '/placeholder.png'} />
-                  <h3>{car.year} {car.make} {car.model}</h3>
-                </Link>
-              </div>
+          <div className="grid">
+            {cars.slice(0, 6).map((c) => (
+              <Link key={c._id} href={`/car/${c._id}`} className="card">
+                <img src={c.images?.[0]} />
+                <h3>{c.make} {c.model}</h3>
+              </Link>
             ))}
           </div>
         )}
       </section>
 
-      {/* ================= SEARCH ================= */}
-      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-
-      {/* ================= FOOTER ================= */}
+      {/* FOOTER */}
       <footer className="footer">
-        <img src="/images/ferrari.png" className="footer-logo-img" />
+        <div className="footer-logos">
+          {footerLogos.map((l, i) => (
+            <img key={i} src={l} />
+          ))}
+        </div>
       </footer>
 
+      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <AdminProvider>
+      <HomeContent />
+    </AdminProvider>
   );
 }
