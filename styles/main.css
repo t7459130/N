@@ -1,3 +1,4 @@
+/* HEADER */
 .header {
   display: flex;
   align-items: center;
@@ -23,6 +24,7 @@
   width: 55px;
   height: 55px;
   object-fit: contain;
+  transition: all 0.4s ease;
 }
 
 /* MOBILE LOGO */
@@ -34,12 +36,14 @@
   width: 45px;
   height: 45px;
   object-fit: contain;
+  transition: opacity 0.3s ease;
 }
 
 /* HERO */
 .banner {
   position: relative;
   height: 70vh;
+  overflow: hidden;
 }
 
 .banner img {
@@ -55,6 +59,21 @@
   background: rgba(0,0,0,0.4);
   padding: 20px;
   border-radius: 10px;
+}
+
+/* SOLD */
+.sold-tile {
+  max-width: 800px;
+  margin: auto;
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sold-tile img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
 }
 
 /* INVENTORY */
@@ -74,6 +93,7 @@
     display: flex;
     flex: 1;
     justify-content: center;
+    align-items: center;
   }
 
   .banner-text {
