@@ -20,6 +20,14 @@ function AppContent() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
   const [currentFooterLogoIndex, setCurrentFooterLogoIndex] = useState(0);
+
+  const [cars, setCars] = useState([]);
+  const [loadingCars, setLoadingCars] = useState(true);
+
+  // ✅ SOLD CAR CAROUSEL STATE
+  const [soldImages, setSoldImages] = useState([]);
+  const [currentSoldImage, setCurrentSoldImage] = useState(0);
+
   const menuRef = useRef(null);
   const { isAdmin } = useAdmin();
 
@@ -40,9 +48,7 @@ function AppContent() {
     '/images/rolls.png',
   ];
 
-  const [cars, setCars] = useState([]);
-  const [loadingCars, setLoadingCars] = useState(true);
-
+  // MENU CLOSE OUTSIDE CLICK
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target) && isMenuOpen) {
@@ -53,6 +59,7 @@ function AppContent() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen]);
 
+  // LOGO ROTATION
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
@@ -67,6 +74,7 @@ function AppContent() {
     return () => clearInterval(interval2);
   }, []);
 
+  // FETCH CURRENT CARS
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -86,6 +94,25 @@ function AppContent() {
     fetchCars();
   }, []);
 
+  // FETCH SOLD IMAGES
+  useEffect(() => {
+    fetch('/api/images')
+      .then((res) => res.json())
+      .then((data) => setSoldImages(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  // SOLD CAR ROTATION
+  useEffect(() => {
+    if (!soldImages.length) return;
+
+    const interval = setInterval(() => {
+      setCurrentSoldImage((prev) => (prev + 1) % soldImages.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [soldImages]);
+
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const openSearch = () => setIsSearchOpen(true);
   const closeSearch = () => setIsSearchOpen(false);
@@ -97,77 +124,52 @@ function AppContent() {
         <link rel="icon" href="/images/ferrari.png" />
       </Head>
 
+      {/* HEADER */}
       <header className="header" style={{ position: 'relative' }}>
 
-        {/* LEFT SIDE */}
         <div className="header-left">
-
-          {/* PHONE */}
           <a href="tel:1234567890" className="call-me">
             <FaPhone size={20} />
           </a>
 
-          {/* LEFT NAV LINKS */}
           <div className="desktop-nav nav-left">
             <Link href="/">HOME</Link>
             <Link href="/Inventory">Current Stock</Link>
             <Link href="/Sellyourcar">Sell your car</Link>
           </div>
-
         </div>
 
-        {/* CENTER LOGOS */}
         <div className="logo-bar desktop-logo-bar">
           {logoBatches[currentBatchIndex].map((logo, idx) => (
-            <img
-              key={idx}
-              src={logo}
-              alt={`Logo batch ${currentBatchIndex} - ${idx}`}
-              className="desktop-logo"
-            />
+            <img key={idx} src={logo} alt="" className="desktop-logo" />
           ))}
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="header-icons">
-
-          {/* RIGHT NAV LINKS */}
           <div className="desktop-nav nav-right">
             <Link href="/NewsAndEvents">Insights</Link>
             <Link href="/About">About Us</Link>
             <Link href="/contact">Contact Us</Link>
           </div>
 
-          {/* SEARCH */}
           <button onClick={openSearch} className="search-btn">
             <FaSearch size={20} />
           </button>
 
-          {/* MENU */}
-          <button
-            className={`menu-btn ${isMenuOpen ? 'open' : ''}`}
-            onClick={toggleMenu}
-            style={{ zIndex: 1001 }}
-          >
+          <button className="menu-btn" onClick={toggleMenu}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
-
         </div>
 
-        {/* MOBILE CENTER LOGO */}
         <div className="logo-bar mobile-logo-bar">
           <img
             src={footerLogos[currentFooterLogoIndex]}
-            alt={`Footer logo ${currentFooterLogoIndex}`}
             className="mobile-logo"
+            alt=""
           />
         </div>
 
-        {/* MOBILE / FULLSCREEN MENU */}
-        <nav
-          ref={menuRef}
-          className={`nav-menu ${isMenuOpen ? 'active' : ''}`}
-        >
+        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
             <li><Link href="/">Home</Link></li>
             <li><Link href="/Inventory">Inventory</Link></li>
@@ -177,106 +179,59 @@ function AppContent() {
             <li><Link href="/NewsAndEvents">News and Events</Link></li>
             <li><Link href="/OtherServices">Other Services</Link></li>
             <li><Link href="/Testimonials">Testimonials</Link></li>
-
-            {isAdmin && (
-              <li>
-                <Link href="/admin/add-car">Add Car (Admin)</Link>
-              </li>
-            )}
           </ul>
         </nav>
-
       </header>
 
-      {/* ✅ BANNER — display:block on img fixes mobile white line gap */}
+      {/* BANNER */}
       <section className="banner" style={{ lineHeight: 0, fontSize: 0 }}>
-        <img
-          src="/images/carwallpaper.webp"
-          alt="Banner"
-          className="banner-image"
-          style={{ display: 'block' }}
-        />
-        <div className="banner-text" style={{ lineHeight: 1.4, fontSize: '16px' }}>
+        <img src="/images/carwallpaper.webp" className="banner-image" style={{ display: 'block' }} />
+        <div className="banner-text">
           <h1>Welcome to Our Car Dealership</h1>
           <p>Discover our exclusive range of luxury cars.</p>
         </div>
       </section>
 
+      {/* WELCOME */}
       <section className="welcome-section">
         <div className="welcome-container">
-          <h2>
-            Welcome to <br />
-            <span>Nabil's Surrey Supercars</span>
-          </h2>
-
-          <p>
-            We are a family-run independent luxury car dealership based in Surrey,
-            specialising in a carefully curated collection of supercars, luxury SUVs,
-            prestige vehicles, and high-performance automobiles.
-          </p>
-
-          <p>
-            Founded through a lifelong passion for exceptional engineering and
-            automotive excellence, Nabil's Surrey Supercars is dedicated to offering
-            only the finest vehicles presented to the very highest standards.
-          </p>
-
-          <p>
-            We pride ourselves on delivering a professional, discreet, and seamless
-            experience for every client. Whether you are purchasing your dream
-            supercar, selling a cherished vehicle, or sourcing something truly rare,
-            our goal is to make the entire process enjoyable, transparent, and secure.
-          </p>
-
-          <p>
-            With specialist knowledge, attention to detail, and genuine enthusiasm
-            for luxury motoring, we strive to build long-term relationships with our
-            clients and provide a level of service that reflects the exclusivity of
-            the vehicles we represent.
-          </p>
+          <h2>Welcome to <br /><span>Nabil's Surrey Supercars</span></h2>
+          <p>We are a family-run independent luxury car dealership...</p>
+          <p>Founded through a lifelong passion...</p>
+          <p>We pride ourselves on delivering...</p>
+          <p>With specialist knowledge...</p>
         </div>
       </section>
 
       <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={closeSearch} />
 
       <main>
+
+        {/* ✅ REPLACED ABOUT SECTION WITH SOLD PREVIEW */}
         <section className="about-us">
           <div className="about-wrapper">
 
-            {/* LEFT SIDE IMAGE */}
             <div className="about-image-container">
-              <img
-                src="/images/car1.jpg"
-                alt="About Us"
-                className="about-image"
-              />
+              {soldImages.length > 0 && (
+                <img
+                  src={soldImages[currentSoldImage]}
+                  className="about-image"
+                  alt="Previously Sold"
+                />
+              )}
             </div>
 
-            {/* RIGHT SIDE CONTENT */}
             <div className="about-text-container">
-              <h2>About Us</h2>
+              <h2>Previously Sold Vehicles</h2>
 
               <p>
-                Nabil's Surrey Supercars is a specialist independent luxury car dealership
-                based in Surrey, offering an exclusive selection of prestige, performance,
-                and supercars.
+                A showcase of luxury, prestige and performance vehicles we have
+                successfully supplied to clients across the UK.
               </p>
 
-              <p>
-                We are passionate about delivering exceptional vehicles alongside a
-                professional and personal customer experience tailored to every client.
-              </p>
-
-              {/* HORIZONTAL BUTTONS */}
               <div className="about-links">
-                <Link href="/Inventory" className="about-btn">
-                  Current Stock
-                </Link>
-                <Link href="/NewsAndEvents" className="about-btn">
-                  News & Events
-                </Link>
-                <Link href="/Sellyourcar" className="about-btn">
-                  Sell Your Car
+                <Link href="/sold" className="about-btn">
+                  View All Sold Vehicles
                 </Link>
               </div>
             </div>
@@ -284,8 +239,10 @@ function AppContent() {
           </div>
         </section>
 
+        {/* LATEST ARRIVALS */}
         <section className="latest-arrivals">
           <h2>Latest Arrivals</h2>
+
           {loadingCars ? (
             <p>Loading latest arrivals...</p>
           ) : (
@@ -293,26 +250,9 @@ function AppContent() {
               {cars.slice(0, 6).map((car) => (
                 <div key={car._id} className="car-card">
                   <Link href={`/car/${car._id}`}>
-                    <img
-                      src={car.images?.[0] || '/placeholder.png'}
-                      alt={`${car.make} ${car.model}`}
-                    />
+                    <img src={car.images?.[0] || '/placeholder.png'} />
                     <div className="car-details">
-                      <h3>
-                        {car.year} {car.make} {car.model}
-                      </h3>
-                      <p className="car-price">
-                        £{Number(car.price).toLocaleString()}
-                      </p>
-                      <p className="car-info">
-                        {car.mileage?.toLocaleString()} miles
-                      </p>
-                      <p className="car-info">
-                        {car.colour || car.color}
-                      </p>
-                      <p className="car-info">
-                        {car.year}
-                      </p>
+                      <h3>{car.year} {car.make} {car.model}</h3>
                     </div>
                   </Link>
                 </div>
@@ -320,39 +260,26 @@ function AppContent() {
             </div>
           )}
         </section>
+
       </main>
 
+      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <img
-              src={footerLogos[currentFooterLogoIndex]}
-              alt={`Footer Logo ${currentFooterLogoIndex}`}
-              className="footer-logo-img"
-            />
+            <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo-img" />
           </div>
+
           <div className="footer-details">
             <p>Nabil's Surrey Supercar Website</p>
             <p>Surrey, England, UK</p>
             <p>0777777777</p>
-            <p>
-              We are authorised and regulated by the Financial Conduct Authority (FCA)
-              under FRN 660610. We are a credit broker, not a lender.
-            </p>
           </div>
+
           <div className="footer-links">
             <Link href="/inventory">Current Stock</Link>
-            <Link href="/Sellyourcar">Sell Your Car</Link>
             <Link href="/sold">Previously Sold</Link>
             <Link href="/contact">Contact Us</Link>
-            <Link href="/Inventory">Luxury Cars</Link>
-            <p>&copy; 2025 All Rights Reserved</p>
-            <div className="footer-legal">
-              <Link href="/cookie-policy">Cookie Policy</Link> |{' '}
-              <Link href="/privacy-policy">Privacy Policy</Link> |{' '}
-              <Link href="/complaints-procedure">Complaints Procedure</Link> |{' '}
-              <Link href="/modern-slavery">Modern Slavery Statement</Link>
-            </div>
           </div>
         </div>
       </footer>
