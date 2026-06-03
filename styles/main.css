@@ -179,19 +179,49 @@ a {
 
 /* MOBILE */
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
 
-  .header-left a,
+  /* Hide ONLY nav links, NOT phone */
+  .header-left a:not(.phone),
   .header-right a {
     display: none;
   }
 
+  /* keep phone visible */
+  .phone {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    border: none;
+    z-index: 9999;
+  }
+
+  .phone-text {
+    display: none;
+  }
+
+  .phone-icon {
+    font-size: 22px;
+  }
+
+  /* logos */
   .desktop-logos {
     display: none;
   }
 
   .mobile-logo {
     display: block;
+  }
+
+  /* banner fix */
+  .banner {
+    height: 45vh;
+  }
+
+  .banner img {
+    object-fit: contain;
+    background: #000;
   }
 
   .banner-text {
@@ -204,7 +234,6 @@ a {
     height: 250px;
   }
 }
-
 /* =======================
    LUXURY ABOUT PAGE
 ======================= */
@@ -354,4 +383,11 @@ a {
   .phone-icon {
     font-size: 20px;
   }
+}
+
+.phone {
+  display: flex !important;
+  align-items: center;
+  color: white;
+  z-index: 9999;
 }
