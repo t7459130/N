@@ -9,7 +9,6 @@ body {
   background: #0b0b0b;
   color: white;
   font-family: Arial, sans-serif;
-  overflow-x: hidden;
 }
 
 a {
@@ -17,9 +16,9 @@ a {
   text-decoration: none;
 }
 
-/* =========================
-   HEADER LAYOUT FIX
-========================= */
+/* =======================
+   HEADER (ORIGINAL STABLE)
+======================= */
 
 .site-header {
   height: 80px;
@@ -43,71 +42,51 @@ a {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-/* =========================
-   🔥 LOGO CONTAINER FIX
-========================= */
+/* =======================
+   LOGOS (BACK TO ORIGINAL)
+======================= */
 
 .logo-box {
   display: flex;
-  gap: 16px;
+  gap: 15px;
   align-items: center;
-  justify-content: center;
+}
 
-  /* IMPORTANT: prevents overflow / zoom feel */
-  height: 60px;
-  max-height: 60px;
-
-  padding: 6px 14px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  backdrop-filter: blur(8px);
+.logo-box img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
 /* desktop logos */
-.desktop-logos img {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
-
-  display: block;
-
-  filter: brightness(1.1) contrast(1.1);
-  opacity: 0.95;
-
-  transition: transform 0.25s ease, opacity 0.25s ease;
+.desktop-logos {
+  display: flex;
 }
 
-.desktop-logos img:hover {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
-/* =========================
-   MOBILE LOGO FIX (CRITICAL)
-========================= */
-
+/* mobile logo hidden by default */
 .mobile-logo {
   display: none;
-  height: 60px;
-  align-items: center;
-  justify-content: center;
 }
 
 .mobile-logo img {
-  width: 38px;
-  height: 38px;
+  width: 45px;
+  height: 45px;
   object-fit: contain;
-  display: block;
-
-  filter: brightness(1.1);
 }
 
-/* =========================
-   ICON + PHONE
-========================= */
+/* =======================
+   PHONE + ICONS
+======================= */
+
+.phone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: white;
+}
 
 .icon-btn {
   background: none;
@@ -117,16 +96,9 @@ a {
   font-size: 20px;
 }
 
-.phone {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-}
-
-/* =========================
+/* =======================
    MOBILE MENU
-========================= */
+======================= */
 
 .mobile-menu {
   display: none;
@@ -144,9 +116,9 @@ a {
   z-index: 99999;
 }
 
-/* =========================
-   MOBILE FIX
-========================= */
+/* =======================
+   MOBILE VIEW
+======================= */
 
 @media (max-width: 768px) {
 
@@ -155,16 +127,11 @@ a {
     display: none;
   }
 
-  /* show ONLY mobile logo */
+  /* show single mobile logo */
   .mobile-logo {
     display: flex;
-  }
-
-  /* prevent weird zoom layout shifts */
-  .logo-box {
-    background: transparent;
-    padding: 0;
-    height: 60px;
+    justify-content: center;
+    align-items: center;
   }
 
   .phone-text {
@@ -174,4 +141,14 @@ a {
   .site-header {
     padding: 0 12px;
   }
+}
+
+/* =======================
+   IMAGE SAFETY (ONLY FIX)
+======================= */
+
+/* prevents any image from going full-screen / breaking layout */
+img {
+  max-width: 100%;
+  height: auto;
 }
