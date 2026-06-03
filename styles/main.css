@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
-/* ===================== RESET ===================== */
-
 * {
   margin: 0;
   padding: 0;
@@ -11,22 +9,14 @@
 body {
   font-family: 'Montserrat', sans-serif;
   background: #111;
-  color: #fff;
+  color: white;
   overflow-x: hidden;
 }
 
-/* ===================== LINKS ===================== */
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* ===================== HEADER GRID (FIXED) ===================== */
-
+/* HEADER */
 .header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 
   height: 80px;
@@ -42,45 +32,34 @@ a {
 .header-left {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 15px;
+}
+
+/* CENTER LOGOS (RESTORED SPIN AREA) */
+.logo-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.desktop-logo {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  animation: fade 0.6s ease;
+}
+
+@keyframes fade {
+  from { opacity: 0.2; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* RIGHT */
 .header-right {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   gap: 15px;
 }
-
-/* ===================== PHONE ICON ===================== */
-
-.call-me {
-  color: white;
-  display: flex;
-  align-items: center;
-}
-
-.call-me svg {
-  color: white !important;
-}
-
-/* ===================== CENTER LOGO ===================== */
-
-.logo-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.desktop-logo {
-  width: 45px;
-  height: 45px;
-  object-fit: contain;
-}
-
-/* ===================== NAV ===================== */
 
 .desktop-nav {
   display: flex;
@@ -89,37 +68,32 @@ a {
 
 .desktop-nav a {
   color: #ccc;
-  font-size: 13px;
   font-weight: 600;
-  transition: 0.2s;
+  font-size: 13px;
 }
 
 .desktop-nav a:hover {
-  color: #fff;
+  color: white;
 }
 
-/* ===================== ICON BUTTONS ===================== */
-
+/* ICONS */
 .search-btn,
-.menu-btn {
+.menu-btn,
+.call-me {
   background: none;
   border: none;
   color: white;
   font-size: 18px;
-  cursor: pointer;
 }
 
-/* ===================== BANNER ===================== */
-
+/* BANNER RESTORED */
 .banner {
   position: relative;
-  overflow: hidden;
-  line-height: 0;
+  width: 100%;
 }
 
 .banner-image {
   width: 100%;
-  height: auto;
   max-height: 500px;
   object-fit: cover;
   display: block;
@@ -131,123 +105,17 @@ a {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: white;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
 }
 
-/* ===================== SECTION ===================== */
-
-.latest-arrivals {
-  background: #0f0f0f;
-  padding: 50px 20px;
-}
-
-.latest-arrivals h2 {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-/* ===================== CAR GRID ===================== */
-
-.car-listings {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.car-card {
-  background: #1a1a1a;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.car-card img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-}
-
-/* ===================== ABOUT / SOLD ===================== */
-
-.about-us {
-  padding: 80px 20px;
-  background: #111;
-}
-
-.about-wrapper {
-  max-width: 1200px;
-  margin: auto;
-
-  display: flex;
-  gap: 40px;
-  align-items: center;
-}
-
-.about-image {
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-.about-text-container h2 {
-  font-size: 38px;
-  margin-bottom: 10px;
-}
-
-.about-text-container p {
-  color: #b5b5b5;
-  line-height: 1.8;
-}
-
-/* ===================== BUTTON ===================== */
-
-.about-btn {
-  margin-top: 15px;
-  display: inline-block;
-  padding: 12px 20px;
-  background: #1e1e1e;
-  border-radius: 30px;
-  color: white;
-}
-
-/* ===================== FOOTER (FIXED SMALL LOGOS) ===================== */
-
-.footer {
-  background: #000;
-  padding: 25px;
-  text-align: center;
-  color: #888;
-}
-
-.footer-logos {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.footer-logos img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-  opacity: 0.8;
-}
-
-/* ===================== MOBILE MENU ===================== */
-
+/* MOBILE MENU */
 .nav-menu {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.97);
 
   display: none;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  z-index: 3000;
 }
 
 .nav-menu.active {
@@ -268,23 +136,14 @@ a {
   color: white;
 }
 
-/* ===================== MOBILE ===================== */
-
+/* MOBILE */
 @media (max-width: 768px) {
-
   .desktop-nav {
     display: none;
   }
 
-  .car-listings {
-    grid-template-columns: 1fr;
-  }
-
-  .about-wrapper {
-    flex-direction: column;
-  }
-
   .logo-bar {
-    grid-column: 2;
+    justify-content: center;
+    width: 100%;
   }
 }

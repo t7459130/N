@@ -3,8 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 
-import SearchOverlay from '../components/SearchOverlay';
 import { AdminProvider } from '../components/AdminContext';
+import SearchOverlay from '../components/SearchOverlay';
 
 function AppContent() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,14 +13,15 @@ function AppContent() {
 
   const logoBatches = [
     ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
+    ['/images/aston.png', '/images/pagani.png', '/images/bugatti.png', '/images/mercedes.png'],
   ];
 
-  const [logoIndex, setLogoIndex] = useState(0);
+  const [batchIndex, setBatchIndex] = useState(0);
 
   useEffect(() => {
     const t = setInterval(() => {
-      setLogoIndex((p) => (p + 1) % logoBatches[0].length);
-    }, 2500);
+      setBatchIndex((p) => (p + 1) % logoBatches.length);
+    }, 3000);
     return () => clearInterval(t);
   }, []);
 
@@ -41,7 +42,7 @@ function AppContent() {
         <title>Car Dealership</title>
       </Head>
 
-      {/* HEADER GRID */}
+      {/* HEADER */}
       <header className="header">
 
         {/* LEFT */}
@@ -51,16 +52,14 @@ function AppContent() {
           </a>
         </div>
 
-        {/* CENTER LOGOS (ONLY THIS IS CENTERED) */}
+        {/* CENTER LOGO ROW (4 LOGOS) */}
         <div className="logo-bar">
-          <img
-            src={logoBatches[0][logoIndex]}
-            className="desktop-logo"
-            alt=""
-          />
+          {logoBatches[batchIndex].map((logo, i) => (
+            <img key={i} src={logo} className="desktop-logo" />
+          ))}
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT NAV */}
         <div className="header-right">
           <nav className="desktop-nav">
             <Link href="/">Home</Link>
@@ -92,12 +91,7 @@ function AppContent() {
           </ul>
         </nav>
 
-        <SearchOverlay
-          cars={[]}
-          isOpen={isSearchOpen}
-          onClose={() => setIsSearchOpen(false)}
-        />
-
+        <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} cars={[]} />
       </header>
 
       {/* BANNER */}
