@@ -1,61 +1,66 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import Link from 'next/link';
 
 export default function Home() {
   const [cars, setCars] = useState([]);
-  const [sold, setSold] = useState([]);
+  const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
 
   useEffect(() => {
+    fetch('/api/images')
+      .then((res) => res.json())
+      .then(setSoldImages)
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!soldImages.length) return;
+
+    const i = setInterval(() => {
+      setSoldIndex((p) => (p + 1) % soldImages.length);
+    }, 3500);
+
+    return () => clearInterval(i);
+  }, [soldImages]);
+
+  useEffect(() => {
     fetch('/api/cars')
-      .then((r) => r.json())
-      .then((d) => setCars(Array.isArray(d.cars) ? d.cars : []))
+      .then((res) => res.json())
+      .then((data) => setCars(data.cars || []))
       .catch(() => setCars([]));
   }, []);
-
-  useEffect(() => {
-    fetch('/api/images')
-      .then((r) => r.json())
-      .then(setSold)
-      .catch(() => setSold([]));
-  }, []);
-
-  useEffect(() => {
-    if (!sold.length) return;
-    const t = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % sold.length);
-    }, 3000);
-    return () => clearInterval(t);
-  }, [sold]);
 
   return (
     <Layout>
 
+      {/* HERO */}
       <section className="banner">
         <img src="/images/carwallpaper.webp" alt="" />
         <div className="banner-text">
           <h1>Luxury Car Dealership</h1>
-          <p>Performance • Prestige • Perfection</p>
+          <p>Performance. Prestige. Perfection.</p>
         </div>
       </section>
 
+      {/* WELCOME */}
       <section className="section">
         <h2>Welcome</h2>
-        <p>Luxury vehicles sourced across the UK & Europe.</p>
+        <p>We source and deliver premium vehicles across the UK.</p>
       </section>
 
+      {/* SOLD */}
       <section className="section">
-        <h2>Recently Sold</h2>
+        <h2>Previously Sold</h2>
 
-        {sold.length > 0 && (
+        {soldImages.length > 0 && (
           <div className="tile">
-            <img src={sold[soldIndex]} alt="" />
-            <p>Delivered luxury vehicles to clients worldwide.</p>
+            <img src={soldImages[soldIndex]} alt="" />
           </div>
         )}
       </section>
 
+      {/* INVENTORY */}
       <section className="section">
         <h2>Latest Arrivals</h2>
 
@@ -63,7 +68,7 @@ export default function Home() {
           {cars.slice(0, 6).map((c) => (
             <Link key={c._id} href={`/car/${c._id}`} className="card">
               <img src={c.images?.[0]} alt="" />
-              <h3>{c.make} {c.model}</h3>
+              <p>{c.make} {c.model}</p>
             </Link>
           ))}
         </div>

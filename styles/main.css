@@ -1,4 +1,3 @@
-/* ================= RESET ================= */
 * {
   margin: 0;
   padding: 0;
@@ -7,40 +6,38 @@
 
 html, body {
   width: 100%;
-  overflow-x: hidden; /* 🔥 FIX RIGHT SIDE GAP */
+  overflow-x: hidden; /* 🔥 fixes right-side gap */
+}
+
+body {
   background: #0b0b0b;
   color: white;
   font-family: Arial, sans-serif;
 }
 
-/* ================= APP WRAPPER ================= */
-.app {
-  width: 100%;
-  overflow-x: hidden;
-}
-
 /* ================= HEADER ================= */
 .site-header {
-  width: 100%;
-  height: 80px;
-  background: black;
-
-  display: flex; /* 🔥 replace grid (fixes alignment issues) */
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
 
+  height: 80px;
+  width: 100%;
+
+  background: black;
   padding: 0 20px;
+
   position: sticky;
   top: 0;
   z-index: 9999;
 }
 
-/* ================= NAV ================= */
+/* LEFT + RIGHT */
 .nav-left,
 .nav-right {
   display: flex;
-  gap: 15px;
   align-items: center;
+  gap: 15px;
 }
 
 .nav-left a,
@@ -48,44 +45,36 @@ html, body {
   color: white;
   text-decoration: none;
   font-size: 14px;
-  white-space: nowrap;
 }
 
-/* ================= CENTER LOGOS ================= */
+/* PHONE */
+.phone {
+  color: white;
+}
+
+/* CENTER LOGOS (THIS FIXES YOUR MISALIGNMENT) */
 .logo-box {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
 
-  flex: 1; /* 🔥 forces perfect centering */
-  min-width: 0;
+  width: 100%;
 }
 
 .logo-box img {
-  width: 30px;   /* 🔥 FIX HUGE LOGOS */
-  height: 30px;
+  width: 38px;
+  height: 38px;
   object-fit: contain;
-  flex-shrink: 0;
 }
 
-/* ================= PHONE ICON ================= */
+/* BUTTON */
 .icon-btn {
   background: none;
   border: none;
   color: white;
   cursor: pointer;
-}
-
-/* ================= MOBILE LOGO ================= */
-.mobile-logo {
-  display: none;
-}
-
-.mobile-logo img {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
+  font-size: 18px;
 }
 
 /* ================= MOBILE MENU ================= */
@@ -98,9 +87,8 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 25px;
 
-  z-index: 9999;
+  gap: 20px;
 }
 
 .mobile-menu.open {
@@ -110,33 +98,31 @@ html, body {
 .mobile-menu a {
   color: white;
   font-size: 22px;
-  text-decoration: none;
 }
 
 /* ================= PAGE ================= */
 .page {
   width: 100%;
-  padding: 30px 20px;
   overflow-x: hidden;
 }
 
 /* ================= BANNER ================= */
 .banner {
   width: 100%;
-  height: 60vh;
-  overflow: hidden;
+  position: relative;
 }
 
 .banner img {
   width: 100%;
-  height: 100%;
+  height: 60vh;
   object-fit: cover;
-  display: block; /* 🔥 removes weird white line issues */
+  display: block; /* 🔥 removes weird spacing */
 }
 
-/* ================= SECTIONS ================= */
-.section {
-  padding: 40px 20px;
+.banner-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
 }
 
 /* ================= GRID ================= */
@@ -150,7 +136,6 @@ html, body {
   width: 100%;
   height: 140px;
   object-fit: cover;
-  display: block;
 }
 
 /* ================= TILE ================= */
@@ -158,7 +143,6 @@ html, body {
   width: 100%;
   max-height: 400px;
   object-fit: cover;
-  display: block;
 }
 
 /* ================= FOOTER ================= */
@@ -168,42 +152,10 @@ html, body {
   text-align: center;
 }
 
-.footer-logos {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.footer-logos img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-}
-
 /* ================= MOBILE ================= */
 @media (max-width: 768px) {
-
   .nav-left,
   .nav-right {
     display: none;
-  }
-
-  .logo-box {
-    display: none;
-  }
-
-  .mobile-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .mobile-logo img {
-    width: 38px;
-    height: 38px;
   }
 }
