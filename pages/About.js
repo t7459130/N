@@ -3,20 +3,14 @@ import Layout from '../components/Layout';
 export default function About() {
   return (
     <Layout>
-      <div className="page">
+      <div className="content">
         <h1>About Us</h1>
+        <p>Luxury car dealership built on passion and precision.</p>
 
-        <img
-          src="/IMG_6403.jpg"
-          style={{ width: '100%', borderRadius: 10, margin: '20px 0' }}
-        />
+        <img src="/images/carwallpaper6.jpg" />
 
         <p>
-          Hello, and welcome to our dealership. We specialise in luxury and performance vehicles...
-        </p>
-
-        <p>
-          Every car is hand selected and prepared to showroom standard.
+          We specialise in supercars, prestige vehicles and collector-grade stock.
         </p>
       </div>
     </Layout>

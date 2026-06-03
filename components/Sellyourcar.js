@@ -1,23 +1,18 @@
-import { useState } from 'react';
 import Layout from '../components/Layout';
 
-export default function SellYourCar() {
-  const [form, setForm] = useState({});
-
+export default function Sell() {
   return (
     <Layout>
-      <div className="page">
-
+      <div className="content">
         <h1>Sell Your Car</h1>
 
-        <input placeholder="Make" />
-        <input placeholder="Model" />
-        <input placeholder="Year" />
-
-        <textarea placeholder="Description" />
-
-        <button>Submit</button>
-
+        <form className="form">
+          <input placeholder="First Name" />
+          <input placeholder="Make" />
+          <input placeholder="Model" />
+          <textarea placeholder="Description" />
+          <button>Submit</button>
+        </form>
       </div>
     </Layout>
   );

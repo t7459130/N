@@ -1,31 +1,30 @@
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import Layout from '../components/Layout';
+import Link from 'next/link';
 
 export default function Inventory() {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
     fetch('/api/cars')
-      .then(res => res.json())
-      .then(data => setCars(data.cars || []));
+      .then(r => r.json())
+      .then(d => setCars(d.cars || []));
   }, []);
 
   return (
-    <Layout>
-      <div className="page">
-
+    <Layout cars={cars}>
+      <div className="content">
         <h1>Inventory</h1>
 
         <div className="grid">
-          {cars.map(car => (
-            <Link key={car._id} href={`/car/${car._id}`} className="card">
-              <img src={car.images?.[0]} />
-              <h3>{car.make} {car.model}</h3>
+          {cars.map(c => (
+            <Link key={c._id} href={`/car/${c._id}`} className="card">
+              <img src={c.images?.[0]} />
+              <h3>{c.make} {c.model}</h3>
+              <p>£{c.price}</p>
             </Link>
           ))}
         </div>
-
       </div>
     </Layout>
   );

@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import SearchOverlay from './SearchOverlay';
-import { useAdmin } from './AdminContext';
 
-export default function Layout({ children }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+export default function Layout({ children, cars = [] }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const menuRef = useRef(null);
-  const { isAdmin } = useAdmin();
 
   const logoRow = [
     '/images/ferrari.png',
@@ -17,27 +15,17 @@ export default function Layout({ children }) {
     '/images/bentley.png',
   ];
 
-  const footerLogos = logoRow;
-
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setIsMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
+  const mobileLogo = '/images/ferrari.png';
 
   return (
-    <div className="app">
+    <div className="site">
 
-      {/* HEADER (SAME ON ALL PAGES) */}
+      {/* HEADER */}
       <header className="header">
 
         {/* LEFT */}
         <div className="header-left">
-          <a href="tel:1234567890" className="call-me">
+          <a href="tel:1234567890" className="phone">
             <FaPhone />
           </a>
 
@@ -50,8 +38,8 @@ export default function Layout({ children }) {
 
         {/* CENTER LOGOS */}
         <div className="logo-row">
-          {logoRow.map((logo, i) => (
-            <img key={i} src={logo} className="logo-small" />
+          {logoRow.map((l, i) => (
+            <img key={i} src={l} className="logo" />
           ))}
         </div>
 
@@ -63,17 +51,22 @@ export default function Layout({ children }) {
             <Link href="/contact">Contact</Link>
           </nav>
 
-          <button onClick={() => setIsSearchOpen(true)}>
+          <button onClick={() => setSearchOpen(true)} className="icon-btn">
             <FaSearch />
           </button>
 
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
+          <button onClick={() => setMenuOpen(!menuOpen)} className="icon-btn">
+            {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
+        {/* MOBILE LOGO */}
+        <div className="mobile-logo">
+          <img src={mobileLogo} />
+        </div>
+
         {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        <nav ref={menuRef} className={`mobile-menu ${menuOpen ? 'active' : ''}`}>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
@@ -81,27 +74,13 @@ export default function Layout({ children }) {
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
         </nav>
-
-        {/* SEARCH */}
-        <SearchOverlay
-          cars={[]}
-          isOpen={isSearchOpen}
-          onClose={() => setIsSearchOpen(false)}
-        />
       </header>
 
       {/* PAGE CONTENT */}
-      <main>{children}</main>
+      <main className="page">{children}</main>
 
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="footer-logos">
-          {footerLogos.map((logo, i) => (
-            <img key={i} src={logo} />
-          ))}
-        </div>
-      </footer>
-
+      {/* SEARCH */}
+      <SearchOverlay cars={cars} isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }
