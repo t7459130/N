@@ -292,3 +292,246 @@ a {
     padding: 35px 15px;
   }
 }
+
+/* =====================================================
+   LUXURY CONTACT PAGE (ROLLS-ROYCE STYLE)
+===================================================== */
+
+.contact-page {
+  background: #0b0b0b;
+}
+
+/* HERO */
+.contact-hero {
+  position: relative;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: url("/header/IMG_5908.JPG") center/cover no-repeat;
+}
+
+.contact-hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  padding: 20px;
+  max-width: 800px;
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.hero-content p {
+  color: #ccc;
+  font-size: 18px;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+  padding: 80px 20px;
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+
+.contact-section h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.contact-section p {
+  color: #bbb;
+  line-height: 1.7;
+}
+
+/* GRID */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.contact-card {
+  background: #111;
+  border: 1px solid #222;
+  padding: 25px;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  border-color: #444;
+}
+
+.contact-card h3 {
+  margin-bottom: 10px;
+  color: white;
+}
+
+.contact-card p {
+  color: #ccc;
+}
+
+/* FORM */
+.mailing-form {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mailing-form input {
+  padding: 12px;
+  width: 260px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #0f0f0f;
+  color: white;
+}
+
+.mailing-form button {
+  padding: 12px 18px;
+  background: #c40000;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mailing-form button:hover {
+  background: #ff0000;
+}
+
+/* DARK SECTION */
+.contact-section.dark {
+  background: #0a0a0a;
+}
+
+/* =====================================================
+   ABOUT PAGE (CINEMATIC LUXURY STYLE)
+===================================================== */
+
+.lux-hero {
+  position: relative;
+  height: 90vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.lux-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  transition: background-image 1s ease-in-out;
+}
+
+.lux-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
+}
+
+.lux-hero-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  animation: fadeUp 1s ease;
+}
+
+.lux-hero-content h1 {
+  font-size: 54px;
+  letter-spacing: 2px;
+}
+
+.lux-hero-content p {
+  color: #ccc;
+  font-size: 18px;
+}
+
+/* SECTIONS */
+.lux-section {
+  padding: 100px 20px;
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+
+.lux-section h2 {
+  font-size: 34px;
+  margin-bottom: 15px;
+}
+
+.lux-section p {
+  color: #bbb;
+  line-height: 1.8;
+}
+
+/* DARK SECTION */
+.lux-section.dark {
+  background: #0a0a0a;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================================
+   MOBILE FIXES
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .contact-hero {
+    height: 55vh;
+    padding: 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 30px;
+  }
+
+  .hero-content p {
+    font-size: 14px;
+  }
+
+  .lux-hero {
+    height: 70vh;
+  }
+
+  .lux-hero-content h1 {
+    font-size: 32px;
+    padding: 0 10px;
+  }
+
+  .lux-section {
+    padding: 60px 20px;
+  }
+}
