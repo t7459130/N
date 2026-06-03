@@ -1,411 +1,105 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  FaBars,
-  FaTimes,
-  FaPhone,
-  FaSearch
-} from 'react-icons/fa';
-
-import Head from 'next/head';
-import { useAdmin } from './AdminContext';
+import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import SearchOverlay from './SearchOverlay';
 
 export default function Layout({ children }) {
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
-  const [currentFooterLogoIndex, setCurrentFooterLogoIndex] = useState(0);
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const menuRef = useRef(null);
 
-  const { isAdmin } = useAdmin();
-
   const logoBatches = [
-    [
-      '/images/ferrari.png',
-      '/images/lamborghini.png',
-      '/images/rolls.png',
-      '/images/bentley.png',
-    ],
-    [
-      '/images/aston.png',
-      '/images/pagani.png',
-      '/images/bugatti.png',
-      '/images/mercedes.png',
-    ],
+    ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
   ];
 
-  const footerLogos = [
-    '/images/lamborghini.png',
-    '/images/ferrari.png',
-    '/images/porsche.png',
-    '/images/pagani.png',
-    '/images/mercedes.png',
-    '/images/aston.png',
-    '/images/bugatti.png',
-    '/images/bentley.png',
-    '/images/rolls.png',
-  ];
+  const [logoIndex, setLogoIndex] = useState(0);
 
   useEffect(() => {
-
-    const handleClickOutside = (e) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target)
-      ) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener(
-      'mousedown',
-      handleClickOutside
-    );
-
-    const interval = setInterval(() => {
-      setCurrentBatchIndex(
-        (prev) => (prev + 1) % logoBatches.length
-      );
-    }, 3000);
-
-    const interval2 = setInterval(() => {
-      setCurrentFooterLogoIndex(
-        (prev) => (prev + 1) % footerLogos.length
-      );
-    }, 1000);
-
-    return () => {
-      document.removeEventListener(
-        'mousedown',
-        handleClickOutside
-      );
-
-      clearInterval(interval);
-      clearInterval(interval2);
-    };
-
+    const t = setInterval(() => {
+      setLogoIndex((p) => (p + 1) % logoBatches[0].length);
+    }, 2500);
+    return () => clearInterval(t);
   }, []);
 
-  const toggleMenu = () => {
-    setIsMenuOpen((prev) => !prev);
-  };
-
-  const openSearch = () => {
-    setIsSearchOpen(true);
-  };
-
-  const closeSearch = () => {
-    setIsSearchOpen(false);
-  };
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   return (
     <>
-      <Head>
-        <title>Car Dealership</title>
-        <link
-          rel="icon"
-          href="/images/ferrari.png"
-        />
-      </Head>
-
       {/* HEADER */}
+      <header className="header">
 
-      <header
-        className="header"
-        style={{ position: 'relative' }}
-      >
-
-        {/* LEFT SIDE */}
-
+        {/* LEFT */}
         <div className="header-left">
-
-          {/* PHONE */}
-
-          <a
-            href="tel:1234567890"
-            className="call-me"
-          >
-            <FaPhone size={20} />
+          <a href="tel:07777777777" className="call-me">
+            <FaPhone />
           </a>
 
-          {/* LEFT NAV */}
-
-          <div className="desktop-nav nav-left">
-            <Link href="/">HOME</Link>
-
-            <Link href="/inventory">
-              Current Stock
-            </Link>
-
-            <Link href="/Sellyourcar">
-              Sell your car
-            </Link>
-          </div>
-
+          <nav className="desktop-nav">
+            <Link href="/">Home</Link>
+            <Link href="/inventory">Stock</Link>
+            <Link href="/Sellyourcar">Sell</Link>
+          </nav>
         </div>
 
-        {/* CENTER LOGOS */}
-
-        <div className="logo-bar desktop-logo-bar">
-          {logoBatches[currentBatchIndex].map(
-            (logo, idx) => (
-              <img
-                key={idx}
-                src={logo}
-                alt={`Logo batch ${currentBatchIndex} - ${idx}`}
-                className="desktop-logo"
-              />
-            )
-          )}
+        {/* CENTER LOGO */}
+        <div className="logo-bar">
+          <img src={logoBatches[0][logoIndex]} className="desktop-logo" />
         </div>
 
-        {/* RIGHT SIDE */}
-
+        {/* RIGHT */}
         <div className="header-icons">
+          <nav className="desktop-nav">
+            <Link href="/NewsAndEvents">Insights</Link>
+            <Link href="/About">About</Link>
+            <Link href="/contact">Contact</Link>
+          </nav>
 
-          {/* RIGHT NAV */}
-
-          <div className="desktop-nav nav-right">
-
-            <Link href="/NewsAndEvents">
-              Insights
-            </Link>
-
-            <Link href="/About">
-              About Us
-            </Link>
-
-            <Link href="/contact">
-              Contact Us
-            </Link>
-
-          </div>
-
-          {/* SEARCH */}
-
-          <button
-            onClick={openSearch}
-            className="search-btn"
-          >
-            <FaSearch size={20} />
+          <button className="search-btn" onClick={() => setSearchOpen(true)}>
+            <FaSearch />
           </button>
 
-          {/* MENU */}
-
-          <button
-            className={`menu-btn ${isMenuOpen ? 'open' : ''}`}
-            onClick={toggleMenu}
-            style={{ zIndex: 1001 }}
-          >
-            {isMenuOpen ? (
-              <FaTimes />
-            ) : (
-              <FaBars />
-            )}
+          <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
-
-        </div>
-
-        {/* MOBILE CENTER LOGO */}
-
-        <div className="logo-bar mobile-logo-bar">
-          <img
-            src={
-              footerLogos[
-                currentFooterLogoIndex
-              ]
-            }
-            alt={`Footer logo ${currentFooterLogoIndex}`}
-            className="mobile-logo"
-          />
         </div>
 
         {/* MOBILE MENU */}
-
-        <nav
-          ref={menuRef}
-          className={`nav-menu ${isMenuOpen ? 'active' : ''}`}
-        >
-
+        <nav ref={menuRef} className={`nav-menu ${menuOpen ? 'active' : ''}`}>
           <ul>
-
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-
-            <li>
-              <Link href="/Inventory">
-                Inventory
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/About">
-                About Us
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/contact">
-                Contact Us
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/Sellyourcar">
-                Sell Your Car
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/NewsAndEvents">
-                News and Events
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/OtherServices">
-                Other Services
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/Testimonials">
-                Testimonials
-              </Link>
-            </li>
-
-            {isAdmin && (
-              <li>
-                <Link href="/admin/add-car">
-                  Add Car (Admin)
-                </Link>
-              </li>
-            )}
-
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/inventory">Stock</Link></li>
+            <li><Link href="/Sellyourcar">Sell</Link></li>
+            <li><Link href="/NewsAndEvents">Insights</Link></li>
+            <li><Link href="/About">About</Link></li>
+            <li><Link href="/contact">Contact</Link></li>
           </ul>
-
         </nav>
+
+        <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} cars={[]} />
 
       </header>
 
-      {/* SEARCH OVERLAY */}
-
-      <SearchOverlay
-        isOpen={isSearchOpen}
-        onClose={closeSearch}
-      />
-
       {/* PAGE CONTENT */}
-
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
 
       {/* FOOTER */}
-
       <footer className="footer">
-
-        <div className="footer-content">
-
-          <div className="footer-logo">
-
-            <img
-              src={
-                footerLogos[
-                  currentFooterLogoIndex
-                ]
-              }
-              alt={`Footer Logo ${currentFooterLogoIndex}`}
-              className="footer-logo-img"
-            />
-
-          </div>
-
-          <div className="footer-details">
-
-            <p>
-              Nabils Surrey Supercar Website
-            </p>
-
-            <p>
-              Surrey, England, UK
-            </p>
-
-            <p>
-              0777777777
-            </p>
-
-            <p>
-              We are authorised and regulated by the
-              Financial Conduct Authority (FCA)
-              under FRN 660610.
-              We are a credit broker,
-              not a lender.
-            </p>
-
-          </div>
-
-          <div className="footer-links">
-
-            <Link href="/inventory">
-              Current Stock
-            </Link>
-
-            <Link href="/Sellyourcar">
-              Sell Your Car
-            </Link>
-
-            <Link href="/sold">
-              Previously Sold
-            </Link>
-
-            <Link href="/contact">
-              Contact Us
-            </Link>
-
-            <Link href="/inventory">
-              Luxury Cars
-            </Link>
-
-            <p>
-              &copy; 2025 All Rights Reserved
-            </p>
-
-            <div className="footer-legal">
-
-              <Link href="/cookie-policy">
-                Cookie Policy
-              </Link>
-
-              {' | '}
-
-              <Link href="/privacy-policy">
-                Privacy Policy
-              </Link>
-
-              {' | '}
-
-              <Link href="/complaints-procedure">
-                Complaints Procedure
-              </Link>
-
-              {' | '}
-
-              <Link href="/modern-slavery">
-                Modern Slavery Statement
-              </Link>
-
-            </div>
-
-          </div>
-
+        <div className="footer-logos">
+          <img src="/images/ferrari.png" />
+          <img src="/images/lamborghini.png" />
+          <img src="/images/bentley.png" />
+          <img src="/images/rolls.png" />
         </div>
 
+        <p>© Surrey Supercars</p>
       </footer>
     </>
   );
