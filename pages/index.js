@@ -29,7 +29,7 @@ export default function Home() {
   }, []);
 
   /* =========================
-     LOAD HERO IMAGES (HEADER FOLDER)
+     LOAD HERO IMAGES
   ========================= */
   useEffect(() => {
     const loadHero = async () => {
@@ -46,7 +46,7 @@ export default function Home() {
   }, []);
 
   /* =========================
-     LOAD SOLD IMAGES (WALLPAPER OR SAME SOURCE)
+     LOAD SOLD IMAGES
   ========================= */
   useEffect(() => {
     const loadSold = async () => {
@@ -90,6 +90,7 @@ export default function Home() {
 
   return (
     <Layout>
+
       {/* =========================
           HERO
       ========================= */}
@@ -125,7 +126,7 @@ export default function Home() {
       </section>
 
       {/* =========================
-          PREVIOUSLY SOLD
+          SOLD
       ========================= */}
       <section className="sold-section">
         <h2>Previously Sold</h2>
@@ -144,22 +145,47 @@ export default function Home() {
       </section>
 
       {/* =========================
-          INVENTORY
+          INVENTORY (NEW CARD UI)
       ========================= */}
       <section className="inventory">
-        <h2>Latest Arrivals</h2>
+        <h2 className="section-title">Latest Arrivals</h2>
 
-        <div className="grid">
-          {cars.slice(0, 6).map((car) => (
-            <Link key={car._id} href={`/car/${car._id}`} className="card">
-              <img src={car.images?.[0]} alt={car.make} />
-              <h3>
-                {car.make} {car.model}
-              </h3>
+        <div className="car-grid">
+          {cars.slice(0, 8).map((car) => (
+            <Link key={car._id} href={`/car/${car._id}`} className="car-card">
+
+              <div className="car-image-wrapper">
+                <img
+                  src={car.images?.[0]}
+                  alt={`${car.make} ${car.model}`}
+                />
+
+                <div className="price-tag">
+                  £{Number(car.price).toLocaleString()}
+                </div>
+              </div>
+
+              <div className="car-info">
+                <h3>
+                  {car.year} {car.make} {car.model}
+                </h3>
+
+                <div className="car-meta">
+                  <span>{car.mileage?.toLocaleString()} miles</span>
+                  <span>{car.fuelType}</span>
+                  <span>{car.transmission}</span>
+                </div>
+
+                <button className="view-btn">
+                  View Details
+                </button>
+              </div>
+
             </Link>
           ))}
         </div>
       </section>
+
     </Layout>
   );
 }

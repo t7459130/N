@@ -1,121 +1,73 @@
-import React, { useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
-import axios from 'axios';
-import Link from 'next/link';
+import React, { useState } from "react";
+import { FaTimes } from "react-icons/fa";
+import axios from "axios";
 
 export default function SearchOverlay({ isOpen, onClose }) {
-  const [mode, setMode] = useState('cars'); // cars | plate
-  const [query, setQuery] = useState('');
+  const [plate, setPlate] = useState("");
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
+  const [vehicle, setVehicle] = useState(null);
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
-  const searchCars = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get('/api/cars', {
-        params: { search: query }
-      });
-
-      setResults(data.cars || []);
-    } catch {
-      setResults([]);
-    }
-    setLoading(false);
-  };
-
   const searchPlate = async () => {
     setLoading(true);
+    setError("");
+    setVehicle(null);
+
     try {
-      const { data } = await axios.get('/api/plate-lookup', {
-        params: { plate: query }
-      });
+      const { data } = await axios.get(
+        `/api/plate-lookup?plate=${plate}`
+      );
 
-      setResults(data ? [data] : []);
-    } catch {
-      setResults([]);
+      setVehicle(data);
+    } catch (err) {
+      setError(err.response?.data?.error || "Not found");
     }
+
     setLoading(false);
-  };
-
-  const handleSearch = () => {
-    if (!query) return;
-
-    if (mode === 'cars') searchCars();
-    if (mode === 'plate') searchPlate();
   };
 
   return (
     <div className="search-overlay">
 
       <button className="close-btn" onClick={onClose}>
-        <FaTimes size={24} />
+        <FaTimes size={22} />
       </button>
 
-      <h2>Search</h2>
+      <h2>Vehicle Lookup</h2>
 
-      {/* MODE SWITCH */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
-        <button onClick={() => setMode('cars')}>
-          Cars
-        </button>
-        <button onClick={() => setMode('plate')}>
-          Registration Lookup
-        </button>
-      </div>
-
-      {/* INPUT */}
       <input
-        type="text"
-        placeholder={
-          mode === 'cars'
-            ? "Search cars..."
-            : "Enter registration (e.g. AB12 CDE)"
-        }
-        value={query}
-        onChange={(e) => setQuery(e.target.value.toUpperCase())}
-        style={{
-          width: '100%',
-          padding: 12,
-          fontSize: 16,
-          marginBottom: 10
-        }}
+        value={plate}
+        onChange={(e) => setPlate(e.target.value.toUpperCase())}
+        placeholder="Enter registration (e.g. AB12CDE)"
+        style={{ width: "100%", padding: 12 }}
       />
 
-      <button onClick={handleSearch}>
+      <button onClick={searchPlate} style={{ marginTop: 10 }}>
         Search
       </button>
 
       {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* RESULTS */}
-      <div style={{ marginTop: 20 }}>
-        {results.map((item, i) => (
-          <div key={i} style={{
-            border: '1px solid #ddd',
-            padding: 10,
-            marginBottom: 10
-          }}>
-            
-            {mode === 'cars' ? (
-              <Link href={`/car/${item._id}`}>
-                <img src={item.images?.[0]} width="100%" />
-                <h4>{item.make} {item.model}</h4>
-              </Link>
-            ) : (
-              <>
-                <h3>{item.registration}</h3>
-                <p>Make: {item.make}</p>
-                <p>Model: {item.model}</p>
-                <p>Year: {item.year}</p>
-                <p>Fuel: {item.fuelType}</p>
-              </>
-            )}
+      {vehicle && (
+        <div style={{
+          marginTop: 20,
+          padding: 15,
+          border: "1px solid #ddd",
+          borderRadius: 8
+        }}>
+          <h3>{vehicle.make} {vehicle.model}</h3>
 
-          </div>
-        ))}
-      </div>
+          <p><b>Registration:</b> {vehicle.registrationNumber}</p>
+          <p><b>Year:</b> {vehicle.yearOfManufacture}</p>
+          <p><b>Fuel:</b> {vehicle.fuelType}</p>
+          <p><b>Colour:</b> {vehicle.colour}</p>
+          <p><b>Engine:</b> {vehicle.engineCapacity}cc</p>
+          <p><b>MOT:</b> {vehicle.motStatus}</p>
+        </div>
+      )}
 
       <style jsx>{`
         .search-overlay {
