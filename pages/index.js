@@ -10,6 +10,7 @@ function AppContent() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
   const [currentFooterLogoIndex, setCurrentFooterLogoIndex] = useState(0);
 
   const [cars, setCars] = useState([]);
@@ -19,9 +20,11 @@ function AppContent() {
   const [currentSoldImage, setCurrentSoldImage] = useState(0);
 
   const menuRef = useRef(null);
+  const { isAdmin } = useAdmin();
 
   const logoBatches = [
     ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
+    ['/images/aston.png', '/images/pagani.png', '/images/bugatti.png', '/images/mercedes.png'],
   ];
 
   const footerLogos = [
@@ -36,7 +39,7 @@ function AppContent() {
     '/images/rolls.png',
   ];
 
-  /* CLOSE MENU ON OUTSIDE CLICK */
+  /* CLOSE MENU OUTSIDE */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -47,10 +50,18 @@ function AppContent() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  /* LOGO ROTATION */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   /* FOOTER LOGO ROTATION */
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentFooterLogoIndex((p) => (p + 1) % footerLogos.length);
+      setCurrentFooterLogoIndex((prev) => (prev + 1) % footerLogos.length);
     }, 1200);
     return () => clearInterval(interval);
   }, []);
@@ -62,7 +73,7 @@ function AppContent() {
         const res = await fetch('/api/cars');
         const data = await res.json();
         setCars(Array.isArray(data.cars) ? data.cars.reverse() : []);
-      } catch {
+      } catch (e) {
         setCars([]);
       } finally {
         setLoadingCars(false);
@@ -76,109 +87,103 @@ function AppContent() {
     fetch('/api/images')
       .then((res) => res.json())
       .then(setSoldImages)
-      .catch(() => setSoldImages([]));
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
     if (!soldImages.length) return;
     const interval = setInterval(() => {
       setCurrentSoldImage((p) => (p + 1) % soldImages.length);
-    }, 3000);
+    }, 3500);
     return () => clearInterval(interval);
   }, [soldImages]);
 
   return (
     <div className="app">
+
       <Head>
-        <title>Nabil Surrey Supercars</title>
+        <title>Car Dealership</title>
       </Head>
 
       {/* HEADER */}
       <header className="header">
 
-        <div className="header-left">
-          <a href="tel:1234567890" className="icon">
-            <FaPhone />
-          </a>
-
-          <div className="desktop-nav">
-            <Link href="/">Home</Link>
-            <Link href="/Inventory">Inventory</Link>
-            <Link href="/Sellyourcar">Sell Your Car</Link>
-          </div>
+        {/* LEFT NAV */}
+        <div className="nav-left">
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Current Stock</Link>
+          <Link href="/Sellyourcar">Sell Your Car</Link>
         </div>
 
-        <div className="logo-center">
-          <img src="/images/ferrari.png" />
+        {/* CENTER LOGOS */}
+        <div className="logo-bar">
+          {logoBatches[currentBatchIndex].map((logo, i) => (
+            <img key={i} src={logo} className="desktop-logo" />
+          ))}
         </div>
 
-        <div className="header-right">
-          <button className="icon" onClick={() => setIsSearchOpen(true)}>
-            <FaSearch />
-          </button>
+        {/* RIGHT NAV */}
+        <div className="nav-right">
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About Us</Link>
+          <Link href="/contact">Contact Us</Link>
 
-          <button className="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <FaPhone className="icon" />
+          <FaSearch className="icon" />
+
+          <button className="menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
+        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Inventory</Link>
-          <Link href="/About">About Us</Link>
           <Link href="/Sellyourcar">Sell Your Car</Link>
-          <Link href="/NewsAndEvents">News</Link>
-          <Link href="/Testimonials">Testimonials</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
         </nav>
+
       </header>
 
-      {/* HERO */}
-      <section className="hero">
-        <img src="/images/carwallpaper.webp" />
-        <div className="hero-text">
-          <h1>Luxury Car Dealership</h1>
-          <p>Supercars • Prestige • Performance</p>
+      {/* BANNER */}
+      <section className="banner">
+        <img src="/images/carwallpaper.webp" className="banner-image" />
+        <div className="banner-text">
+          <h1>Welcome to Our Car Dealership</h1>
+          <p>Luxury & Performance Vehicles</p>
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section className="section">
-        <h2>About Us</h2>
-
-        <p>
-          We are a family-run independent luxury car dealership based in Surrey,
-          specialising in supercars, prestige vehicles and performance cars.
-        </p>
-
-        <p>
-          Built from a passion for automotive excellence, we carefully select every vehicle
-          to ensure showroom-quality standards.
-        </p>
-
-        <p>
-          We pride ourselves on transparency, professionalism and long-term customer relationships.
-        </p>
+      {/* WELCOME */}
+      <section className="welcome-section">
+        <div className="welcome-container">
+          <h2>Welcome to <span>Nabil's Surrey Supercars</span></h2>
+          <p>Family-run luxury dealership in Surrey...</p>
+          <p>Specialising in supercars, prestige & performance...</p>
+          <p>We deliver a premium buying experience...</p>
+        </div>
       </section>
 
-      {/* SOLD CAROUSEL */}
-      <section className="section dark">
+      {/* SOLD SECTION (ROTATING IMAGE BOX) */}
+      <section className="sold-section">
         <h2>Previously Sold Vehicles</h2>
 
         <div className="sold-box">
           {soldImages.length > 0 && (
-            <img src={soldImages[currentSoldImage]} className="sold-image" />
+            <img src={soldImages[currentSoldImage]} />
           )}
         </div>
 
-        <p className="subtext">
-          A showcase of luxury and performance vehicles successfully supplied across the UK.
+        <p className="sold-text">
+          A showcase of luxury vehicles successfully supplied to clients across the UK.
         </p>
       </section>
 
       {/* INVENTORY */}
-      <section className="section">
+      <section className="inventory">
         <h2>Latest Arrivals</h2>
 
         {loadingCars ? (
@@ -187,10 +192,8 @@ function AppContent() {
           <div className="grid">
             {cars.slice(0, 6).map((car) => (
               <div key={car._id} className="card">
-                <Link href={`/car/${car._id}`}>
-                  <img src={car.images?.[0]} />
-                  <h3>{car.year} {car.make} {car.model}</h3>
-                </Link>
+                <img src={car.images?.[0]} />
+                <h3>{car.year} {car.make} {car.model}</h3>
               </div>
             ))}
           </div>
@@ -199,13 +202,13 @@ function AppContent() {
 
       {/* FOOTER */}
       <footer className="footer">
-        <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo" />
+        <div className="footer-logos">
+          <img src={footerLogos[currentFooterLogoIndex]} />
+        </div>
 
-        <p>© Nabil Surrey Supercars</p>
-        <p>Surrey, UK</p>
+        <p>Surrey, UK • 0777777777</p>
       </footer>
 
-      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 }
