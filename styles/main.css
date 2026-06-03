@@ -1,4 +1,6 @@
-/* RESET */
+/* =========================
+   GLOBAL RESET
+========================= */
 * {
   margin: 0;
   padding: 0;
@@ -16,9 +18,9 @@ a {
   text-decoration: none;
 }
 
-/* =======================
-   HEADER (ORIGINAL STABLE)
-======================= */
+/* =========================
+   HEADER
+========================= */
 
 .site-header {
   height: 80px;
@@ -32,21 +34,23 @@ a {
   z-index: 9999;
 }
 
+/* left/right groups */
 .header-side {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
+.header-side a {
+  font-size: 14px;
+}
+
+/* center logos */
 .header-center {
   flex: 1;
   display: flex;
   justify-content: center;
 }
-
-/* =======================
-   LOGOS (BACK TO ORIGINAL)
-======================= */
 
 .logo-box {
   display: flex;
@@ -60,34 +64,24 @@ a {
   object-fit: contain;
 }
 
-/* desktop logos */
-.desktop-logos {
-  display: flex;
-}
-
-/* mobile logo hidden by default */
-.mobile-logo {
-  display: none;
-}
-
-.mobile-logo img {
-  width: 45px;
-  height: 45px;
-  object-fit: contain;
-}
-
-/* =======================
-   PHONE + ICONS
-======================= */
-
+/* phone */
 .phone {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
   color: white;
+  font-size: 14px;
+  padding: 6px 10px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
+.phone-icon {
+  font-size: 18px;
+}
+
+/* menu button */
 .icon-btn {
   background: none;
   border: none;
@@ -96,9 +90,9 @@ a {
   font-size: 20px;
 }
 
-/* =======================
+/* =========================
    MOBILE MENU
-======================= */
+========================= */
 
 .mobile-menu {
   display: none;
@@ -116,39 +110,185 @@ a {
   z-index: 99999;
 }
 
-/* =======================
-   MOBILE VIEW
-======================= */
+.mobile-menu a {
+  font-size: 24px;
+}
+
+/* =========================
+   MOBILE LOGO FIX (IMPORTANT)
+========================= */
+
+.mobile-logo {
+  display: none;
+}
+
+.mobile-logo img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+/* =========================
+   HERO / BANNER (FIXED)
+========================= */
+
+.banner {
+  position: relative;
+  height: 55vh; /* smaller than before */
+  overflow: hidden;
+}
+
+.banner img,
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* FIX: prevents zoom-out / weird scaling */
+  display: block;
+}
+
+/* overlay */
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1;
+}
+
+/* text */
+.banner-text {
+  position: absolute;
+  bottom: 25px;
+  left: 30px;
+  z-index: 2;
+  background: rgba(0,0,0,0.45);
+  padding: 16px 18px;
+  border-radius: 10px;
+  max-width: 500px;
+}
+
+.banner-text h1 {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.banner-text p {
+  color: #ccc;
+  font-size: 15px;
+}
+
+/* =========================
+   SECTIONS (CLEANER LOOK)
+========================= */
+
+.welcome-section,
+.inventory,
+.sold-section {
+  padding: 50px 20px;
+}
+
+.welcome-section h2,
+.inventory h2,
+.sold-section h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.welcome-section p {
+  color: #bbb;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* =========================
+   SOLD SECTION
+========================= */
+
+.sold-tile {
+  max-width: 800px;
+  margin: auto;
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sold-tile img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+}
+
+.sold-tile p {
+  padding: 15px;
+  color: #ccc;
+}
+
+/* =========================
+   INVENTORY GRID
+========================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 15px;
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* =========================
+   DESKTOP / MOBILE FIXES
+========================= */
 
 @media (max-width: 768px) {
 
-  /* hide desktop logos */
-  .desktop-logos {
+  /* hide links only */
+  .header-left a:not(.phone),
+  .header-right a {
     display: none;
   }
 
-  /* show single mobile logo */
-  .mobile-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  /* keep phone visible */
+  .phone {
+    border: none;
+    padding: 8px;
   }
 
   .phone-text {
     display: none;
   }
 
-  .site-header {
-    padding: 0 12px;
+  /* IMPORTANT: FIX MOBILE LOGO SHOWING */
+  .desktop-logos {
+    display: none;
   }
-}
 
-/* =======================
-   IMAGE SAFETY (ONLY FIX)
-======================= */
+  .mobile-logo {
+    display: block !important; /* FIX */
+  }
 
-/* prevents any image from going full-screen / breaking layout */
-img {
-  max-width: 100%;
-  height: auto;
+  .banner {
+    height: 40vh; /* smaller mobile hero */
+  }
+
+  .banner-text {
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .sold-tile img {
+    height: 220px;
+  }
+
+  .welcome-section,
+  .inventory,
+  .sold-section {
+    padding: 35px 15px;
+  }
 }
