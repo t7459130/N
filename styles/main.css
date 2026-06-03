@@ -332,3 +332,99 @@ body {
     font-size: 16px;
   }
 }
+
+/* =========================
+   FIX MOBILE HAMBURGER MENU
+   ========================= */
+
+@media (max-width: 768px) {
+
+  /* FORCE HEADER LAYOUT CLEAN */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #111;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* HIDE DESKTOP NAV COMPLETELY */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .desktop-logo-bar {
+    display: none !important;
+  }
+
+  /* HAMBURGER BUTTON ALWAYS ON TOP */
+  .menu-btn {
+    z-index: 3001;
+    color: white;
+    font-size: 22px;
+  }
+
+  .search-btn {
+    z-index: 3001;
+    color: white;
+  }
+
+  /* FULL SCREEN OVERLAY MENU */
+  .nav-menu {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.95);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+
+    z-index: 2500;
+  }
+
+  .nav-menu.active {
+    transform: translateX(0);
+  }
+
+  /* CLEAN MENU LIST */
+  .nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  .nav-menu li {
+    margin: 18px 0;
+  }
+
+  .nav-menu a {
+    color: white;
+    font-size: 22px;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .nav-menu a:hover {
+    color: #c40000;
+  }
+
+  /* PREVENT PAGE SCROLL WHEN MENU OPEN (optional but good) */
+  body.menu-open {
+    overflow: hidden;
+  }
+}
