@@ -323,3 +323,113 @@ h1, h2, h3 {
     object-fit: contain;
   }
 }
+
+/* ================= MOBILE LOGO FIX ================= */
+
+.mobile-logo {
+  display: none;
+}
+
+/* ONLY SHOW ON MOBILE */
+@media (max-width: 768px) {
+
+  .mobile-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: auto;
+
+    pointer-events: none;
+  }
+
+  /* THIS IS THE KEY: fixed box */
+  .mobile-logo-box {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #0b0b0b;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+
+    overflow: hidden;
+  }
+
+  .mobile-logo-box img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+/* ================= DESKTOP / MOBILE CONTROL ================= */
+
+.desktop-only {
+  display: flex;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* ================= MOBILE LOGO FIX ================= */
+
+.mobile-logo {
+  display: none;
+}
+
+.mobile-logo-box {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  background: #0b0b0b;
+
+  overflow: hidden;
+}
+
+.mobile-logo-box img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+/* MOBILE RULES */
+@media (max-width: 768px) {
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 80px;
+  }
+
+  .icon-btn {
+    color: white;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+  }
+}

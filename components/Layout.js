@@ -26,24 +26,25 @@ export default function Layout({ children }) {
     '/images/bugatti.png',
   ];
 
-  /* CLOSE MENU OUTSIDE CLICK */
+  // CLOSE MENU ON OUTSIDE CLICK
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  /* MOBILE LOGO ROTATION */
+  // MOBILE LOGO CYCLER
   useEffect(() => {
-    const i = setInterval(() => {
-      setMobileLogoIndex((p) => (p + 1) % mobileLogos.length);
+    const interval = setInterval(() => {
+      setMobileLogoIndex((prev) => (prev + 1) % mobileLogos.length);
     }, 2500);
 
-    return () => clearInterval(i);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -65,16 +66,21 @@ export default function Layout({ children }) {
           </nav>
         </div>
 
-        {/* CENTER LOGOS (DESKTOP) */}
+        {/* CENTER DESKTOP LOGOS */}
         <div className="logo-row desktop-only">
           {logoRow.map((logo, i) => (
             <img key={i} src={logo} className="logo-small" />
           ))}
         </div>
 
-        {/* MOBILE LOGO */}
+        {/* MOBILE LOGO (FIXED BOX) */}
         <div className="mobile-only mobile-logo">
-          <img src={mobileLogos[mobileLogoIndex]} alt="logo" />
+          <div className="mobile-logo-box">
+            <img
+              src={mobileLogos[mobileLogoIndex]}
+              alt="logo"
+            />
+          </div>
         </div>
 
         {/* RIGHT */}
@@ -85,17 +91,26 @@ export default function Layout({ children }) {
             <Link href="/contact">Contact</Link>
           </nav>
 
-          <button onClick={() => setIsSearchOpen(true)}>
+          <button
+            className="icon-btn"
+            onClick={() => setIsSearchOpen(true)}
+          >
             <FaSearch />
           </button>
 
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button
+            className="icon-btn"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        <nav
+          ref={menuRef}
+          className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}
+        >
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
@@ -112,13 +127,17 @@ export default function Layout({ children }) {
       {/* ================= FOOTER ================= */}
       <footer className="footer">
         <div className="footer-logos">
-          {logoRow.map((l, i) => (
-            <img key={i} src={l} />
+          {logoRow.map((logo, i) => (
+            <img key={i} src={logo} className="footer-logo" />
           ))}
         </div>
       </footer>
 
-      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      {/* SEARCH OVERLAY */}
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
 
     </div>
   );
