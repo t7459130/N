@@ -19,6 +19,7 @@ function AppContent() {
   const [currentSoldImage, setCurrentSoldImage] = useState(0);
 
   const menuRef = useRef(null);
+  const { isAdmin } = useAdmin();
 
   const logoBatches = [
     ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
@@ -37,7 +38,7 @@ function AppContent() {
     '/images/rolls.png',
   ];
 
-  /* CLOSE MENU */
+  /* CLOSE MENU OUTSIDE CLICK */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -48,7 +49,7 @@ function AppContent() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  /* LOGOS */
+  /* LOGO ROTATION */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
@@ -63,20 +64,29 @@ function AppContent() {
     return () => clearInterval(interval);
   }, []);
 
-  /* CAR FETCH */
+  /* FETCH CARS */
   useEffect(() => {
-    fetch('/api/cars')
-      .then((res) => res.json())
-      .then((data) => setCars(Array.isArray(data.cars) ? data.cars.reverse() : []))
-      .catch(() => setCars([]))
-      .finally(() => setLoadingCars(false));
+    const fetchCars = async () => {
+      try {
+        const res = await fetch('/api/cars');
+        const data = await res.json();
+        setCars(Array.isArray(data.cars) ? data.cars.reverse() : []);
+      } catch (err) {
+        console.error(err);
+        setCars([]);
+      } finally {
+        setLoadingCars(false);
+      }
+    };
+
+    fetchCars();
   }, []);
 
-  /* SOLD IMAGES */
+  /* FETCH SOLD IMAGES */
   useEffect(() => {
     fetch('/api/images')
       .then((res) => res.json())
-      .then(setSoldImages)
+      .then((data) => setSoldImages(data))
       .catch(console.error);
   }, []);
 
@@ -84,7 +94,7 @@ function AppContent() {
     if (!soldImages.length) return;
 
     const interval = setInterval(() => {
-      setCurrentSoldImage((p) => (p + 1) % soldImages.length);
+      setCurrentSoldImage((prev) => (prev + 1) % soldImages.length);
     }, 3500);
 
     return () => clearInterval(interval);
@@ -94,100 +104,110 @@ function AppContent() {
     <div className="app">
       <Head>
         <title>Car Dealership</title>
+        <link rel="icon" href="/images/ferrari.png" />
       </Head>
 
       {/* HEADER */}
-      <header className="header">
+      <header className="header" style={{ position: 'relative' }}>
 
-        {/* LEFT */}
         <div className="header-left">
           <a href="tel:1234567890" className="call-me">
             <FaPhone size={20} />
           </a>
 
-          <div className="desktop-nav">
+          <div className="desktop-nav nav-left">
             <Link href="/">HOME</Link>
-            <Link href="/Inventory">Inventory</Link>
-            <Link href="/Sellyourcar">Sell</Link>
+            <Link href="/Inventory">Current Stock</Link>
+            <Link href="/Sellyourcar">Sell your car</Link>
           </div>
         </div>
 
-        {/* CENTER LOGO */}
         <div className="logo-bar desktop-logo-bar">
-          {logoBatches[currentBatchIndex].map((logo, i) => (
-            <img key={i} src={logo} className="desktop-logo" />
+          {logoBatches[currentBatchIndex].map((logo, idx) => (
+            <img key={idx} src={logo} alt="" className="desktop-logo" />
           ))}
         </div>
 
-        {/* RIGHT */}
         <div className="header-icons">
-
-          <div className="desktop-nav">
-            <Link href="/About">About</Link>
-            <Link href="/contact">Contact</Link>
+          <div className="desktop-nav nav-right">
+            <Link href="/NewsAndEvents">Insights</Link>
+            <Link href="/About">About Us</Link>
+            <Link href="/contact">Contact Us</Link>
           </div>
 
-          <button className="search-btn" onClick={() => setIsSearchOpen(true)}>
+          <button onClick={() => setIsSearchOpen(true)} className="search-btn">
             <FaSearch size={20} />
           </button>
 
-          <button
-            className="menu-btn"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
+          <button className="menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        {/* MOBILE LOGO */}
-        <div className="mobile-logo-bar">
-          <img src={footerLogos[currentFooterLogoIndex]} className="mobile-logo" />
+        <div className="logo-bar mobile-logo-bar">
+          <img
+            src={footerLogos[currentFooterLogoIndex]}
+            className="mobile-logo"
+            alt=""
+          />
         </div>
 
-        {/* MOBILE MENU */}
         <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
             <li><Link href="/">Home</Link></li>
             <li><Link href="/Inventory">Inventory</Link></li>
-            <li><Link href="/sold">Sold</Link></li>
-            <li><Link href="/About">About</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
-            <li><Link href="/Sellyourcar">Sell</Link></li>
+            <li><Link href="/About">About Us</Link></li>
+            <li><Link href="/contact">Contact Us</Link></li>
+            <li><Link href="/Sellyourcar">Sell Your Car</Link></li>
+            <li><Link href="/NewsAndEvents">News and Events</Link></li>
+            <li><Link href="/OtherServices">Other Services</Link></li>
+            <li><Link href="/Testimonials">Testimonials</Link></li>
           </ul>
         </nav>
-
       </header>
 
       {/* BANNER */}
-      <section className="banner">
-        <img src="/images/carwallpaper.webp" className="banner-image" />
+      <section className="banner" style={{ lineHeight: 0, fontSize: 0 }}>
+        <img
+          src="/images/carwallpaper.webp"
+          className="banner-image"
+          style={{ display: 'block' }}
+        />
         <div className="banner-text">
-          <h1>Welcome to Our Dealership</h1>
+          <h1>Welcome to Our Car Dealership</h1>
+          <p>Discover our exclusive range of luxury cars.</p>
         </div>
       </section>
 
-      {/* WELCOME */}
+      {/* WELCOME SECTION (RESTORED TEXT) */}
       <section className="welcome-section">
         <div className="welcome-container">
           <h2>
-            Welcome to <span>Nabil's Surrey Supercars</span>
+            Welcome to <br />
+            <span>Nabil's Surrey Supercars</span>
           </h2>
 
           <p>
-            We are a luxury car dealership specialising in supercars, prestige vehicles,
-            and high-performance automobiles.
+            We are a family-run independent luxury car dealership based in Surrey,
+            specialising in a carefully curated selection of supercars, prestige vehicles,
+            luxury SUVs, and high-performance automobiles.
           </p>
 
           <p>
-            We provide a professional, transparent and premium buying experience.
+            Founded from a lifelong passion for exceptional engineering and automotive excellence,
+            we are committed to offering only the highest quality vehicles presented to showroom standards.
           </p>
 
           <p>
-            Every vehicle is carefully selected and prepared to showroom standard.
+            We pride ourselves on delivering a professional, discreet, and seamless experience for every client.
+            Whether you're purchasing your dream car, selling a cherished vehicle, or sourcing something rare,
+            we ensure the process is smooth, transparent, and enjoyable.
           </p>
 
           <p>
-            Our goal is to deliver a seamless and enjoyable customer experience.
+            With specialist knowledge and genuine enthusiasm for luxury motoring,
+            we aim to build long-term relationships and provide a level of service
+            that reflects the exclusivity of the vehicles we represent.
           </p>
         </div>
       </section>
@@ -196,31 +216,83 @@ function AppContent() {
 
       <main>
 
-        {/* SOLD PREVIEW */}
+        {/* SOLD PREVIEW (FIXED MOBILE LAYOUT EXPECTED VIA CSS) */}
         <section className="about-us">
           <div className="about-wrapper">
 
-            <img
-              src={soldImages[currentSoldImage]}
-              className="about-image"
-            />
+            <div className="about-image-container">
+              {soldImages.length > 0 && (
+                <img
+                  src={soldImages[currentSoldImage]}
+                  className="about-image"
+                  alt="Previously Sold Vehicles"
+                />
+              )}
+            </div>
 
             <div className="about-text-container">
               <h2>Previously Sold Vehicles</h2>
 
               <p>
-                A showcase of luxury, prestige and performance vehicles sold across the UK.
+                A showcase of luxury, prestige and performance vehicles we have successfully
+                supplied to clients across the UK.
               </p>
 
-              <Link href="/sold" className="about-btn">
-                View Sold Vehicles
-              </Link>
+              <div className="about-links">
+                <Link href="/sold" className="about-btn">
+                  View All Sold Vehicles
+                </Link>
+              </div>
             </div>
 
           </div>
         </section>
 
+        {/* LATEST ARRIVALS */}
+        <section className="latest-arrivals">
+          <h2>Latest Arrivals</h2>
+
+          {loadingCars ? (
+            <p>Loading latest arrivals...</p>
+          ) : (
+            <div className="car-listings">
+              {cars.slice(0, 6).map((car) => (
+                <div key={car._id} className="car-card">
+                  <Link href={`/car/${car._id}`}>
+                    <img src={car.images?.[0] || '/placeholder.png'} />
+                    <div className="car-details">
+                      <h3>{car.year} {car.make} {car.model}</h3>
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
       </main>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-logo">
+            <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo-img" />
+          </div>
+
+          <div className="footer-details">
+            <p>Nabil's Surrey Supercar Website</p>
+            <p>Surrey, England, UK</p>
+            <p>0777777777</p>
+          </div>
+
+          <div className="footer-links">
+            <Link href="/inventory">Current Stock</Link>
+            <Link href="/sold">Previously Sold</Link>
+            <Link href="/contact">Contact Us</Link>
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 }
