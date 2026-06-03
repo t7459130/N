@@ -304,3 +304,18 @@ a {
     padding: 60px 20px;
   }
 }
+
+.phone-btn {
+  background: #111;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: white;
+  border: 1px solid #333;
+  transition: 0.3s;
+}
+
+.phone-btn:hover {
+  background: #c40000;
+  border-color: #c40000;
+}
