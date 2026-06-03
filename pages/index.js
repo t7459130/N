@@ -6,23 +6,28 @@ import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import { AdminProvider } from '../components/AdminContext';
 import SearchOverlay from '../components/SearchOverlay';
 
-function AppContent() {
+function HomeContent() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [logoIndex, setLogoIndex] = useState(0);
+
   const menuRef = useRef(null);
 
-  const logoBatches = [
-    ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
-    ['/images/aston.png', '/images/pagani.png', '/images/bugatti.png', '/images/mercedes.png'],
+  const logos = [
+    '/images/ferrari.png',
+    '/images/lamborghini.png',
+    '/images/rolls.png',
+    '/images/bentley.png',
   ];
 
-  const [batchIndex, setBatchIndex] = useState(0);
+  const footerLogos = logos;
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setBatchIndex((p) => (p + 1) % logoBatches.length);
-    }, 3000);
-    return () => clearInterval(t);
+    const interval = setInterval(() => {
+      setLogoIndex((p) => (p + 1) % logos.length);
+    }, 2500);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -39,7 +44,7 @@ function AppContent() {
     <div className="app">
 
       <Head>
-        <title>Car Dealership</title>
+        <title>Home</title>
       </Head>
 
       {/* HEADER */}
@@ -50,57 +55,87 @@ function AppContent() {
           <a href="tel:1234567890" className="call-me">
             <FaPhone />
           </a>
-        </div>
 
-        {/* CENTER LOGO ROW (4 LOGOS) */}
-        <div className="logo-bar">
-          {logoBatches[batchIndex].map((logo, i) => (
-            <img key={i} src={logo} className="desktop-logo" />
-          ))}
-        </div>
-
-        {/* RIGHT NAV */}
-        <div className="header-right">
-          <nav className="desktop-nav">
+          <nav className="nav-left">
             <Link href="/">Home</Link>
             <Link href="/Inventory">Stock</Link>
             <Link href="/Sellyourcar">Sell</Link>
+          </nav>
+        </div>
+
+        {/* CENTER LOGO CAROUSEL */}
+        <div className="logo-bar">
+          <img src={logos[logoIndex]} className="logo" alt="logo" />
+        </div>
+
+        {/* RIGHT */}
+        <div className="header-right">
+
+          <nav className="nav-right">
             <Link href="/NewsAndEvents">Insights</Link>
             <Link href="/About">About</Link>
             <Link href="/contact">Contact</Link>
           </nav>
 
-          <button className="search-btn" onClick={() => setIsSearchOpen(true)}>
+          <button className="icon-btn" onClick={() => setIsSearchOpen(true)}>
             <FaSearch />
           </button>
 
-          <button className="menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="icon-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-          <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/Inventory">Stock</Link></li>
-            <li><Link href="/Sellyourcar">Sell</Link></li>
-            <li><Link href="/NewsAndEvents">Insights</Link></li>
-            <li><Link href="/About">About</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
-          </ul>
+        <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
 
-        <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} cars={[]} />
       </header>
 
       {/* BANNER */}
       <section className="banner">
-        <img src="/images/carwallpaper.webp" className="banner-image" />
+        <img src="/images/carwallpaper.webp" className="banner-img" />
         <div className="banner-text">
-          <h1>Luxury Cars. Premium Service.</h1>
+          <h1>Luxury Cars</h1>
+          <p>Premium vehicles. Premium service.</p>
         </div>
       </section>
+
+      {/* HOME SECTIONS */}
+      <section className="home-grid">
+
+        <div className="home-card">
+          <h2>About Us</h2>
+          <p>Luxury dealership based in Surrey.</p>
+          <Link href="/About">Read More</Link>
+        </div>
+
+        <div className="home-card">
+          <h2>Sold Vehicles</h2>
+          <p>View our previously sold cars.</p>
+          <Link href="/sold">View Sold</Link>
+        </div>
+
+        <div className="home-card">
+          <h2>Inventory</h2>
+          <p>Browse current stock.</p>
+          <Link href="/Inventory">View Stock</Link>
+        </div>
+
+      </section>
+
+      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <img src={footerLogos[logoIndex]} className="footer-logo" />
+      </footer>
 
     </div>
   );
@@ -109,7 +144,7 @@ function AppContent() {
 export default function Home() {
   return (
     <AdminProvider>
-      <AppContent />
+      <HomeContent />
     </AdminProvider>
   );
 }
