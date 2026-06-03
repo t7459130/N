@@ -9,175 +9,253 @@ body {
   background: #0b0b0b;
   color: white;
   font-family: Arial, sans-serif;
-  overflow-x: hidden;
+}
+
+/* ================= GLOBAL ================= */
+a {
+  color: white;
+  text-decoration: none;
 }
 
 /* ================= HEADER ================= */
-.site-header {
+.header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
   height: 80px;
   padding: 0 20px;
-  background: black;
 
+  background: black;
   position: sticky;
   top: 0;
   z-index: 9999;
-
-  width: 100%;
 }
 
-/* LEFT + RIGHT NAV */
-.nav-left,
+/* LEFT NAV */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-left a {
+  font-size: 14px;
+}
+
+/* PHONE */
+.call-me {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+}
+
+/* LEFT NAV LINKS */
+.nav-left {
+  display: flex;
+  gap: 15px;
+}
+
+/* RIGHT NAV */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .nav-right {
   display: flex;
-  gap: 18px;
-  align-items: center;
+  gap: 15px;
 }
 
-.nav-left a,
-.nav-right a {
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-/* ================= LOGO CENTER ================= */
-.logo-box {
+/* ================= DESKTOP LOGO ROW (CENTER) ================= */
+.logo-row {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 12px;
-  justify-content: center;
-  align-items: center;
 
-  flex: 1;              /* ✅ CRITICAL FIX (centers properly) */
+  flex: 1;
 }
 
-.logo-box img {
-  width: 40px;
-  height: 40px;
+/* FORCE LOGO SIZE (IMPORTANT FIX) */
+.logo-small {
+  width: 38px !important;
+  height: 38px !important;
   object-fit: contain;
-  flex-shrink: 0;       /* prevents squashing */
+  display: block;
 }
 
-/* ================= PHONE ================= */
-.phone {
-  color: white;
-  display: flex;
-  align-items: center;
-}
-
-/* ================= RIGHT BUTTON ================= */
-.hamburger {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-/* ================= MOBILE MENU ================= */
-.mobile-menu {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.97);
-
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-
-  z-index: 10000;
-}
-
-.mobile-menu a {
-  color: white;
-  font-size: 22px;
-  text-decoration: none;
-}
-
-.mobile-menu.open {
-  display: flex;
-}
-
-/* ================= MOBILE LOGO ================= */
+/* ================= MOBILE LOGO (CENTER SINGLE CYCLING) ================= */
 .mobile-logo {
   display: none;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  align-items: center;
-  justify-content: center;
 }
 
 .mobile-logo img {
   width: 45px;
   height: 45px;
   object-fit: contain;
+  display: block;
+}
+
+/* ================= BUTTONS ================= */
+button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* ================= MOBILE MENU ================= */
+.mobile-menu {
+  display: none;
+
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.97);
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 25px;
+
+  z-index: 99999;
+}
+
+.mobile-menu a {
+  font-size: 22px;
+}
+
+.mobile-menu.active {
+  display: flex;
+}
+
+/* ================= BANNER ================= */
+.banner {
+  position: relative;
+  height: 70vh;
+  overflow: hidden;
+}
+
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-text {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+
+  background: rgba(0,0,0,0.4);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* ================= SECTIONS ================= */
+.welcome-section,
+.inventory,
+.sold-section {
+  padding: 40px 20px;
+}
+
+/* ================= SOLD TILE (FIX FOR BIG IMAGE ISSUE) ================= */
+.sold-tile {
+  max-width: 800px;
+  margin: 0 auto;
+
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+
+  text-align: center;
+}
+
+.sold-tile img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.sold-tile p {
+  padding: 15px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* ================= INVENTORY GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 /* ================= FOOTER ================= */
 .footer {
   background: black;
-  padding: 30px;
+  padding: 25px;
   text-align: center;
 }
 
 .footer-logos {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap; /* ✅ prevents overflow on small screens */
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .footer-logos img {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
 }
 
-/* ================= PAGE WRAPPER ================= */
-.page {
-  min-height: 80vh;
-  padding: 40px 20px;
-}
-
-/* ================= MOBILE FIX ================= */
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
 
-  .desktop-only {
-    display: none !important;
-  }
-
-  .site-header {
-    justify-content: center;
-    position: sticky;
-    padding: 0 15px;
-  }
-
-  /* hide desktop logo row */
-  .logo-box {
-    display: none;
-  }
-
-  /* show mobile logo centered */
-  .mobile-logo {
-    display: flex;
-  }
-
-  .mobile-logo img {
-    width: 42px;
-    height: 42px;
-  }
-
-  /* prevent nav overlap issues */
   .nav-left,
   .nav-right {
     display: none;
+  }
+
+  /* center logo properly */
+  .logo-row {
+    display: none;
+  }
+
+  .mobile-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex: 1;
+  }
+
+  .header {
+    justify-content: space-between;
+    padding: 0 15px;
+  }
+
+  .banner-text {
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .sold-tile img {
+    height: 250px;
   }
 }
