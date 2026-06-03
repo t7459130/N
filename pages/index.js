@@ -1,106 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Link from 'next/link';
 
 export default function Home() {
   const [cars, setCars] = useState([]);
-  const [soldImages, setSoldImages] = useState([]);
+  const [sold, setSold] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
 
-  /* LOAD SOLD IMAGES */
+  useEffect(() => {
+    fetch('/api/cars')
+      .then((r) => r.json())
+      .then((d) => setCars(Array.isArray(d.cars) ? d.cars : []))
+      .catch(() => setCars([]));
+  }, []);
+
   useEffect(() => {
     fetch('/api/images')
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setSoldImages(data);
-        else setSoldImages([]);
-      })
-      .catch(() => setSoldImages([]));
+      .then((r) => r.json())
+      .then(setSold)
+      .catch(() => setSold([]));
   }, []);
 
-  /* SOLD CAROUSEL */
   useEffect(() => {
-    if (!soldImages.length) return;
-
-    const interval = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % soldImages.length);
-    }, 3500);
-
-    return () => clearInterval(interval);
-  }, [soldImages]);
-
-  /* LOAD CARS */
-  useEffect(() => {
-    const loadCars = async () => {
-      try {
-        const res = await fetch('/api/cars');
-        const data = await res.json();
-
-        const list = Array.isArray(data?.cars) ? data.cars : [];
-        setCars(list);
-      } catch {
-        setCars([]);
-      }
-    };
-
-    loadCars();
-  }, []);
+    if (!sold.length) return;
+    const t = setInterval(() => {
+      setSoldIndex((p) => (p + 1) % sold.length);
+    }, 3000);
+    return () => clearInterval(t);
+  }, [sold]);
 
   return (
     <Layout>
-      {/* HERO */}
-      <section className="banner">
-        <img src="/images/carwallpaper.webp" alt="Luxury cars" />
 
+      <section className="banner">
+        <img src="/images/carwallpaper.webp" alt="" />
         <div className="banner-text">
           <h1>Luxury Car Dealership</h1>
-          <p>Performance. Prestige. Perfection.</p>
+          <p>Performance • Prestige • Perfection</p>
         </div>
       </section>
 
-      {/* WELCOME */}
-      <section className="welcome-section">
+      <section className="section">
         <h2>Welcome</h2>
-        <p>
-          We source and deliver high-end luxury, performance and prestige vehicles across the UK.
-        </p>
+        <p>Luxury vehicles sourced across the UK & Europe.</p>
       </section>
 
-      {/* SOLD SECTION */}
-      <section className="sold-section">
-        <h2>Previously Sold</h2>
+      <section className="section">
+        <h2>Recently Sold</h2>
 
-        {soldImages.length > 0 ? (
-          <div className="sold-tile">
-            <img src={soldImages[soldIndex]} alt="Sold vehicle" />
-            <p>
-              A selection of previously delivered luxury vehicles to satisfied clients.
-            </p>
+        {sold.length > 0 && (
+          <div className="tile">
+            <img src={sold[soldIndex]} alt="" />
+            <p>Delivered luxury vehicles to clients worldwide.</p>
           </div>
-        ) : (
-          <p>No sold vehicles available.</p>
         )}
       </section>
 
-      {/* INVENTORY */}
-      <section className="inventory">
+      <section className="section">
         <h2>Latest Arrivals</h2>
 
-        {cars.length > 0 ? (
-          <div className="grid">
-            {cars.slice(0, 6).map((car) => (
-              <Link key={car._id} href={`/car/${car._id}`} className="card">
-                <img src={car.images?.[0] || '/placeholder.png'} alt="" />
-                <h3>
-                  {car.make} {car.model}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p>No vehicles available.</p>
-        )}
+        <div className="grid">
+          {cars.slice(0, 6).map((c) => (
+            <Link key={c._id} href={`/car/${c._id}`} className="card">
+              <img src={c.images?.[0]} alt="" />
+              <h3>{c.make} {c.model}</h3>
+            </Link>
+          ))}
+        </div>
       </section>
+
     </Layout>
   );
 }

@@ -4,10 +4,8 @@ import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import SearchOverlay from './SearchOverlay';
 
 export default function Layout({ children }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [logoIndex, setLogoIndex] = useState(0);
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const menuRef = useRef(null);
 
   const logoRow = [
@@ -17,31 +15,30 @@ export default function Layout({ children }) {
     '/images/bentley.png',
   ];
 
-  const allLogos = [
+  const mobileLogos = [
     '/images/ferrari.png',
     '/images/lamborghini.png',
     '/images/rolls.png',
     '/images/bentley.png',
     '/images/aston.png',
     '/images/bugatti.png',
-    '/images/mercedes.png',
-    '/images/pagani.png',
   ];
 
+  const [logoIndex, setLogoIndex] = useState(0);
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLogoIndex((p) => (p + 1) % allLogos.length);
+    const t = setInterval(() => {
+      setLogoIndex((p) => (p + 1) % mobileLogos.length);
     }, 2500);
-    return () => clearInterval(interval);
+    return () => clearInterval(t);
   }, []);
 
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setIsMenuOpen(false);
+        setMenuOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
@@ -49,10 +46,9 @@ export default function Layout({ children }) {
   return (
     <div className="app">
 
-      {/* HEADER */}
       <header className="site-header">
 
-        {/* LEFT NAV */}
+        {/* LEFT */}
         <div className="nav-left">
           <a href="tel:07777777777" className="phone">
             <FaPhone />
@@ -65,37 +61,34 @@ export default function Layout({ children }) {
 
         {/* CENTER LOGOS (DESKTOP) */}
         <div className="logo-box">
-          {logoRow.map((logo, i) => (
-            <img key={i} src={logo} alt="logo" />
+          {logoRow.map((l, i) => (
+            <img key={i} src={l} alt="" />
           ))}
         </div>
 
-        {/* RIGHT NAV */}
+        {/* RIGHT */}
         <div className="nav-right">
           <Link href="/sold">Sold</Link>
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
 
-          <button className="hamburger" onClick={() => setIsSearchOpen(true)}>
+          <button onClick={() => setSearchOpen(true)} className="icon-btn">
             <FaSearch />
           </button>
 
-          <button className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
+          <button onClick={() => setMenuOpen(!menuOpen)} className="icon-btn">
+            {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        {/* MOBILE LOGO (ONLY ONE SMALL CENTERED) */}
+        {/* MOBILE LOGO */}
         <div className="mobile-logo">
-          <img src={allLogos[logoIndex]} alt="logo" />
+          <img src={mobileLogos[logoIndex]} alt="" />
         </div>
 
         {/* MOBILE MENU */}
-        <nav
-          ref={menuRef}
-          className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}
-        >
+        <nav ref={menuRef} className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
@@ -107,25 +100,17 @@ export default function Layout({ children }) {
 
       </header>
 
-      {/* PAGE CONTENT */}
-      <main className="page">
-        {children}
-      </main>
+      <main className="page">{children}</main>
 
-      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-logos">
-          {allLogos.map((logo, i) => (
-            <img key={i} src={logo} alt="logo" />
+          {logoRow.map((l, i) => (
+            <img key={i} src={l} alt="" />
           ))}
         </div>
       </footer>
 
-      <SearchOverlay
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
-
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }
