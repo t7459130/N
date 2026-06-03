@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import { FaBars, FaTimes, FaPhone, FaSearch } from "react-icons/fa";
-import SearchOverlay from "./SearchOverlay";
+import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
+import SearchOverlay from './SearchOverlay';
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
@@ -11,10 +11,21 @@ export default function Layout({ children }) {
   const menuRef = useRef(null);
 
   const logoBatches = [
-    ["/images/ferrari.png", "/images/lamborghini.png", "/images/rolls.png", "/images/bentley.png"],
-    ["/images/aston.png", "/images/pagani.png", "/images/bugatti.png", "/images/mercedes.png"],
+    [
+      '/images/ferrari.png',
+      '/images/lamborghini.png',
+      '/images/rolls.png',
+      '/images/bentley.png',
+    ],
+    [
+      '/images/aston.png',
+      '/images/pagani.png',
+      '/images/bugatti.png',
+      '/images/mercedes.png',
+    ],
   ];
 
+  /* CLOSE MENU ON OUTSIDE CLICK */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -22,10 +33,11 @@ export default function Layout({ children }) {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  /* LOGO ROTATION (DESKTOP ONLY VISUALLY) */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
@@ -35,49 +47,75 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <div>
+    <div className="app">
+
+      {/* HEADER */}
       <header className="site-header">
 
+        {/* LEFT */}
         <div className="header-side header-left">
+
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
+            <span className="phone-text">+44 7826 456793</span>
           </a>
 
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        <div className="header-center">
-          <div className="logo-box desktop-logos">
+        {/* CENTER LOGOS (DESKTOP ONLY) */}
+        <div className="header-center desktop-logos">
+          <div className="logo-box">
             {logoBatches[currentBatchIndex].map((logo, i) => (
-              <img key={i} src={logo} />
+              <img key={i} src={logo} alt="logo" />
             ))}
           </div>
         </div>
 
+        {/* RIGHT */}
         <div className="header-side header-right">
-          <Link href="/sold">Sold</Link>
-          <Link href="/contact">Contact</Link>
 
-          <button onClick={() => setSearchOpen(true)}>
+          <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
 
-          <button onClick={() => setOpen(!open)}>
+          <Link href="/sold">Sold</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
+
+          <button className="icon-btn" onClick={() => setOpen(!open)}>
             {open ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        <nav ref={menuRef} className={`mobile-menu ${open ? "open" : ""}`}>
+        {/* MOBILE MENU */}
+        <nav
+          ref={menuRef}
+          className={`mobile-menu ${open ? 'open' : ''}`}
+        >
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/sold">Sold</Link>
+          <Link href="/Sellyourcar">Sell</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
+
       </header>
 
-      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      {/* SEARCH OVERLAY */}
+      <SearchOverlay
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
+      />
 
+      {/* PAGE CONTENT */}
       <main>{children}</main>
+
     </div>
   );
 }
