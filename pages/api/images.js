@@ -12,13 +12,15 @@ export default function handler(req, res) {
         file.endsWith(".jpg") ||
         file.endsWith(".jpeg") ||
         file.endsWith(".png") ||
-        file.endsWith(".webp")
+        file.endsWith(".webp") ||
+        file.endsWith(".JPG") ||
+        file.endsWith(".JPEG")
       )
-      .map((file) => `/header/${file}`); // IMPORTANT: public URL path
+      .map((file) => `/header/${file}`);
 
     res.status(200).json(images);
   } catch (err) {
-    console.error(err);
+    console.error("Image API error:", err);
     res.status(200).json([]);
   }
 }

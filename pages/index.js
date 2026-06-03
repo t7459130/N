@@ -4,10 +4,16 @@ import Link from "next/link";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
-  const [wallpapers, setWallpapers] = useState([]);
+
+  const [heroImages, setHeroImages] = useState([]);
   const [heroIndex, setHeroIndex] = useState(0);
 
-  /* LOAD CARS */
+  const [soldImages, setSoldImages] = useState([]);
+  const [soldIndex, setSoldIndex] = useState(0);
+
+  /* =========================
+     LOAD CARS
+  ========================= */
   useEffect(() => {
     const loadCars = async () => {
       try {
@@ -22,46 +28,82 @@ export default function Home() {
     loadCars();
   }, []);
 
-  /* LOAD WALLPAPERS */
+  /* =========================
+     LOAD HERO IMAGES (HEADER FOLDER)
+  ========================= */
   useEffect(() => {
-    const loadImages = async () => {
+    const loadHero = async () => {
       try {
-        const res = await fetch("/api/images");
+        const res = await fetch("/api/header-images");
         const data = await res.json();
-        setWallpapers(Array.isArray(data) ? data : []);
+        setHeroImages(Array.isArray(data) ? data : []);
       } catch {
-        setWallpapers([]);
+        setHeroImages([]);
       }
     };
 
-    loadImages();
+    loadHero();
   }, []);
 
-  /* ROTATE HERO IMAGES */
+  /* =========================
+     LOAD SOLD IMAGES (WALLPAPER OR SAME SOURCE)
+  ========================= */
   useEffect(() => {
-    if (!wallpapers.length) return;
+    const loadSold = async () => {
+      try {
+        const res = await fetch("/api/wallpaper-images");
+        const data = await res.json();
+        setSoldImages(Array.isArray(data) ? data : []);
+      } catch {
+        setSoldImages([]);
+      }
+    };
+
+    loadSold();
+  }, []);
+
+  /* =========================
+     HERO ROTATION
+  ========================= */
+  useEffect(() => {
+    if (!heroImages.length) return;
 
     const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % wallpapers.length);
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [wallpapers]);
+  }, [heroImages]);
+
+  /* =========================
+     SOLD ROTATION
+  ========================= */
+  useEffect(() => {
+    if (!soldImages.length) return;
+
+    const interval = setInterval(() => {
+      setSoldIndex((prev) => (prev + 1) % soldImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [soldImages]);
 
   return (
     <Layout>
-      {/* HERO */}
+      {/* =========================
+          HERO
+      ========================= */}
       <section className="banner">
-        {wallpapers.length > 0 ? (
+        {heroImages.length > 0 ? (
           <img
-            src={wallpapers[heroIndex]}
-            alt="Luxury Car Showroom"
+            src={heroImages[heroIndex]}
+            alt="Luxury Cars"
             className="hero-img"
           />
         ) : (
           <img
             src="/images/carwallpaper.webp"
-            alt="Luxury Car Showroom"
+            alt="Luxury Cars"
             className="hero-img"
           />
         )}
@@ -72,7 +114,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WELCOME */}
+      {/* =========================
+          WELCOME
+      ========================= */}
       <section className="welcome-section">
         <h2>Welcome</h2>
         <p>
@@ -80,15 +124,17 @@ export default function Home() {
         </p>
       </section>
 
-      {/* SOLD */}
+      {/* =========================
+          PREVIOUSLY SOLD
+      ========================= */}
       <section className="sold-section">
         <h2>Previously Sold</h2>
 
-        {wallpapers.length > 0 && (
+        {soldImages.length > 0 && (
           <div className="sold-tile">
             <img
-              src={wallpapers[(heroIndex + 1) % wallpapers.length]}
-              alt="Previously Sold Luxury Car"
+              src={soldImages[soldIndex]}
+              alt="Sold Luxury Vehicle"
             />
             <p>
               Delivered premium luxury vehicles to clients across the UK and internationally.
@@ -97,7 +143,9 @@ export default function Home() {
         )}
       </section>
 
-      {/* INVENTORY */}
+      {/* =========================
+          INVENTORY
+      ========================= */}
       <section className="inventory">
         <h2>Latest Arrivals</h2>
 
