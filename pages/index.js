@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 
-import { AdminProvider, useAdmin } from '../components/AdminContext';
+import { AdminProvider } from '../components/AdminContext';
 import SearchOverlay from '../components/SearchOverlay';
 
 function HomeContent() {
@@ -11,12 +11,8 @@ function HomeContent() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const [cars, setCars] = useState([]);
-  const [loadingCars, setLoadingCars] = useState(true);
-
   const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
-
-  const [mobileLogoIndex, setMobileLogoIndex] = useState(0);
 
   const menuRef = useRef(null);
 
@@ -26,17 +22,6 @@ function HomeContent() {
     '/images/rolls.png',
     '/images/bentley.png',
   ];
-
-  const mobileLogos = [
-    '/images/ferrari.png',
-    '/images/lamborghini.png',
-    '/images/rolls.png',
-    '/images/bentley.png',
-    '/images/aston.png',
-    '/images/bugatti.png',
-  ];
-
-  const footerLogos = logoRow;
 
   useEffect(() => {
     const handler = (e) => {
@@ -49,41 +34,24 @@ function HomeContent() {
   }, []);
 
   useEffect(() => {
-    const i = setInterval(() => {
-      setMobileLogoIndex((p) => (p + 1) % mobileLogos.length);
-    }, 2500);
-    return () => clearInterval(i);
+    fetch('/api/cars')
+      .then(r => r.json())
+      .then(d => setCars(d.cars || []));
   }, []);
 
   useEffect(() => {
     fetch('/api/images')
-      .then((res) => res.json())
-      .then(setSoldImages)
-      .catch(console.error);
+      .then(r => r.json())
+      .then(setSoldImages);
   }, []);
 
   useEffect(() => {
     if (!soldImages.length) return;
     const i = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % soldImages.length);
-    }, 3500);
+      setSoldIndex(p => (p + 1) % soldImages.length);
+    }, 3000);
     return () => clearInterval(i);
   }, [soldImages]);
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch('/api/cars');
-        const data = await res.json();
-        setCars(Array.isArray(data.cars) ? data.cars : []);
-      } catch {
-        setCars([]);
-      } finally {
-        setLoadingCars(false);
-      }
-    };
-    load();
-  }, []);
 
   return (
     <div className="app">
@@ -94,7 +62,7 @@ function HomeContent() {
       {/* HEADER */}
       <header className="header">
 
-        {/* LEFT */}
+        {/* LEFT NAV ONLY (NO DUPLICATES ANYWHERE) */}
         <div className="header-left">
           <a href="tel:1234567890" className="call-me">
             <FaPhone />
@@ -107,14 +75,14 @@ function HomeContent() {
           </nav>
         </div>
 
-        {/* CENTER LOGO ROW */}
+        {/* CENTER LOGOS (FIXED CENTERING) */}
         <div className="logo-row">
           {logoRow.map((l, i) => (
             <img key={i} src={l} className="logo-small" />
           ))}
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT NAV ONLY */}
         <div className="header-right">
           <nav className="nav-right">
             <Link href="/NewsAndEvents">Insights</Link>
@@ -131,11 +99,6 @@ function HomeContent() {
           </button>
         </div>
 
-        {/* MOBILE LOGO */}
-        <div className="mobile-logo">
-          <img src={mobileLogos[mobileLogoIndex]} />
-        </div>
-
         {/* MOBILE MENU */}
         <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
           <Link href="/">Home</Link>
@@ -145,9 +108,10 @@ function HomeContent() {
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
         </nav>
+
       </header>
 
-      {/* BANNER */}
+      {/* HERO */}
       <section className="banner">
         <img src="/images/carwallpaper.webp" />
         <div className="banner-text">
@@ -157,40 +121,57 @@ function HomeContent() {
 
       {/* WELCOME */}
       <section className="welcome-section">
-        <h2>Welcome to Our Dealership</h2>
-        <p>Luxury vehicles, premium service.</p>
+        <h2>Welcome</h2>
+        <p>Luxury cars, sourced and delivered across the UK.</p>
       </section>
 
-      {/* SOLD */}
+      {/* SOLD SECTION (FIXED TILE + CAROUSEL + TEXT) */}
       <section className="sold-section">
+
         <h2>Previously Sold</h2>
-        {soldImages.length > 0 && (
-          <img src={soldImages[soldIndex]} className="sold-image" />
-        )}
+
+        <div className="sold-tile">
+
+          <div className="sold-image-box">
+            {soldImages.length > 0 && (
+              <img src={soldImages[soldIndex]} className="sold-image" />
+            )}
+          </div>
+
+          <div className="sold-text">
+            <h3>Recent Deliveries</h3>
+            <p>
+              A curated selection of luxury vehicles recently delivered to clients across the UK.
+              Every car represents precision sourcing, premium condition, and exceptional provenance.
+            </p>
+
+            <p>
+              From Ferrari and Lamborghini to Rolls-Royce and Bentley, each vehicle is hand-selected
+              and delivered with a bespoke client experience.
+            </p>
+          </div>
+
+        </div>
       </section>
 
       {/* INVENTORY */}
       <section className="inventory">
         <h2>Latest Arrivals</h2>
 
-        {loadingCars ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="grid">
-            {cars.slice(0, 6).map((c) => (
-              <Link key={c._id} href={`/car/${c._id}`} className="card">
-                <img src={c.images?.[0]} />
-                <h3>{c.make} {c.model}</h3>
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="grid">
+          {cars.slice(0, 6).map((c) => (
+            <Link key={c._id} href={`/car/${c._id}`} className="card">
+              <img src={c.images?.[0]} />
+              <h3>{c.make} {c.model}</h3>
+            </Link>
+          ))}
+        </div>
       </section>
 
       {/* FOOTER */}
       <footer className="footer">
         <div className="footer-logos">
-          {footerLogos.map((l, i) => (
+          {logoRow.map((l, i) => (
             <img key={i} src={l} />
           ))}
         </div>

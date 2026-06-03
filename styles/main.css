@@ -133,3 +133,62 @@ a {
     display: none;
   }
 }
+
+/* FIX HEADER DUPLICATION ISSUES */
+.nav-left, .nav-right {
+  display: flex;
+  gap: 15px;
+}
+
+/* CENTER LOGOS PROPERLY */
+.logo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.logo-small {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* SOLD TILE FIX */
+.sold-tile {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.sold-image-box {
+  width: 400px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.sold-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sold-text {
+  max-width: 500px;
+  color: white;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .sold-tile {
+    flex-direction: column;
+  }
+
+  .logo-row {
+    display: none;
+  }
+}
