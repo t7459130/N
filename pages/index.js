@@ -18,6 +18,8 @@ function HomeContent() {
 
   const [mobileLogoIndex, setMobileLogoIndex] = useState(0);
 
+  const [desktopLogoIndex, setDesktopLogoIndex] = useState(0);
+
   const menuRef = useRef(null);
 
   const logoRow = [
@@ -49,11 +51,21 @@ function HomeContent() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  /* DESKTOP LOGO ROTATION (FIXED) */
+  useEffect(() => {
+    const i = setInterval(() => {
+      setDesktopLogoIndex((p) => (p + 1) % logoRow.length);
+    }, 2000);
+
+    return () => clearInterval(i);
+  }, []);
+
   /* MOBILE LOGO ROTATION */
   useEffect(() => {
     const i = setInterval(() => {
       setMobileLogoIndex((p) => (p + 1) % mobileLogos.length);
     }, 2500);
+
     return () => clearInterval(i);
   }, []);
 
@@ -67,9 +79,11 @@ function HomeContent() {
 
   useEffect(() => {
     if (!soldImages.length) return;
+
     const i = setInterval(() => {
       setSoldIndex((p) => (p + 1) % soldImages.length);
     }, 3500);
+
     return () => clearInterval(i);
   }, [soldImages]);
 
@@ -111,11 +125,28 @@ function HomeContent() {
           </nav>
         </div>
 
-        {/* CENTER LOGO ROW (4 LOGOS STATIC) */}
+        {/* CENTER LOGO ROW (FIXED ROTATION) */}
         <div className="logo-row">
-          {logoRow.map((l, i) => (
-            <img key={i} src={l} className="logo-small" />
-          ))}
+          <img
+            src={logoRow[desktopLogoIndex]}
+            className="logo-small"
+            alt="logo"
+          />
+          <img
+            src={logoRow[(desktopLogoIndex + 1) % logoRow.length]}
+            className="logo-small"
+            alt="logo"
+          />
+          <img
+            src={logoRow[(desktopLogoIndex + 2) % logoRow.length]}
+            className="logo-small"
+            alt="logo"
+          />
+          <img
+            src={logoRow[(desktopLogoIndex + 3) % logoRow.length]}
+            className="logo-small"
+            alt="logo"
+          />
         </div>
 
         {/* RIGHT NAV */}
@@ -137,7 +168,7 @@ function HomeContent() {
 
         {/* MOBILE LOGO */}
         <div className="mobile-logo">
-          <img src={mobileLogos[mobileLogoIndex]} />
+          <img src={mobileLogos[mobileLogoIndex]} alt="logo" />
         </div>
 
         {/* MOBILE MENU */}
@@ -200,7 +231,11 @@ function HomeContent() {
         </div>
       </footer>
 
-      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <SearchOverlay
+        cars={cars}
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </div>
   );
 }
