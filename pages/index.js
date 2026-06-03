@@ -38,7 +38,12 @@ function AppContent() {
     '/images/rolls.png',
   ];
 
-  /* CLOSE MENU OUTSIDE CLICK */
+  // LOCK SCROLL WHEN MENU OPEN
+  useEffect(() => {
+    document.body.classList.toggle('menu-open', isMenuOpen);
+  }, [isMenuOpen]);
+
+  // CLOSE ON OUTSIDE CLICK
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -49,64 +54,57 @@ function AppContent() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  /* LOGO ROTATION */
+  // LOGO ROTATION
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
+      setCurrentBatchIndex((p) => (p + 1) % logoBatches.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentFooterLogoIndex((prev) => (prev + 1) % footerLogos.length);
-    }, 1000);
+      setCurrentFooterLogoIndex((p) => (p + 1) % footerLogos.length);
+    }, 1200);
     return () => clearInterval(interval);
   }, []);
 
-  /* FETCH CARS */
+  // FETCH CARS
   useEffect(() => {
     const fetchCars = async () => {
       try {
         const res = await fetch('/api/cars');
         const data = await res.json();
         setCars(Array.isArray(data.cars) ? data.cars.reverse() : []);
-      } catch (err) {
-        console.error(err);
+      } catch {
         setCars([]);
       } finally {
         setLoadingCars(false);
       }
     };
-
     fetchCars();
   }, []);
 
-  /* FETCH SOLD IMAGES */
+  // SOLD IMAGES
   useEffect(() => {
     fetch('/api/images')
-      .then((res) => res.json())
-      .then((data) => setSoldImages(data))
-      .catch(console.error);
+      .then((r) => r.json())
+      .then(setSoldImages)
+      .catch(() => setSoldImages([]));
   }, []);
 
   useEffect(() => {
     if (!soldImages.length) return;
-
     const interval = setInterval(() => {
-      setCurrentSoldImage((prev) => (prev + 1) % soldImages.length);
+      setCurrentSoldImage((p) => (p + 1) % soldImages.length);
     }, 3500);
-
     return () => clearInterval(interval);
   }, [soldImages]);
-
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
     <div className="app">
       <Head>
         <title>Car Dealership</title>
-        <link rel="icon" href="/images/ferrari.png" />
       </Head>
 
       {/* HEADER */}
@@ -114,34 +112,28 @@ function AppContent() {
 
         <div className="header-left">
           <a href="tel:1234567890" className="call-me">
-            <FaPhone size={20} />
+            <FaPhone />
           </a>
 
           <div className="desktop-nav">
-            <Link href="/">HOME</Link>
-            <Link href="/Inventory">Current Stock</Link>
-            <Link href="/Sellyourcar">Sell your car</Link>
+            <Link href="/">Home</Link>
+            <Link href="/Inventory">Inventory</Link>
+            <Link href="/Sellyourcar">Sell Your Car</Link>
           </div>
         </div>
 
         <div className="logo-bar desktop-logo-bar">
-          {logoBatches[currentBatchIndex].map((logo, idx) => (
-            <img key={idx} src={logo} className="desktop-logo" />
+          {logoBatches[currentBatchIndex].map((l, i) => (
+            <img key={i} src={l} className="desktop-logo" />
           ))}
         </div>
 
         <div className="header-icons">
-          <div className="desktop-nav">
-            <Link href="/NewsAndEvents">Insights</Link>
-            <Link href="/About">About Us</Link>
-            <Link href="/contact">Contact Us</Link>
-          </div>
-
-          <button onClick={() => setIsSearchOpen(true)} className="search-btn">
+          <button onClick={() => setIsSearchOpen(true)} className="icon-btn">
             <FaSearch />
           </button>
 
-          <button className="menu-btn" onClick={toggleMenu}>
+          <button onClick={() => setIsMenuOpen((v) => !v)} className="icon-btn">
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
@@ -150,24 +142,19 @@ function AppContent() {
           <img src={footerLogos[currentFooterLogoIndex]} className="mobile-logo" />
         </div>
 
-        {/* SAFE FALLBACK INLINE CONTROL */}
-        <nav
-          ref={menuRef}
-          className={`nav-menu ${isMenuOpen ? 'active' : ''}`}
-          style={{ display: isMenuOpen ? 'flex' : 'none' }}
-        >
+        {/* MOBILE MENU */}
+        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <ul>
             <li><Link href="/">Home</Link></li>
             <li><Link href="/Inventory">Inventory</Link></li>
             <li><Link href="/About">About Us</Link></li>
-            <li><Link href="/contact">Contact Us</Link></li>
+            <li><Link href="/contact">Contact</Link></li>
             <li><Link href="/Sellyourcar">Sell Your Car</Link></li>
-            <li><Link href="/NewsAndEvents">News and Events</Link></li>
-            <li><Link href="/OtherServices">Other Services</Link></li>
+            <li><Link href="/NewsAndEvents">News</Link></li>
+            <li><Link href="/OtherServices">Services</Link></li>
             <li><Link href="/Testimonials">Testimonials</Link></li>
           </ul>
         </nav>
-
       </header>
 
       {/* BANNER */}
@@ -175,19 +162,19 @@ function AppContent() {
         <img src="/images/carwallpaper.webp" className="banner-image" />
         <div className="banner-text">
           <h1>Welcome to Our Car Dealership</h1>
-          <p>Discover our exclusive range of luxury cars.</p>
+          <p>Luxury & Performance Vehicles</p>
         </div>
       </section>
 
       {/* WELCOME */}
       <section className="welcome-section">
         <div className="welcome-container">
-          <h2>Welcome to <br /><span>Nabil's Surrey Supercars</span></h2>
+          <h2>Welcome to <span>Nabil's Surrey Supercars</span></h2>
 
-          <p>We are a family-run luxury dealership...</p>
+          <p>Family-run luxury dealership based in Surrey...</p>
           <p>We specialise in supercars and prestige vehicles...</p>
-          <p>We deliver a seamless experience...</p>
-          <p>We build long-term client relationships...</p>
+          <p>We offer a transparent and premium experience...</p>
+          <p>Long-term relationships and trusted service...</p>
         </div>
       </section>
 
@@ -195,6 +182,7 @@ function AppContent() {
 
       <main>
 
+        {/* SOLD */}
         <section className="about-us">
           <div className="about-wrapper">
 
@@ -206,18 +194,47 @@ function AppContent() {
 
             <div className="about-text-container">
               <h2>Previously Sold Vehicles</h2>
-              <p>Luxury vehicles supplied across the UK.</p>
-
-              <Link href="/sold" className="about-btn">
-                View All Sold Vehicles
-              </Link>
+              <p>Luxury and performance vehicles supplied across the UK.</p>
+              <Link href="/sold" className="about-btn">View Sold Cars</Link>
             </div>
 
           </div>
         </section>
 
+        {/* INVENTORY */}
+        <section className="latest-arrivals">
+          <h2>Latest Arrivals</h2>
+
+          {loadingCars ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="car-listings">
+              {cars.slice(0, 6).map((c) => (
+                <div key={c._id} className="car-card">
+                  <Link href={`/car/${c._id}`}>
+                    <img src={c.images?.[0]} />
+                    <h3>{c.year} {c.make} {c.model}</h3>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
       </main>
 
+      {/* FOOTER */}
+      <footer className="footer">
+        <div className="footer-content">
+          <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo-img" />
+
+          <div className="footer-links">
+            <Link href="/Inventory">Inventory</Link>
+            <Link href="/sold">Sold</Link>
+            <Link href="/contact">Contact</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
