@@ -1,107 +1,86 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import Layout from '../components/Layout';
 import Link from 'next/link';
-import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 
-const allLogos = [
-  '/images/ferrari.png',
-  '/images/lamborghini.png',
-  '/images/rolls.png',
-  '/images/bentley.png',
-  '/images/aston.png',
-  '/images/bugatti.png',
-  '/images/mercedes.png',
-  '/images/porsche.png'
-];
+export default function Home() {
+  const [cars, setCars] = useState([]);
+  const [soldImages, setSoldImages] = useState([]);
+  const [soldIndex, setSoldIndex] = useState(0);
 
-export default function Layout({ children }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [logoIndex, setLogoIndex] = useState(0);
-
-  const menuRef = useRef(null);
-
-  /* ROTATE ALL LOGOS */
+  /* LOAD CARS */
   useEffect(() => {
-    const i = setInterval(() => {
-      setLogoIndex((p) => (p + 1) % allLogos.length);
-    }, 1800);
-
-    return () => clearInterval(i);
-  }, []);
-
-  /* CLOSE MENU OUTSIDE CLICK */
-  useEffect(() => {
-    const handler = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
+    const load = async () => {
+      try {
+        const res = await fetch('/api/cars');
+        const data = await res.json();
+        setCars(Array.isArray(data.cars) ? data.cars : []);
+      } catch {
+        setCars([]);
       }
     };
-
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    load();
   }, []);
 
+  /* SOLD IMAGES */
+  useEffect(() => {
+    fetch('/api/images')
+      .then((res) => res.json())
+      .then(setSoldImages)
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!soldImages.length) return;
+
+    const i = setInterval(() => {
+      setSoldIndex((p) => (p + 1) % soldImages.length);
+    }, 3500);
+
+    return () => clearInterval(i);
+  }, [soldImages]);
+
   return (
-    <>
-      {/* ================= HEADER ================= */}
-      <header className="header">
-
-        {/* LEFT */}
-        <div className="header-left">
-          <a href="tel:1234567890" className="call-me">
-            <FaPhone />
-          </a>
-
-          <nav className="nav-left">
-            <Link href="/">Home</Link>
-            <Link href="/Inventory">Stock</Link>
-            <Link href="/Sellyourcar">Sell</Link>
-          </nav>
+    <Layout>
+      {/* HERO */}
+      <section className="banner">
+        <img src="/images/carwallpaper.webp" />
+        <div className="banner-text">
+          <h1>Luxury Car Dealership</h1>
+          <p>Performance. Prestige. Perfection.</p>
         </div>
+      </section>
 
-        {/* CENTER ROTATING LOGO (GLOBAL FIX) */}
-        <div className="logo-row">
-          <img
-            src={allLogos[logoIndex]}
-            className="logo-small"
-            alt="logo"
-          />
-        </div>
+      {/* WELCOME */}
+      <section className="welcome-section">
+        <h2>Welcome</h2>
+        <p>We source and deliver the finest luxury vehicles in the UK.</p>
+      </section>
 
-        {/* RIGHT */}
-        <div className="header-right">
-          <nav className="nav-right">
-            <Link href="/NewsAndEvents">Insights</Link>
-            <Link href="/About">About</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
+      {/* SOLD */}
+      <section className="sold-section">
+        <h2>Previously Sold</h2>
 
-          <button onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
+        {soldImages.length > 0 && (
+          <div className="sold-tile">
+            <img src={soldImages[soldIndex]} />
+            <p>Delivered luxury vehicles to clients across the UK and beyond.</p>
+          </div>
+        )}
+      </section>
 
-        {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`mobile-menu ${menuOpen ? 'active' : ''}`}>
-          <Link href="/">Home</Link>
-          <Link href="/Inventory">Stock</Link>
-          <Link href="/Sellyourcar">Sell</Link>
-          <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About</Link>
-          <Link href="/contact">Contact</Link>
-        </nav>
-      </header>
+      {/* INVENTORY */}
+      <section className="inventory">
+        <h2>Latest Arrivals</h2>
 
-      {/* PAGE CONTENT */}
-      <main>{children}</main>
-
-      {/* ================= FOOTER ================= */}
-      <footer className="footer">
-        <div className="footer-logos">
-          {allLogos.map((l, i) => (
-            <img key={i} src={l} />
+        <div className="grid">
+          {cars.slice(0, 6).map((c) => (
+            <Link key={c._id} href={`/car/${c._id}`} className="card">
+              <img src={c.images?.[0]} />
+              <h3>{c.make} {c.model}</h3>
+            </Link>
           ))}
         </div>
-      </footer>
-    </>
+      </section>
+    </Layout>
   );
 }
