@@ -1,37 +1,44 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { FaBars, FaTimes, FaPhone } from 'react-icons/fa';
-
-const logos = [
-  '/images/ferrari.png',
-  '/images/lamborghini.png',
-  '/images/rolls.png',
-  '/images/bentley.png',
-  '/images/aston.png',
-  '/images/bugatti.png',
-  '/images/mercedes.png',
-  '/images/porsche.png'
-];
+import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
+import SearchOverlay from './SearchOverlay';
 
 export default function Layout({ children }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [logoIndex, setLogoIndex] = useState(0);
+
   const menuRef = useRef(null);
 
-  /* ROTATING LOGO */
-  useEffect(() => {
-    const i = setInterval(() => {
-      setLogoIndex((p) => (p + 1) % logos.length);
-    }, 1800);
+  const logoRow = [
+    '/images/ferrari.png',
+    '/images/lamborghini.png',
+    '/images/rolls.png',
+    '/images/bentley.png',
+  ];
 
-    return () => clearInterval(i);
+  const allLogos = [
+    '/images/ferrari.png',
+    '/images/lamborghini.png',
+    '/images/rolls.png',
+    '/images/bentley.png',
+    '/images/aston.png',
+    '/images/bugatti.png',
+    '/images/mercedes.png',
+    '/images/pagani.png',
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLogoIndex((p) => (p + 1) % allLogos.length);
+    }, 2500);
+    return () => clearInterval(interval);
   }, []);
 
-  /* CLOSE MENU OUTSIDE CLICK */
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
+        setIsMenuOpen(false);
       }
     };
 
@@ -40,53 +47,59 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <>
-      {/* ================= HEADER ================= */}
-      <header className="header">
+    <div className="app">
 
-        {/* LEFT */}
-        <div className="header-left">
-          <a href="tel:1234567890" className="call-me">
+      {/* HEADER */}
+      <header className="site-header">
+
+        {/* LEFT NAV */}
+        <div className="nav-left">
+          <a href="tel:07777777777" className="phone">
             <FaPhone />
           </a>
 
-          <nav className="nav-left">
-            <Link href="/">Home</Link>
-            <Link href="/Inventory">Stock</Link>
-            <Link href="/Sellyourcar">Sell</Link>
-          </nav>
-        </div>
-
-        {/* CENTER LOGO (SAFE + SMALL ALWAYS) */}
-        <div className="logo-row">
-          <img
-            src={logos[logoIndex]}
-            className="logo-small"
-            alt="logo"
-          />
-        </div>
-
-        {/* RIGHT */}
-        <div className="header-right">
-          <nav className="nav-right">
-            <Link href="/NewsAndEvents">Insights</Link>
-            <Link href="/About">About</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
-
-          <button
-            className="hamburger"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-
-        {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`mobile-menu ${menuOpen ? 'active' : ''}`}>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
+        </div>
+
+        {/* CENTER LOGOS (DESKTOP) */}
+        <div className="logo-box">
+          {logoRow.map((logo, i) => (
+            <img key={i} src={logo} alt="logo" />
+          ))}
+        </div>
+
+        {/* RIGHT NAV */}
+        <div className="nav-right">
+          <Link href="/sold">Sold</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
+
+          <button className="hamburger" onClick={() => setIsSearchOpen(true)}>
+            <FaSearch />
+          </button>
+
+          <button className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
+        {/* MOBILE LOGO (ONLY ONE SMALL CENTERED) */}
+        <div className="mobile-logo">
+          <img src={allLogos[logoIndex]} alt="logo" />
+        </div>
+
+        {/* MOBILE MENU */}
+        <nav
+          ref={menuRef}
+          className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}
+        >
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
+          <Link href="/sold">Sold</Link>
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
@@ -95,16 +108,24 @@ export default function Layout({ children }) {
       </header>
 
       {/* PAGE CONTENT */}
-      <main>{children}</main>
+      <main className="page">
+        {children}
+      </main>
 
-      {/* ================= FOOTER ================= */}
+      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-logos">
-          {logos.map((l, i) => (
-            <img key={i} src={l} className="footer-logo" />
+          {allLogos.map((logo, i) => (
+            <img key={i} src={logo} alt="logo" />
           ))}
         </div>
       </footer>
-    </>
+
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
+
+    </div>
   );
 }
