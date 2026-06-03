@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
-/* ===================== RESET ===================== */
-
 * {
   margin: 0;
   padding: 0;
@@ -14,30 +12,25 @@ body {
   overflow-x: hidden;
 }
 
-/* ===================== GLOBAL LINKS ===================== */
-
+/* LINKS */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* ===================== HEADER ===================== */
-
+/* HEADER */
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 2000;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   background: #111;
-  padding: 15px 30px;
   height: 80px;
+  padding: 15px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 2000;
 }
 
-/* LEFT / RIGHT BLOCKS */
 .header-left,
 .header-icons {
   display: flex;
@@ -45,29 +38,17 @@ a {
   gap: 20px;
 }
 
-/* ===================== ICONS ===================== */
-
-.call-me {
-  color: white;
-  display: flex;
-  align-items: center;
-}
-
-.call-me svg {
-  color: white !important;
-}
-
+/* ICONS */
+.call-me svg,
 .search-btn,
 .menu-btn {
-  color: white;
-  background: transparent;
+  color: white !important;
+  background: none;
   border: none;
   font-size: 20px;
-  cursor: pointer;
 }
 
-/* ===================== DESKTOP NAV ===================== */
-
+/* NAV */
 .desktop-nav {
   display: flex;
   gap: 20px;
@@ -76,48 +57,31 @@ a {
 .desktop-nav a {
   color: #ccc;
   font-weight: 600;
-  font-size: 14px;
 }
 
-.desktop-nav a:hover {
-  color: #fff;
-}
-
-/* ===================== LOGO ===================== */
-
+/* LOGO */
 .logo-bar {
+  width: 30%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 30%;
 }
 
 .desktop-logo {
   width: 65px;
-  height: auto;
-  object-fit: contain;
 }
 
-/* ===================== MOBILE LOGO ===================== */
-
+/* MOBILE LOGO */
 .mobile-logo-bar {
   display: none;
 }
 
-/* ===================== BANNER ===================== */
-
+/* BANNER */
 .banner {
   position: relative;
-  overflow: hidden;
-  line-height: 0;
-  font-size: 0;
 }
 
 .banner-image {
   width: 100%;
-  height: auto;
-  max-height: 420px;
-  object-fit: cover;
   display: block;
 }
 
@@ -125,281 +89,63 @@ a {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%,-50%);
   color: white;
-  text-align: center;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
 }
 
-/* ===================== WELCOME ===================== */
-
-.welcome-section {
-  background: #0b0b0b;
-  padding: 80px 20px;
-  text-align: center;
-}
-
-.welcome-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.welcome-section h2 {
-  color: white;
-  font-size: 46px;
-  margin-bottom: 20px;
-}
-
-.welcome-section h2 span {
-  color: #d4af37;
-}
-
-.welcome-section p {
-  color: #b5b5b5;
-  line-height: 1.8;
-  margin-bottom: 12px;
-}
-
-/* ===================== GRID ===================== */
-
-.latest-arrivals {
-  background: #0f0f0f;
-  padding: 50px 20px;
-}
-
-.latest-arrivals h2 {
-  color: white;
-  text-align: center;
-  font-size: 34px;
-  margin-bottom: 30px;
-}
-
-.car-listings {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-}
-
-.car-card {
-  position: relative;
-  background: #1a1a1a;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.car-card img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-}
-
-/* SOLD BADGE */
-.car-card::after {
-  content: "SOLD";
-  position: absolute;
-  top: 15px;
-  right: -45px;
-  background: #c40000;
-  color: white;
-  width: 160px;
-  text-align: center;
-  padding: 8px 0;
-  transform: rotate(45deg);
-  font-weight: bold;
-}
-
-/* ===================== ABOUT ===================== */
-
-.about-us {
-  background: #111;
-  padding: 80px 20px;
-}
-
-.about-wrapper {
-  max-width: 1200px;
-  margin: auto;
-  display: flex;
-  gap: 40px;
+/* MENU FIX */
+.nav-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.97);
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  z-index: 3500;
+
+  display: none;
 }
 
-.about-image {
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-  border-radius: 12px;
+.nav-menu.active {
+  display: flex;
 }
 
-.about-text-container h2 {
-  color: white;
-  font-size: 40px;
-}
-
-.about-text-container p {
-  color: #b5b5b5;
-  line-height: 1.8;
-}
-
-.about-btn {
-  margin-top: 20px;
-  display: inline-block;
-  padding: 12px 22px;
-  background: #1e1e1e;
-  color: white;
-  border-radius: 30px;
-}
-
-/* ===================== FOOTER ===================== */
-
-.footer {
-  background: black;
-  padding: 30px;
+.nav-menu ul {
+  list-style: none;
   text-align: center;
-  color: #999;
 }
 
-/* ===================== MOBILE FIX (CLEAN REWRITE) ===================== */
+.nav-menu li {
+  margin: 18px 0;
+}
 
+.nav-menu a {
+  color: white;
+  font-size: 22px;
+}
+
+/* MOBILE */
 @media (max-width: 768px) {
 
-  /* HEADER */
-  .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    z-index: 3000;
-    padding: 10px 15px;
-  }
-
-  /* REMOVE DESKTOP NAV */
   .desktop-nav,
   .desktop-logo-bar {
-    display: none !important;
+    display: none;
   }
 
-  /* KEEP HEADER CLEAN */
-  .header-left,
-  .header-icons {
-    gap: 10px;
-  }
-
-  /* CENTER MOBILE LOGO */
   .mobile-logo-bar {
     display: flex;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 2500;
   }
 
   .mobile-logo {
     width: 50px;
-    height: 50px;
-    object-fit: contain;
-    filter: grayscale(100%) brightness(0) invert(1);
+    filter: invert(1);
   }
 
-  /* ICONS WHITE */
-  .call-me svg,
-  .search-btn,
-  .menu-btn {
-    color: white !important;
-  }
-
-  /* ===================== FIXED MENU OVERLAY ===================== */
-
-  .nav-menu {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.97);
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    /* IMPORTANT FIX: prevent ghost menu */
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-
-    transition: all 0.25s ease;
-    z-index: 3500;
-  }
-
-  .nav-menu.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .nav-menu ul {
-    list-style: none;
-    text-align: center;
-  }
-
-  .nav-menu li {
-    margin: 18px 0;
-  }
-
-  .nav-menu a {
-    font-size: 22px;
-    color: white;
-    font-weight: 600;
-  }
-
-  /* GRID */
   .car-listings {
     grid-template-columns: 1fr;
-  }
-
-  /* TEXT */
-  .welcome-section h2 {
-    font-size: 32px;
-  }
-
-  /* FIX HEADER OVERLAP */
-  body {
-    padding-top: 70px;
-  }
-}
-
-/* ===================== FOOTER LOGO FIX ===================== */
-
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.footer-logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer-logo-img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-}
-
-/* optional: keep footer tidy on mobile */
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer-logo-img {
-    width: 55px;
-    height: 55px;
   }
 }

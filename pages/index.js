@@ -100,6 +100,8 @@ function AppContent() {
     return () => clearInterval(interval);
   }, [soldImages]);
 
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
   return (
     <div className="app">
       <Head>
@@ -108,14 +110,14 @@ function AppContent() {
       </Head>
 
       {/* HEADER */}
-      <header className="header" style={{ position: 'relative' }}>
+      <header className="header">
 
         <div className="header-left">
           <a href="tel:1234567890" className="call-me">
             <FaPhone size={20} />
           </a>
 
-          <div className="desktop-nav nav-left">
+          <div className="desktop-nav">
             <Link href="/">HOME</Link>
             <Link href="/Inventory">Current Stock</Link>
             <Link href="/Sellyourcar">Sell your car</Link>
@@ -124,35 +126,36 @@ function AppContent() {
 
         <div className="logo-bar desktop-logo-bar">
           {logoBatches[currentBatchIndex].map((logo, idx) => (
-            <img key={idx} src={logo} alt="" className="desktop-logo" />
+            <img key={idx} src={logo} className="desktop-logo" />
           ))}
         </div>
 
         <div className="header-icons">
-          <div className="desktop-nav nav-right">
+          <div className="desktop-nav">
             <Link href="/NewsAndEvents">Insights</Link>
             <Link href="/About">About Us</Link>
             <Link href="/contact">Contact Us</Link>
           </div>
 
           <button onClick={() => setIsSearchOpen(true)} className="search-btn">
-            <FaSearch size={20} />
+            <FaSearch />
           </button>
 
-          <button className="menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="menu-btn" onClick={toggleMenu}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         <div className="logo-bar mobile-logo-bar">
-          <img
-            src={footerLogos[currentFooterLogoIndex]}
-            className="mobile-logo"
-            alt=""
-          />
+          <img src={footerLogos[currentFooterLogoIndex]} className="mobile-logo" />
         </div>
 
-        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
+        {/* SAFE FALLBACK INLINE CONTROL */}
+        <nav
+          ref={menuRef}
+          className={`nav-menu ${isMenuOpen ? 'active' : ''}`}
+          style={{ display: isMenuOpen ? 'flex' : 'none' }}
+        >
           <ul>
             <li><Link href="/">Home</Link></li>
             <li><Link href="/Inventory">Inventory</Link></li>
@@ -164,51 +167,27 @@ function AppContent() {
             <li><Link href="/Testimonials">Testimonials</Link></li>
           </ul>
         </nav>
+
       </header>
 
       {/* BANNER */}
-      <section className="banner" style={{ lineHeight: 0, fontSize: 0 }}>
-        <img
-          src="/images/carwallpaper.webp"
-          className="banner-image"
-          style={{ display: 'block' }}
-        />
+      <section className="banner">
+        <img src="/images/carwallpaper.webp" className="banner-image" />
         <div className="banner-text">
           <h1>Welcome to Our Car Dealership</h1>
           <p>Discover our exclusive range of luxury cars.</p>
         </div>
       </section>
 
-      {/* WELCOME SECTION (RESTORED TEXT) */}
+      {/* WELCOME */}
       <section className="welcome-section">
         <div className="welcome-container">
-          <h2>
-            Welcome to <br />
-            <span>Nabil's Surrey Supercars</span>
-          </h2>
+          <h2>Welcome to <br /><span>Nabil's Surrey Supercars</span></h2>
 
-          <p>
-            We are a family-run independent luxury car dealership based in Surrey,
-            specialising in a carefully curated selection of supercars, prestige vehicles,
-            luxury SUVs, and high-performance automobiles.
-          </p>
-
-          <p>
-            Founded from a lifelong passion for exceptional engineering and automotive excellence,
-            we are committed to offering only the highest quality vehicles presented to showroom standards.
-          </p>
-
-          <p>
-            We pride ourselves on delivering a professional, discreet, and seamless experience for every client.
-            Whether you're purchasing your dream car, selling a cherished vehicle, or sourcing something rare,
-            we ensure the process is smooth, transparent, and enjoyable.
-          </p>
-
-          <p>
-            With specialist knowledge and genuine enthusiasm for luxury motoring,
-            we aim to build long-term relationships and provide a level of service
-            that reflects the exclusivity of the vehicles we represent.
-          </p>
+          <p>We are a family-run luxury dealership...</p>
+          <p>We specialise in supercars and prestige vehicles...</p>
+          <p>We deliver a seamless experience...</p>
+          <p>We build long-term client relationships...</p>
         </div>
       </section>
 
@@ -216,82 +195,28 @@ function AppContent() {
 
       <main>
 
-        {/* SOLD PREVIEW (FIXED MOBILE LAYOUT EXPECTED VIA CSS) */}
         <section className="about-us">
           <div className="about-wrapper">
 
             <div className="about-image-container">
               {soldImages.length > 0 && (
-                <img
-                  src={soldImages[currentSoldImage]}
-                  className="about-image"
-                  alt="Previously Sold Vehicles"
-                />
+                <img src={soldImages[currentSoldImage]} className="about-image" />
               )}
             </div>
 
             <div className="about-text-container">
               <h2>Previously Sold Vehicles</h2>
+              <p>Luxury vehicles supplied across the UK.</p>
 
-              <p>
-                A showcase of luxury, prestige and performance vehicles we have successfully
-                supplied to clients across the UK.
-              </p>
-
-              <div className="about-links">
-                <Link href="/sold" className="about-btn">
-                  View All Sold Vehicles
-                </Link>
-              </div>
+              <Link href="/sold" className="about-btn">
+                View All Sold Vehicles
+              </Link>
             </div>
 
           </div>
-        </section>
-
-        {/* LATEST ARRIVALS */}
-        <section className="latest-arrivals">
-          <h2>Latest Arrivals</h2>
-
-          {loadingCars ? (
-            <p>Loading latest arrivals...</p>
-          ) : (
-            <div className="car-listings">
-              {cars.slice(0, 6).map((car) => (
-                <div key={car._id} className="car-card">
-                  <Link href={`/car/${car._id}`}>
-                    <img src={car.images?.[0] || '/placeholder.png'} />
-                    <div className="car-details">
-                      <h3>{car.year} {car.make} {car.model}</h3>
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          )}
         </section>
 
       </main>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo-img" />
-          </div>
-
-          <div className="footer-details">
-            <p>Nabil's Surrey Supercar Website</p>
-            <p>Surrey, England, UK</p>
-            <p>0777777777</p>
-          </div>
-
-          <div className="footer-links">
-            <Link href="/inventory">Current Stock</Link>
-            <Link href="/sold">Previously Sold</Link>
-            <Link href="/contact">Contact Us</Link>
-          </div>
-        </div>
-      </footer>
 
     </div>
   );
