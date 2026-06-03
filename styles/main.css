@@ -301,3 +301,49 @@ body {
     font-size: 28px;
   }
 }
+
+/* =========================
+   SOLD PREVIEW MOBILE FIX
+========================= */
+
+@media (max-width: 768px) {
+
+  /* Force vertical layout */
+  .about-wrapper {
+    flex-direction: column !important;
+    gap: 25px;
+  }
+
+  /* Make image full width block */
+  .about-image-container {
+    width: 100% !important;
+  }
+
+  .about-image {
+    width: 100% !important;
+    height: 260px !important;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+  }
+
+  /* Text below image properly */
+  .about-text-container {
+    width: 100%;
+    text-align: center;
+  }
+
+  .about-text-container h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+
+  .about-text-container p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .about-links {
+    justify-content: center;
+  }
+}

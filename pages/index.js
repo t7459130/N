@@ -3,16 +3,7 @@ import Head from 'next/head';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
 
-import Sellyourcar from '../components/Sellyourcar';
-import Inventory from '../components/Inventory';
-import Testimonials from '../components/Testimonials';
-import OtherServices from '../components/OtherServices';
-import NewsAndEvents from '../components/NewsAndEvents';
-import ContactUs from '../components/ContactUs';
-import CarDetail from '../components/CarDetail';
-
 import { AdminProvider, useAdmin } from '../components/AdminContext';
-import AddCarPage from '../components/AddCarPageContent';
 import SearchOverlay from '../components/SearchOverlay';
 
 function AppContent() {
@@ -24,7 +15,6 @@ function AppContent() {
   const [cars, setCars] = useState([]);
   const [loadingCars, setLoadingCars] = useState(true);
 
-  // ✅ SOLD CAR CAROUSEL STATE
   const [soldImages, setSoldImages] = useState([]);
   const [currentSoldImage, setCurrentSoldImage] = useState(0);
 
@@ -48,18 +38,18 @@ function AppContent() {
     '/images/rolls.png',
   ];
 
-  // MENU CLOSE OUTSIDE CLICK
+  /* CLOSE MENU OUTSIDE CLICK */
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target) && isMenuOpen) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isMenuOpen]);
+  }, []);
 
-  // LOGO ROTATION
+  /* LOGO ROTATION */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
@@ -68,23 +58,21 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
-    const interval2 = setInterval(() => {
+    const interval = setInterval(() => {
       setCurrentFooterLogoIndex((prev) => (prev + 1) % footerLogos.length);
     }, 1000);
-    return () => clearInterval(interval2);
+    return () => clearInterval(interval);
   }, []);
 
-  // FETCH CURRENT CARS
+  /* FETCH CARS */
   useEffect(() => {
     const fetchCars = async () => {
       try {
         const res = await fetch('/api/cars');
-        if (!res.ok) throw new Error('Failed to fetch cars');
         const data = await res.json();
-        const carList = Array.isArray(data.cars) ? data.cars : [];
-        setCars(carList.reverse());
+        setCars(Array.isArray(data.cars) ? data.cars.reverse() : []);
       } catch (err) {
-        console.error('Error loading cars:', err);
+        console.error(err);
         setCars([]);
       } finally {
         setLoadingCars(false);
@@ -94,15 +82,14 @@ function AppContent() {
     fetchCars();
   }, []);
 
-  // FETCH SOLD IMAGES
+  /* FETCH SOLD IMAGES */
   useEffect(() => {
     fetch('/api/images')
       .then((res) => res.json())
       .then((data) => setSoldImages(data))
-      .catch((err) => console.error(err));
+      .catch(console.error);
   }, []);
 
-  // SOLD CAR ROTATION
   useEffect(() => {
     if (!soldImages.length) return;
 
@@ -112,10 +99,6 @@ function AppContent() {
 
     return () => clearInterval(interval);
   }, [soldImages]);
-
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-  const openSearch = () => setIsSearchOpen(true);
-  const closeSearch = () => setIsSearchOpen(false);
 
   return (
     <div className="app">
@@ -152,11 +135,11 @@ function AppContent() {
             <Link href="/contact">Contact Us</Link>
           </div>
 
-          <button onClick={openSearch} className="search-btn">
+          <button onClick={() => setIsSearchOpen(true)} className="search-btn">
             <FaSearch size={20} />
           </button>
 
-          <button className="menu-btn" onClick={toggleMenu}>
+          <button className="menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
@@ -185,29 +168,55 @@ function AppContent() {
 
       {/* BANNER */}
       <section className="banner" style={{ lineHeight: 0, fontSize: 0 }}>
-        <img src="/images/carwallpaper.webp" className="banner-image" style={{ display: 'block' }} />
+        <img
+          src="/images/carwallpaper.webp"
+          className="banner-image"
+          style={{ display: 'block' }}
+        />
         <div className="banner-text">
           <h1>Welcome to Our Car Dealership</h1>
           <p>Discover our exclusive range of luxury cars.</p>
         </div>
       </section>
 
-      {/* WELCOME */}
+      {/* WELCOME SECTION (RESTORED TEXT) */}
       <section className="welcome-section">
         <div className="welcome-container">
-          <h2>Welcome to <br /><span>Nabil's Surrey Supercars</span></h2>
-          <p>We are a family-run independent luxury car dealership...</p>
-          <p>Founded through a lifelong passion...</p>
-          <p>We pride ourselves on delivering...</p>
-          <p>With specialist knowledge...</p>
+          <h2>
+            Welcome to <br />
+            <span>Nabil's Surrey Supercars</span>
+          </h2>
+
+          <p>
+            We are a family-run independent luxury car dealership based in Surrey,
+            specialising in a carefully curated selection of supercars, prestige vehicles,
+            luxury SUVs, and high-performance automobiles.
+          </p>
+
+          <p>
+            Founded from a lifelong passion for exceptional engineering and automotive excellence,
+            we are committed to offering only the highest quality vehicles presented to showroom standards.
+          </p>
+
+          <p>
+            We pride ourselves on delivering a professional, discreet, and seamless experience for every client.
+            Whether you're purchasing your dream car, selling a cherished vehicle, or sourcing something rare,
+            we ensure the process is smooth, transparent, and enjoyable.
+          </p>
+
+          <p>
+            With specialist knowledge and genuine enthusiasm for luxury motoring,
+            we aim to build long-term relationships and provide a level of service
+            that reflects the exclusivity of the vehicles we represent.
+          </p>
         </div>
       </section>
 
-      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={closeSearch} />
+      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       <main>
 
-        {/* ✅ REPLACED ABOUT SECTION WITH SOLD PREVIEW */}
+        {/* SOLD PREVIEW (FIXED MOBILE LAYOUT EXPECTED VIA CSS) */}
         <section className="about-us">
           <div className="about-wrapper">
 
@@ -216,7 +225,7 @@ function AppContent() {
                 <img
                   src={soldImages[currentSoldImage]}
                   className="about-image"
-                  alt="Previously Sold"
+                  alt="Previously Sold Vehicles"
                 />
               )}
             </div>
@@ -225,8 +234,8 @@ function AppContent() {
               <h2>Previously Sold Vehicles</h2>
 
               <p>
-                A showcase of luxury, prestige and performance vehicles we have
-                successfully supplied to clients across the UK.
+                A showcase of luxury, prestige and performance vehicles we have successfully
+                supplied to clients across the UK.
               </p>
 
               <div className="about-links">
@@ -283,6 +292,7 @@ function AppContent() {
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
