@@ -13,7 +13,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ================= HEADER ================= */
+/* ================= HEADER GRID ================= */
 
 .header {
   display: grid;
@@ -30,7 +30,7 @@ body {
 .nav-left,
 .nav-right {
   display: flex;
-  gap: 20px;
+  gap: 18px;
   align-items: center;
 }
 
@@ -51,10 +51,9 @@ a:hover {
   gap: 10px;
 }
 
-.logo-bar img {
+.logo {
   width: 55px;
   height: auto;
-  object-fit: contain;
 }
 
 /* ICONS */
@@ -70,12 +69,37 @@ a:hover {
   font-size: 20px;
 }
 
-/* ================= BANNER ================= */
+/* ================= MOBILE MENU ================= */
 
-.banner {
-  position: relative;
-  text-align: center;
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.98);
+
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2000;
+  gap: 20px;
 }
+
+.mobile-menu.active {
+  display: flex;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 24px;
+  background: none;
+  border: none;
+}
+
+/* ================= BANNER ================= */
 
 .banner img {
   width: 100%;
@@ -93,41 +117,19 @@ a:hover {
 /* ================= SOLD ================= */
 
 .sold-section {
-  padding: 60px 20px;
   text-align: center;
+  padding: 60px 20px;
 }
 
 .sold-box {
   width: 80%;
-  max-width: 900px;
-  margin: 20px auto;
+  margin: auto;
   height: 400px;
-  overflow: hidden;
-  border-radius: 12px;
 }
 
 .sold-box img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-/* ================= INVENTORY ================= */
-
-.inventory {
-  padding: 60px 20px;
-  text-align: center;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 20px;
-}
-
-.card img {
-  width: 100%;
-  height: 220px;
   object-fit: cover;
 }
 
@@ -139,9 +141,8 @@ a:hover {
   background: black;
 }
 
-.footer-logos img {
+.footer-logo {
   width: 60px;
-  margin-bottom: 10px;
 }
 
 /* ================= MOBILE ================= */
@@ -157,10 +158,6 @@ a:hover {
   .nav-right {
     justify-content: center;
     flex-wrap: wrap;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
   }
 
   .logo-bar {
