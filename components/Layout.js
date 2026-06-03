@@ -1,116 +1,57 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
-import SearchOverlay from './SearchOverlay';
 
 export default function Layout({ children }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [mobileLogoIndex, setMobileLogoIndex] = useState(0);
-
-  const menuRef = useRef(null);
-
-  const logoRow = [
-    '/images/ferrari.png',
-    '/images/lamborghini.png',
-    '/images/rolls.png',
-    '/images/bentley.png',
-  ];
-
-  const mobileLogos = [
-    '/images/ferrari.png',
-    '/images/lamborghini.png',
-    '/images/rolls.png',
-    '/images/bentley.png',
-    '/images/aston.png',
-    '/images/bugatti.png',
-  ];
-
-  // CLOSE MENU ON OUTSIDE CLICK
-  useEffect(() => {
-    const handler = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-
-  // MOBILE LOGO CYCLER
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMobileLogoIndex((prev) => (prev + 1) % mobileLogos.length);
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="app">
+    <div className="site">
 
       {/* ================= HEADER ================= */}
-      <header className="header">
+      <header className="site-header">
 
         {/* LEFT */}
         <div className="header-left">
-          <a href="tel:1234567890" className="call-me">
+          <a href="tel:1234567890" className="phone">
             <FaPhone />
           </a>
 
-          <nav className="nav-left">
+          <nav className="nav-left desktop-only">
             <Link href="/">Home</Link>
             <Link href="/Inventory">Stock</Link>
             <Link href="/Sellyourcar">Sell</Link>
           </nav>
         </div>
 
-        {/* CENTER DESKTOP LOGOS */}
-        <div className="logo-row desktop-only">
-          {logoRow.map((logo, i) => (
-            <img key={i} src={logo} className="logo-small" />
-          ))}
-        </div>
-
-        {/* MOBILE LOGO (FIXED BOX) */}
-        <div className="mobile-only mobile-logo">
-          <div className="mobile-logo-box">
-            <img
-              src={mobileLogos[mobileLogoIndex]}
-              alt="logo"
-            />
-          </div>
+        {/* CENTER LOGO (ALWAYS 4 LOGOS DESKTOP) */}
+        <div className="logo-box desktop-only">
+          <img src="/images/ferrari.png" />
+          <img src="/images/lamborghini.png" />
+          <img src="/images/rolls.png" />
+          <img src="/images/bentley.png" />
         </div>
 
         {/* RIGHT */}
         <div className="header-right">
-          <nav className="nav-right">
+          <nav className="nav-right desktop-only">
             <Link href="/NewsAndEvents">Insights</Link>
             <Link href="/About">About</Link>
             <Link href="/contact">Contact</Link>
           </nav>
 
-          <button
-            className="icon-btn"
-            onClick={() => setIsSearchOpen(true)}
-          >
-            <FaSearch />
-          </button>
-
-          <button
-            className="icon-btn"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
+          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
+        {/* MOBILE CENTER LOGO (SINGLE SMALL BOX) */}
+        <div className="mobile-logo">
+          <img src="/images/ferrari.png" />
+        </div>
+
         {/* MOBILE MENU */}
-        <nav
-          ref={menuRef}
-          className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}
-        >
+        <nav className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
@@ -121,23 +62,18 @@ export default function Layout({ children }) {
 
       </header>
 
-      {/* ================= PAGE CONTENT ================= */}
-      <main>{children}</main>
+      {/* PAGE CONTENT */}
+      <main className="page">{children}</main>
 
-      {/* ================= FOOTER ================= */}
+      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-logos">
-          {logoRow.map((logo, i) => (
-            <img key={i} src={logo} className="footer-logo" />
-          ))}
+          <img src="/images/ferrari.png" />
+          <img src="/images/lamborghini.png" />
+          <img src="/images/rolls.png" />
+          <img src="/images/bentley.png" />
         </div>
       </footer>
-
-      {/* SEARCH OVERLAY */}
-      <SearchOverlay
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
 
     </div>
   );
