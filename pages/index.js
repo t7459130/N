@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
-
 import { AdminProvider } from '../components/AdminContext';
 import SearchOverlay from '../components/SearchOverlay';
 
@@ -11,14 +10,8 @@ function HomeContent() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const [cars, setCars] = useState([]);
-  const [loadingCars, setLoadingCars] = useState(true);
-
   const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
-
-  const [mobileLogoIndex, setMobileLogoIndex] = useState(0);
-
-  const [desktopLogoIndex, setDesktopLogoIndex] = useState(0);
 
   const menuRef = useRef(null);
 
@@ -29,18 +22,8 @@ function HomeContent() {
     '/images/bentley.png',
   ];
 
-  const mobileLogos = [
-    '/images/ferrari.png',
-    '/images/lamborghini.png',
-    '/images/rolls.png',
-    '/images/bentley.png',
-    '/images/aston.png',
-    '/images/bugatti.png',
-  ];
+  const mobileLogos = logoRow;
 
-  const footerLogos = logoRow;
-
-  /* MENU CLOSE OUTSIDE CLICK */
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -51,56 +34,25 @@ function HomeContent() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  /* DESKTOP LOGO ROTATION (FIXED) */
-  useEffect(() => {
-    const i = setInterval(() => {
-      setDesktopLogoIndex((p) => (p + 1) % logoRow.length);
-    }, 2000);
-
-    return () => clearInterval(i);
-  }, []);
-
-  /* MOBILE LOGO ROTATION */
-  useEffect(() => {
-    const i = setInterval(() => {
-      setMobileLogoIndex((p) => (p + 1) % mobileLogos.length);
-    }, 2500);
-
-    return () => clearInterval(i);
-  }, []);
-
-  /* SOLD CAROUSEL */
   useEffect(() => {
     fetch('/api/images')
-      .then((res) => res.json())
+      .then((r) => r.json())
       .then(setSoldImages)
-      .catch(console.error);
+      .catch(() => setSoldImages([]));
   }, []);
 
   useEffect(() => {
-    if (!soldImages.length) return;
-
     const i = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % soldImages.length);
-    }, 3500);
-
+      setSoldIndex((p) => (p + 1) % (soldImages.length || 1));
+    }, 3000);
     return () => clearInterval(i);
   }, [soldImages]);
 
-  /* CARS */
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch('/api/cars');
-        const data = await res.json();
-        setCars(Array.isArray(data.cars) ? data.cars : []);
-      } catch {
-        setCars([]);
-      } finally {
-        setLoadingCars(false);
-      }
-    };
-    load();
+    fetch('/api/cars')
+      .then((r) => r.json())
+      .then((d) => setCars(Array.isArray(d.cars) ? d.cars : []))
+      .catch(() => setCars([]));
   }, []);
 
   return (
@@ -112,9 +64,9 @@ function HomeContent() {
       {/* HEADER */}
       <header className="header">
 
-        {/* LEFT */}
+        {/* LEFT NAV */}
         <div className="header-left">
-          <a href="tel:1234567890" className="call-me">
+          <a className="call-me" href="tel:1234567890">
             <FaPhone />
           </a>
 
@@ -125,28 +77,11 @@ function HomeContent() {
           </nav>
         </div>
 
-        {/* CENTER LOGO ROW (FIXED ROTATION) */}
+        {/* CENTER LOGOS */}
         <div className="logo-row">
-          <img
-            src={logoRow[desktopLogoIndex]}
-            className="logo-small"
-            alt="logo"
-          />
-          <img
-            src={logoRow[(desktopLogoIndex + 1) % logoRow.length]}
-            className="logo-small"
-            alt="logo"
-          />
-          <img
-            src={logoRow[(desktopLogoIndex + 2) % logoRow.length]}
-            className="logo-small"
-            alt="logo"
-          />
-          <img
-            src={logoRow[(desktopLogoIndex + 3) % logoRow.length]}
-            className="logo-small"
-            alt="logo"
-          />
+          {logoRow.map((l, i) => (
+            <img key={i} src={l} className="logo-small" />
+          ))}
         </div>
 
         {/* RIGHT NAV */}
@@ -166,11 +101,6 @@ function HomeContent() {
           </button>
         </div>
 
-        {/* MOBILE LOGO */}
-        <div className="mobile-logo">
-          <img src={mobileLogos[mobileLogoIndex]} alt="logo" />
-        </div>
-
         {/* MOBILE MENU */}
         <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
           <Link href="/">Home</Link>
@@ -180,27 +110,24 @@ function HomeContent() {
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
         </nav>
+
       </header>
 
       {/* BANNER */}
       <section className="banner">
         <img src="/images/carwallpaper.webp" />
-        <div className="banner-text">
-          <h1>Luxury Car Dealership</h1>
-        </div>
       </section>
 
       {/* WELCOME */}
       <section className="welcome-section">
         <h2>Welcome to Our Dealership</h2>
-        <p>Luxury vehicles, premium service.</p>
       </section>
 
-      {/* SOLD */}
+      {/* SOLD CAROUSEL */}
       <section className="sold-section">
         <h2>Previously Sold</h2>
         {soldImages.length > 0 && (
-          <img src={soldImages[soldIndex]} className="sold-image" />
+          <img src={soldImages[soldIndex]} />
         )}
       </section>
 
@@ -208,34 +135,26 @@ function HomeContent() {
       <section className="inventory">
         <h2>Latest Arrivals</h2>
 
-        {loadingCars ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="grid">
-            {cars.slice(0, 6).map((c) => (
-              <Link key={c._id} href={`/car/${c._id}`} className="card">
-                <img src={c.images?.[0]} />
-                <h3>{c.make} {c.model}</h3>
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="grid">
+          {cars.slice(0, 6).map((c) => (
+            <Link key={c._id} href={`/car/${c._id}`} className="card">
+              <img src={c.images?.[0]} />
+              <h3>{c.make} {c.model}</h3>
+            </Link>
+          ))}
+        </div>
       </section>
 
       {/* FOOTER */}
       <footer className="footer">
         <div className="footer-logos">
-          {footerLogos.map((l, i) => (
+          {logoRow.map((l, i) => (
             <img key={i} src={l} />
           ))}
         </div>
       </footer>
 
-      <SearchOverlay
-        cars={cars}
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
+      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 }

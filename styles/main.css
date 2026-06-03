@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 
-/* ===================== RESET ===================== */
+/* ================= RESET ================= */
 
 * {
   margin: 0;
@@ -10,136 +10,153 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  background: #0f0f0f;
+  background: #111;
   color: #fff;
   overflow-x: hidden;
 }
 
+/* links */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* ===================== HEADER GRID ===================== */
+/* ================= HEADER ================= */
 
 .header {
   position: sticky;
   top: 0;
-  z-index: 2000;
+  z-index: 3000;
 
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
 
-  background: #000;
+  background: #111;
   padding: 12px 20px;
   height: 80px;
 }
 
-/* LEFT NAV */
+/* LEFT */
 .header-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
+.call-me svg {
+  color: white;
+}
+
+/* CENTER NAV GROUP (LEFT SIDE OF LOGO) */
 .nav-left {
   display: flex;
-  gap: 18px;
+  gap: 15px;
   font-size: 13px;
   font-weight: 600;
 }
 
-/* CENTER LOGOS */
+/* CENTER LOGO ROW */
 .logo-row {
   display: flex;
-  gap: 15px;
   justify-content: center;
   align-items: center;
+  gap: 12px;
 }
 
 .logo-small {
   width: 45px;
-  height: auto;
+  height: 45px;
   object-fit: contain;
-  opacity: 0.9;
 }
 
-/* RIGHT NAV */
+/* RIGHT SIDE NAV */
 .header-right {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
   gap: 15px;
 }
 
 .nav-right {
   display: flex;
-  gap: 18px;
+  gap: 15px;
   font-size: 13px;
   font-weight: 600;
 }
 
-/* ICONS */
-button {
-  background: none;
+/* buttons */
+.header-right button {
+  background: transparent;
   border: none;
   color: white;
-  font-size: 18px;
   cursor: pointer;
+  font-size: 18px;
 }
 
-/* PHONE */
-.call-me {
-  color: white;
-  display: flex;
-  align-items: center;
-}
-
-/* ===================== MOBILE LOGO ===================== */
+/* ================= MOBILE ================= */
 
 .mobile-logo {
   display: none;
 }
 
-.mobile-logo img {
-  width: 45px;
-  height: auto;
-}
-
-/* ===================== MOBILE MENU ===================== */
-
 .mobile-menu {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.97);
-
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 3000;
 }
 
-.mobile-menu.active {
-  display: flex;
+/* show mobile */
+@media (max-width: 768px) {
+
+  .header {
+    grid-template-columns: 1fr auto 1fr;
+    height: 70px;
+  }
+
+  .nav-left,
+  .nav-right,
+  .logo-row {
+    display: none;
+  }
+
+  .mobile-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mobile-logo img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+  }
+
+  /* hamburger menu */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.97);
+
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+    font-size: 22px;
+    z-index: 4000;
+  }
+
+  .mobile-menu.active {
+    display: flex;
+  }
 }
 
-.mobile-menu a {
-  font-size: 22px;
-  margin: 12px 0;
-  color: white;
-  font-weight: 600;
-}
-
-/* ===================== BANNER ===================== */
+/* ================= BANNER ================= */
 
 .banner {
   position: relative;
   width: 100%;
-  height: 65vh;
-  overflow: hidden;
+  height: 70vh;
 }
 
 .banner img {
@@ -154,10 +171,9 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
 }
 
-/* ===================== SECTIONS ===================== */
+/* ================= SECTIONS ================= */
 
 .welcome-section,
 .sold-section,
@@ -166,45 +182,13 @@ button {
   text-align: center;
 }
 
-.welcome-section h2,
-.sold-section h2,
-.inventory h2 {
-  font-size: 32px;
-  margin-bottom: 15px;
-}
-
-/* ===================== SOLD IMAGE ===================== */
-
-.sold-image {
-  width: 100%;
-  max-width: 900px;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin: 20px auto;
-  display: block;
-}
-
-/* ===================== INVENTORY GRID ===================== */
+/* ================= INVENTORY GRID ================= */
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.card {
-  background: #1a1a1a;
-  border-radius: 10px;
-  overflow: hidden;
-  padding: 10px;
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: scale(1.02);
+  margin-top: 30px;
 }
 
 .card img {
@@ -213,11 +197,11 @@ button {
   object-fit: cover;
 }
 
-/* ===================== FOOTER ===================== */
+/* ================= FOOTER ================= */
 
 .footer {
+  padding: 30px;
   background: #000;
-  padding: 30px 20px;
   text-align: center;
 }
 
@@ -225,35 +209,11 @@ button {
   display: flex;
   justify-content: center;
   gap: 15px;
-  flex-wrap: wrap;
 }
 
 .footer-logos img {
-  width: 40px;
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
   opacity: 0.8;
-}
-
-/* ===================== DESKTOP RESPONSIVE ===================== */
-
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .logo-row {
-    display: none;
-  }
-
-  .mobile-logo {
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .nav-left,
-  .nav-right {
-    display: none;
-  }
 }
