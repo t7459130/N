@@ -147,6 +147,7 @@ body {
   width: 100%;
   max-height: 400px;
   object-fit: cover;
+  display: block; /* ← fixes the white line gap on mobile */
 }
 
 .banner-text {
