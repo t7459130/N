@@ -1,16 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
-import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
+import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 
-import { AdminProvider } from '../components/AdminContext';
+import { AdminProvider, useAdmin } from '../components/AdminContext';
+import SearchOverlay from '../components/SearchOverlay';
 
 function AppContent() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
   const [currentFooterLogoIndex, setCurrentFooterLogoIndex] = useState(0);
 
+  const [cars, setCars] = useState([]);
+  const [loadingCars, setLoadingCars] = useState(true);
+
+  const [soldImages, setSoldImages] = useState([]);
+  const [currentSoldImage, setCurrentSoldImage] = useState(0);
+
   const menuRef = useRef(null);
+  const { isAdmin } = useAdmin();
 
   const logoBatches = [
     ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
@@ -30,6 +39,16 @@ function AppContent() {
   ];
 
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBatchIndex((p) => (p + 1) % logoBatches.length);
     }, 3000);
@@ -39,50 +58,61 @@ function AppContent() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentFooterLogoIndex((p) => (p + 1) % footerLogos.length);
-    }, 1200);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const res = await fetch('/api/cars');
+        const data = await res.json();
+        setCars(Array.isArray(data.cars) ? data.cars.reverse() : []);
+      } catch {
+        setCars([]);
+      } finally {
+        setLoadingCars(false);
+      }
+    };
+    fetchCars();
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/images')
+      .then((res) => res.json())
+      .then(setSoldImages)
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!soldImages.length) return;
+
+    const interval = setInterval(() => {
+      setCurrentSoldImage((p) => (p + 1) % soldImages.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [soldImages]);
+
   return (
     <div className="app">
-
       <Head>
-        <title>Luxury Car Dealership</title>
+        <title>Car Dealership</title>
+        <link rel="icon" href="/images/ferrari.png" />
       </Head>
 
-      {/* ================= HEADER ================= */}
+      {/* HEADER */}
       <header className="header">
 
-        <div className="nav-left">
-          <Link href="/">Home</Link>
-          <Link href="/Inventory">Stock</Link>
-          <Link href="/Sellyourcar">Sell</Link>
+        {/* LEFT */}
+        <div className="header-left">
+          <a href="tel:1234567890" className="call-me">
+            <FaPhone size={18} />
+          </a>
         </div>
 
-        <div className="logo-bar">
-          {logoBatches[currentBatchIndex].map((logo, i) => (
-            <img key={i} src={logo} className="logo" />
-          ))}
-        </div>
-
-        <div className="nav-right">
-          <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About</Link>
-          <Link href="/contact">Contact</Link>
-
-          <FaPhone className="icon" />
-          <FaSearch className="icon" />
-
-          <button className="menu-btn" onClick={() => setIsMenuOpen(true)}>
-            <FaBars />
-          </button>
-        </div>
-
-        <nav className={`mobile-menu ${isMenuOpen ? 'active' : ''}`} ref={menuRef}>
-          <button className="close-btn" onClick={() => setIsMenuOpen(false)}>
-            <FaTimes />
-          </button>
-
+        {/* CENTER NAV (DESKTOP ONLY) */}
+        <nav className="desktop-nav">
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
@@ -91,69 +121,103 @@ function AppContent() {
           <Link href="/contact">Contact</Link>
         </nav>
 
+        {/* CENTER LOGO CAROUSEL */}
+        <div className="logo-bar desktop-logo-bar">
+          {logoBatches[currentBatchIndex].map((logo, idx) => (
+            <img key={idx} src={logo} className="desktop-logo" alt="" />
+          ))}
+        </div>
+
+        {/* RIGHT */}
+        <div className="header-icons">
+          <button onClick={() => setIsSearchOpen(true)} className="search-btn">
+            <FaSearch size={18} />
+          </button>
+
+          <button className="menu-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
+        {/* MOBILE LOGO */}
+        <div className="logo-bar mobile-logo-bar">
+          <img
+            src={footerLogos[currentFooterLogoIndex]}
+            className="mobile-logo"
+            alt=""
+          />
+        </div>
+
+        {/* MOBILE MENU */}
+        <nav ref={menuRef} className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
+          <ul>
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/Inventory">Stock</Link></li>
+            <li><Link href="/Sellyourcar">Sell</Link></li>
+            <li><Link href="/NewsAndEvents">Insights</Link></li>
+            <li><Link href="/About">About</Link></li>
+            <li><Link href="/contact">Contact</Link></li>
+          </ul>
+        </nav>
+
       </header>
 
-      {/* ================= HERO ================= */}
-      <section className="hero">
-        <div className="hero-overlay">
-          <h1>Luxury & Performance Vehicles</h1>
-          <p>Handpicked supercars, prestige & rare automotive excellence</p>
-          <Link href="/Inventory" className="hero-btn">
-            View Inventory
-          </Link>
+      {/* BANNER */}
+      <section className="banner">
+        <img src="/images/carwallpaper.webp" className="banner-image" />
+        <div className="banner-text">
+          <h1>Welcome to Our Car Dealership</h1>
+          <p>Luxury cars. Premium service.</p>
         </div>
       </section>
 
-      {/* ================= FEATURED ABOUT ================= */}
-      <section className="about-preview">
-        <h2>About Us</h2>
-        <p>
-          We are a family-run luxury dealership based in Surrey,
-          specialising in supercars, performance and prestige vehicles.
-        </p>
-      </section>
+      {/* SOLD SECTION (CAROUSEL STYLE) */}
+      <section className="about-us">
+        <div className="about-wrapper">
 
-      {/* ================= SOLD ================= */}
-      <section className="sold-section">
-        <h2>Previously Sold Vehicles</h2>
-
-        <div className="sold-card">
-          <div className="sold-image" />
-          <div className="sold-content">
-            <p>We have successfully supplied luxury vehicles across the UK.</p>
-            <Link href="/sold">View Full Gallery</Link>
+          <div className="about-image-container">
+            {soldImages.length > 0 && (
+              <img
+                src={soldImages[currentSoldImage]}
+                className="about-image"
+                alt="Sold"
+              />
+            )}
           </div>
+
+          <div className="about-text-container">
+            <h2>Previously Sold</h2>
+            <p>Luxury vehicles successfully delivered to clients across the UK.</p>
+          </div>
+
         </div>
       </section>
 
-      {/* ================= INVENTORY ================= */}
-      <section className="inventory-preview">
+      {/* INVENTORY */}
+      <section className="latest-arrivals">
         <h2>Latest Arrivals</h2>
 
-        <div className="grid">
-          <div className="card">
-            <div className="placeholder" />
-            <h3>Featured Vehicle</h3>
+        {loadingCars ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="car-listings">
+            {cars.slice(0, 6).map((car) => (
+              <div key={car._id} className="car-card">
+                <Link href={`/car/${car._id}`}>
+                  <img src={car.images?.[0] || '/placeholder.png'} />
+                </Link>
+              </div>
+            ))}
           </div>
-
-          <div className="card">
-            <div className="placeholder" />
-            <h3>Featured Vehicle</h3>
-          </div>
-
-          <div className="card">
-            <div className="placeholder" />
-            <h3>Featured Vehicle</h3>
-          </div>
-        </div>
+        )}
       </section>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="footer">
-        <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo" />
-        <p>Surrey, UK • Luxury Car Dealership</p>
-      </footer>
+      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
+      {/* FOOTER */}
+      <footer className="footer">
+        <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo-img" />
+      </footer>
     </div>
   );
 }
