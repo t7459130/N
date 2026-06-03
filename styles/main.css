@@ -1,65 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+/* ===================== HEADER FIX ===================== */
 
-/* ===================== RESET ===================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Montserrat', sans-serif;
-  background: #0f0f0f;
-  color: #fff;
-  overflow-x: hidden;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
-
-/* ===================== HEADER ===================== */
 .header {
   position: sticky;
   top: 0;
-  z-index: 3000;
-  height: 80px;
+  z-index: 9999;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  height: 80px;
   padding: 0 20px;
   background: #0f0f0f;
   border-bottom: 1px solid #222;
+
+  position: relative;
 }
 
-/* LEFT NAV */
+/* LEFT SIDE */
 .header-left {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
 }
 
-/* RIGHT NAV */
+/* RIGHT SIDE */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
 }
 
 /* NAV LINKS */
 .nav-left,
 .nav-right {
   display: flex;
-  gap: 15px;
+  gap: 14px;
 }
 
 .nav-left a,
 .nav-right a {
   color: #ccc;
   text-decoration: none;
-  font-weight: 500;
   font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .nav-left a:hover,
@@ -69,136 +54,56 @@ img {
 
 /* PHONE */
 .call-me {
-  color: #fff;
+  color: white;
   display: flex;
   align-items: center;
 }
 
-/* ===================== CENTER LOGOS (DESKTOP) ===================== */
+/* ===================== CENTER LOGOS ===================== */
+
 .logo-row {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
+  justify-content: center;
+
+  z-index: 5;
 }
 
 .logo-small {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
-}
-
-/* ===================== MOBILE LOGO ===================== */
-.mobile-logo {
-  display: none;
-}
-
-/* ===================== BUTTONS ===================== */
-button {
-  background: transparent;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* ===================== BANNER ===================== */
-.banner {
-  position: relative;
-  height: 70vh;
-}
-
-.banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.banner-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-/* ===================== SECTIONS ===================== */
-section {
-  padding: 60px 20px;
-}
-
-h1, h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* ===================== INVENTORY GRID ===================== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.card {
-  background: #1a1a1a;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-/* ===================== SOLD ===================== */
-.sold-image {
-  width: 100%;
-  max-height: 450px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-/* ===================== FOOTER ===================== */
-.footer {
-  padding: 30px;
-  text-align: center;
-  border-top: 1px solid #222;
-}
-
-.footer-logos {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.footer-logos img {
-  width: 35px;
-  height: 35px;
+  width: 38px;
+  height: 38px;
   object-fit: contain;
 }
 
 /* ===================== MOBILE ===================== */
+
 @media (max-width: 768px) {
 
+  /* hide desktop nav */
   .nav-left,
   .nav-right {
     display: none;
   }
 
+  /* keep header stable */
+  .header {
+    justify-content: space-between;
+  }
+
+  /* keep logos centered */
   .logo-row {
     display: none;
   }
 
-  .mobile-logo {
-    display: block;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .header {
-    justify-content: space-between;
+  /* prevent overlap text bug */
+  .header-left,
+  .header-right {
+    gap: 10px;
   }
 }

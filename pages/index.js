@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 
 import { AdminProvider } from '../components/AdminContext';
@@ -13,7 +14,6 @@ function HomeContent() {
   const [cars, setCars] = useState([]);
   const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
-  const [mobileLogoIndex, setMobileLogoIndex] = useState(0);
 
   const menuRef = useRef(null);
 
@@ -24,66 +24,56 @@ function HomeContent() {
     '/images/bentley.png',
   ];
 
-  const mobileLogos = [
-    '/images/ferrari.png',
-    '/images/lamborghini.png',
-    '/images/rolls.png',
-    '/images/bentley.png',
-    '/images/aston.png',
-    '/images/bugatti.png',
-  ];
-
-  /* MENU CLOSE */
+  /* CLOSE MENU ON OUTSIDE CLICK */
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  /* MOBILE LOGO ROTATION */
-  useEffect(() => {
-    const i = setInterval(() => {
-      setMobileLogoIndex((p) => (p + 1) % mobileLogos.length);
-    }, 2500);
-    return () => clearInterval(i);
-  }, []);
-
-  /* SOLD */
-  useEffect(() => {
-    fetch('/api/images')
-      .then((res) => res.json())
-      .then(setSoldImages)
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    if (!soldImages.length) return;
-    const i = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % soldImages.length);
-    }, 3500);
-    return () => clearInterval(i);
-  }, [soldImages]);
-
-  /* CARS */
+  /* FETCH CARS */
   useEffect(() => {
     fetch('/api/cars')
-      .then((res) => res.json())
-      .then((data) => setCars(Array.isArray(data.cars) ? data.cars : []));
+      .then(res => res.json())
+      .then(data => setCars(Array.isArray(data.cars) ? data.cars : []))
+      .catch(() => setCars([]));
   }, []);
+
+  /* FETCH SOLD IMAGES */
+  useEffect(() => {
+    fetch('/api/images')
+      .then(res => res.json())
+      .then(setSoldImages)
+      .catch(() => setSoldImages([]));
+  }, []);
+
+  /* SOLD CAROUSEL */
+  useEffect(() => {
+    if (!soldImages.length) return;
+
+    const interval = setInterval(() => {
+      setSoldIndex(prev => (prev + 1) % soldImages.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [soldImages]);
 
   return (
     <div>
+
       <Head>
-        <title>Home</title>
+        <title>Home | Dealership</title>
       </Head>
 
-      {/* HEADER */}
+      {/* ================= HEADER ================= */}
       <header className="header">
 
+        {/* LEFT */}
         <div className="header-left">
           <a href="tel:1234567890" className="call-me">
             <FaPhone />
@@ -98,11 +88,12 @@ function HomeContent() {
 
         {/* CENTER LOGOS */}
         <div className="logo-row">
-          {logos.map((l, i) => (
-            <img key={i} src={l} className="logo-small" />
+          {logos.map((logo, i) => (
+            <img key={i} src={logo} className="logo-small" alt="logo" />
           ))}
         </div>
 
+        {/* RIGHT */}
         <div className="header-right">
           <nav className="nav-right">
             <Link href="/NewsAndEvents">Insights</Link>
@@ -119,11 +110,6 @@ function HomeContent() {
           </button>
         </div>
 
-        {/* MOBILE LOGO */}
-        <div className="mobile-logo">
-          <img src={mobileLogos[mobileLogoIndex]} />
-        </div>
-
         {/* MOBILE MENU */}
         <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
           <Link href="/">Home</Link>
@@ -136,46 +122,71 @@ function HomeContent() {
 
       </header>
 
-      {/* BANNER */}
+      {/* ================= BANNER ================= */}
       <section className="banner">
-        <img src="/images/carwallpaper.webp" />
+        <img src="/images/carwallpaper.webp" alt="banner" />
         <div className="banner-text">
-          <h1>Luxury Cars</h1>
+          <h1>Luxury Cars. Premium Service.</h1>
         </div>
       </section>
 
-      {/* SOLD */}
+      {/* ================= ABOUT / INTRO ================= */}
+      <section>
+        <h2>Welcome</h2>
+        <p style={{ textAlign: 'center', maxWidth: 800, margin: '0 auto' }}>
+          We specialise in luxury and performance vehicles across the UK.
+        </p>
+      </section>
+
+      {/* ================= SOLD SECTION ================= */}
       <section>
         <h2>Previously Sold</h2>
+
         {soldImages.length > 0 && (
-          <img className="sold-image" src={soldImages[soldIndex]} />
+          <div style={{ textAlign: 'center' }}>
+            <img
+              src={soldImages[soldIndex]}
+              style={{
+                width: '100%',
+                maxHeight: '500px',
+                objectFit: 'cover',
+                borderRadius: '10px'
+              }}
+            />
+          </div>
         )}
       </section>
 
-      {/* INVENTORY */}
+      {/* ================= INVENTORY ================= */}
       <section>
         <h2>Latest Stock</h2>
 
         <div className="grid">
-          {cars.slice(0, 6).map((c) => (
-            <Link key={c._id} href={`/car/${c._id}`} className="card">
-              <img src={c.images?.[0]} />
-              <h3>{c.make} {c.model}</h3>
+          {cars.slice(0, 6).map(car => (
+            <Link key={car._id} href={`/car/${car._id}`} className="card">
+              <img src={car.images?.[0] || '/placeholder.png'} />
+              <h3>{car.year} {car.make} {car.model}</h3>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* ================= FOOTER ================= */}
       <footer className="footer">
         <div className="footer-logos">
-          {logos.map((l, i) => (
-            <img key={i} src={l} />
+          {logos.map((logo, i) => (
+            <img key={i} src={logo} alt="logo" />
           ))}
         </div>
       </footer>
 
-      <SearchOverlay cars={cars} isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      {/* SEARCH OVERLAY */}
+      <SearchOverlay
+        cars={cars}
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
+
     </div>
   );
 }
