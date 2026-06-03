@@ -1,30 +1,28 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 import SearchOverlay from './SearchOverlay';
+import { useAdmin } from './AdminContext';
 
 export default function Layout({ children }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const menuRef = useRef(null);
+  const { isAdmin } = useAdmin();
 
-  const logoBatches = [
-    ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
+  const logoRow = [
+    '/images/ferrari.png',
+    '/images/lamborghini.png',
+    '/images/rolls.png',
+    '/images/bentley.png',
   ];
 
-  const [logoIndex, setLogoIndex] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setLogoIndex((p) => (p + 1) % logoBatches[0].length);
-    }, 2500);
-    return () => clearInterval(t);
-  }, []);
+  const footerLogos = logoRow;
 
   useEffect(() => {
     const handleClick = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
+        setIsMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClick);
@@ -32,59 +30,64 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <>
-      {/* HEADER */}
+    <div className="app">
+
+      {/* HEADER (SAME ON ALL PAGES) */}
       <header className="header">
 
         {/* LEFT */}
         <div className="header-left">
-          <a href="tel:07777777777" className="call-me">
+          <a href="tel:1234567890" className="call-me">
             <FaPhone />
           </a>
 
-          <nav className="desktop-nav">
+          <nav className="nav-left">
             <Link href="/">Home</Link>
-            <Link href="/inventory">Stock</Link>
+            <Link href="/Inventory">Stock</Link>
             <Link href="/Sellyourcar">Sell</Link>
           </nav>
         </div>
 
-        {/* CENTER LOGO */}
-        <div className="logo-bar">
-          <img src={logoBatches[0][logoIndex]} className="desktop-logo" />
+        {/* CENTER LOGOS */}
+        <div className="logo-row">
+          {logoRow.map((logo, i) => (
+            <img key={i} src={logo} className="logo-small" />
+          ))}
         </div>
 
         {/* RIGHT */}
-        <div className="header-icons">
-          <nav className="desktop-nav">
+        <div className="header-right">
+          <nav className="nav-right">
             <Link href="/NewsAndEvents">Insights</Link>
             <Link href="/About">About</Link>
             <Link href="/contact">Contact</Link>
           </nav>
 
-          <button className="search-btn" onClick={() => setSearchOpen(true)}>
+          <button onClick={() => setIsSearchOpen(true)}>
             <FaSearch />
           </button>
 
-          <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? <FaTimes /> : <FaBars />}
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`nav-menu ${menuOpen ? 'active' : ''}`}>
-          <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/inventory">Stock</Link></li>
-            <li><Link href="/Sellyourcar">Sell</Link></li>
-            <li><Link href="/NewsAndEvents">Insights</Link></li>
-            <li><Link href="/About">About</Link></li>
-            <li><Link href="/contact">Contact</Link></li>
-          </ul>
+        <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
 
-        <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} cars={[]} />
-
+        {/* SEARCH */}
+        <SearchOverlay
+          cars={[]}
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+        />
       </header>
 
       {/* PAGE CONTENT */}
@@ -93,14 +96,12 @@ export default function Layout({ children }) {
       {/* FOOTER */}
       <footer className="footer">
         <div className="footer-logos">
-          <img src="/images/ferrari.png" />
-          <img src="/images/lamborghini.png" />
-          <img src="/images/bentley.png" />
-          <img src="/images/rolls.png" />
+          {footerLogos.map((logo, i) => (
+            <img key={i} src={logo} />
+          ))}
         </div>
-
-        <p>© Surrey Supercars</p>
       </footer>
-    </>
+
+    </div>
   );
 }
