@@ -1,44 +1,42 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
-import SearchOverlay from './SearchOverlay';
+import { FaBars, FaTimes, FaPhone } from 'react-icons/fa';
 
 export default function Layout({ children }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [mobileIndex, setMobileIndex] = useState(0);
   const menuRef = useRef(null);
 
-  const logoRow = [
-    '/images/ferrari.png',
-    '/images/lamborghini.png',
-    '/images/rolls.png',
-    '/images/bentley.png',
-  ];
-
-  const mobileLogos = [
+  // ✅ EXACT LOGOS YOU WANTED (NO EXTRA FILES)
+  const logos = [
     '/images/ferrari.png',
     '/images/lamborghini.png',
     '/images/rolls.png',
     '/images/bentley.png',
     '/images/aston.png',
     '/images/bugatti.png',
+    '/images/pagani.png',
+    '/images/mercedes.png',
+    '/images/porsche.png',
   ];
 
-  const [logoIndex, setLogoIndex] = useState(0);
-
+  // mobile rotation
   useEffect(() => {
-    const t = setInterval(() => {
-      setLogoIndex((p) => (p + 1) % mobileLogos.length);
-    }, 2500);
-    return () => clearInterval(t);
+    const interval = setInterval(() => {
+      setMobileIndex((p) => (p + 1) % logos.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, []);
 
+  // close menu outside click
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
+        setOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
@@ -46,11 +44,12 @@ export default function Layout({ children }) {
   return (
     <div className="app">
 
-      <header className="site-header">
+      {/* HEADER */}
+      <header className="header">
 
-        {/* LEFT */}
+        {/* LEFT NAV */}
         <div className="nav-left">
-          <a href="tel:07777777777" className="phone">
+          <a href="tel:1234567890" className="phone">
             <FaPhone />
           </a>
 
@@ -60,39 +59,33 @@ export default function Layout({ children }) {
         </div>
 
         {/* CENTER LOGOS (DESKTOP) */}
-        <div className="logo-box">
-          {logoRow.map((l, i) => (
-            <img key={i} src={l} alt="" />
+        <div className="logo-bar desktop-only">
+          {logos.map((logo, i) => (
+            <img key={i} src={logo} className="logo" alt="" />
           ))}
         </div>
 
-        {/* RIGHT */}
+        {/* MOBILE LOGO (SINGLE ROTATING) */}
+        <div className="mobile-only mobile-logo">
+          <img src={logos[mobileIndex]} alt="" />
+        </div>
+
+        {/* RIGHT NAV */}
         <div className="nav-right">
-          <Link href="/sold">Sold</Link>
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
 
-          <button onClick={() => setSearchOpen(true)} className="icon-btn">
-            <FaSearch />
+          <button className="hamburger" onClick={() => setOpen(!open)}>
+            {open ? <FaTimes /> : <FaBars />}
           </button>
-
-          <button onClick={() => setMenuOpen(!menuOpen)} className="icon-btn">
-            {menuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-
-        {/* MOBILE LOGO */}
-        <div className="mobile-logo">
-          <img src={mobileLogos[logoIndex]} alt="" />
         </div>
 
         {/* MOBILE MENU */}
-        <nav ref={menuRef} className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+        <nav ref={menuRef} className={`mobile-menu ${open ? 'open' : ''}`}>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
-          <Link href="/sold">Sold</Link>
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
@@ -100,17 +93,14 @@ export default function Layout({ children }) {
 
       </header>
 
+      {/* PAGE CONTENT */}
       <main className="page">{children}</main>
 
+      {/* FOOTER */}
       <footer className="footer">
-        <div className="footer-logos">
-          {logoRow.map((l, i) => (
-            <img key={i} src={l} alt="" />
-          ))}
-        </div>
+        <p>Luxury Car Dealership</p>
       </footer>
 
-      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }
