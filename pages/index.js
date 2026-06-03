@@ -7,7 +7,7 @@ export default function Home() {
   const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
 
-  /* HERO IMAGES */
+  /* HERO IMAGES (STATIC SAFE - NO API) */
   const headerImages = [
     '/header/IMG_1.jpg',
     '/header/IMG_2.jpg',
@@ -41,14 +41,15 @@ export default function Home() {
     load();
   }, []);
 
-  /* SOLD IMAGES */
+  /* SOLD IMAGES (FROM API - SAFE) */
   useEffect(() => {
-    fetch('/api/images')
+    fetch('/api/images?folder=sold')
       .then((res) => res.json())
       .then(setSoldImages)
       .catch(console.error);
   }, []);
 
+  /* SOLD ROTATION */
   useEffect(() => {
     if (!soldImages.length) return;
 

@@ -446,3 +446,15 @@ a {
   color: white;
   z-index: 9999;
 }
+
+.sold-badge {
+  position: absolute;
+  top: 15px;
+  right: -40px;
+  background: red;
+  color: white;
+  padding: 10px 60px;
+  transform: rotate(45deg);
+  font-weight: bold;
+  letter-spacing: 2px;
+}
