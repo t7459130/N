@@ -57,12 +57,12 @@ const ContactUs = () => {
         <div className="contact-grid">
           <div className="contact-card">
             <h3>Email</h3>
-            <p>info@cardealership.com</p>
+            <p>surreyexotics@gmail.com</p>
           </div>
 
           <div className="contact-card">
             <h3>Phone</h3>
-            <p>(123) 456-7890</p>
+            <p>+44 7826 456793</p>
           </div>
         </div>
       </div>
