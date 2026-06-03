@@ -1,13 +1,18 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 export default function handler(req, res) {
-  const publicDir = path.join(process.cwd(), "public");
+  try {
+    const dir = path.join(process.cwd(), 'public', 'sold'); // or wallpaper ONLY
 
-  const files = fs
-    .readdirSync(publicDir)
-    .filter((file) => file.toLowerCase().endsWith(".jpg"))
-    .map((file) => `/${file}`);
+    const files = fs.readdirSync(dir);
 
-  res.status(200).json(files);
+    const images = files
+      .filter((file) => file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.png'))
+      .map((file) => `/sold/${file}`); // IMPORTANT: match folder
+
+    res.status(200).json(images);
+  } catch (err) {
+    res.status(500).json([]);
+  }
 }
