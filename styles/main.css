@@ -120,14 +120,16 @@ a {
   object-fit: cover;
 }
 
-.banner-text {
-  position: absolute;
-  left: 40px;
-  bottom: 40px;
+/* ✅ MOBILE FIX */
+@media (max-width: 768px) {
+  .banner {
+    height: 45vh;
+  }
 
-  background: rgba(0,0,0,.4);
-  padding: 20px;
-  border-radius: 10px;
+  .banner img {
+    object-fit: contain;   /* 👈 key change */
+    background: #000;      /* fills empty space nicely */
+  }
 }
 
 /* CONTENT */
