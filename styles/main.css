@@ -234,6 +234,61 @@ a {
     height: 250px;
   }
 }
+
+.banner {
+  position: relative;
+  height: 70vh;
+  overflow: hidden;
+}
+
+/* background layer */
+.banner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  transition: background-image 1s ease-in-out;
+}
+
+/* dark overlay for luxury look */
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+/* text stays above everything */
+.banner-text {
+  position: absolute;
+  left: 40px;
+  bottom: 40px;
+  z-index: 2;
+  background: rgba(0,0,0,0.4);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.banner-text h1 {
+  font-size: 40px;
+}
+
+.banner-text p {
+  color: #ccc;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .banner {
+    height: 50vh;
+  }
+
+  .banner-text {
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+  }
+}
 /* =======================
    LUXURY ABOUT PAGE
 ======================= */

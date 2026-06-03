@@ -7,6 +7,26 @@ export default function Home() {
   const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
 
+  /* HERO IMAGES */
+  const headerImages = [
+    '/header/IMG_1.jpg',
+    '/header/IMG_2.jpg',
+    '/header/IMG_3.jpg',
+    '/header/IMG_4.jpg',
+    '/header/IMG_5.jpg',
+  ];
+
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  /* HERO ROTATION */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % headerImages.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   /* LOAD CARS */
   useEffect(() => {
     const load = async () => {
@@ -44,12 +64,21 @@ export default function Home() {
 
       {/* HERO */}
       <section className="banner">
-        <img src="/images/carwallpaper.webp" />
+
+        <div
+          className="banner-bg"
+          style={{
+            backgroundImage: `url(${headerImages[heroIndex]})`,
+          }}
+        />
+
+        <div className="banner-overlay" />
 
         <div className="banner-text">
           <h1>Luxury Car Dealership</h1>
           <p>Performance. Prestige. Perfection.</p>
         </div>
+
       </section>
 
       {/* WELCOME */}
