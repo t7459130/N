@@ -1,79 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import Layout from '../components/Layout';
-import Link from 'next/link';
+import { FaBars, FaTimes, FaPhone } from 'react-icons/fa';
 
-export default function Home() {
-  const [cars, setCars] = useState([]);
-  const [soldImages, setSoldImages] = useState([]);
-  const [soldIndex, setSoldIndex] = useState(0);
+export default function Header() {
+
+  const logoBatches = [
+    [
+      '/images/ferrari.png',
+      '/images/lamborghini.png',
+      '/images/rolls.png',
+      '/images/bentley.png',
+    ],
+    [
+      '/images/aston.png',
+      '/images/pagani.png',
+      '/images/bugatti.png',
+      '/images/mercedes.png',
+    ],
+  ];
+
+  const mobileLogos = [
+    '/images/lamborghini.png',
+    '/images/ferrari.png',
+    '/images/porsche.png',
+    '/images/pagani.png',
+    '/images/mercedes.png',
+    '/images/aston.png',
+    '/images/bugatti.png',
+    '/images/bentley.png',
+    '/images/rolls.png',
+  ];
+
+  const [batchIndex, setBatchIndex] = useState(0);
+  const [mobileIndex, setMobileIndex] = useState(0);
 
   useEffect(() => {
-    fetch('/api/images')
-      .then((res) => res.json())
-      .then(setSoldImages)
-      .catch(console.error);
+    const i = setInterval(() => {
+      setBatchIndex((p) => (p + 1) % logoBatches.length);
+    }, 3000);
+    return () => clearInterval(i);
   }, []);
 
   useEffect(() => {
-    if (!soldImages.length) return;
-
     const i = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % soldImages.length);
-    }, 3500);
-
+      setMobileIndex((p) => (p + 1) % mobileLogos.length);
+    }, 1200);
     return () => clearInterval(i);
-  }, [soldImages]);
-
-  useEffect(() => {
-    fetch('/api/cars')
-      .then((res) => res.json())
-      .then((data) => setCars(data.cars || []))
-      .catch(() => setCars([]));
   }, []);
 
   return (
-    <Layout>
+    <header className="header">
 
-      {/* HERO */}
-      <section className="banner">
-        <img src="/images/carwallpaper.webp" alt="" />
-        <div className="banner-text">
-          <h1>Luxury Car Dealership</h1>
-          <p>Performance. Prestige. Perfection.</p>
-        </div>
-      </section>
+      {/* LEFT */}
+      <div className="header-left">
+        <a href="tel:1234567890" className="call-me">
+          <FaPhone />
+        </a>
+      </div>
 
-      {/* WELCOME */}
-      <section className="section">
-        <h2>Welcome</h2>
-        <p>We source and deliver premium vehicles across the UK.</p>
-      </section>
+      {/* DESKTOP: 4 LOGO BATCH */}
+      <div className="logo-bar desktop-logo-bar">
+        {logoBatches[batchIndex].map((logo, i) => (
+          <img key={i} src={logo} className="desktop-logo" />
+        ))}
+      </div>
 
-      {/* SOLD */}
-      <section className="section">
-        <h2>Previously Sold</h2>
+      {/* MOBILE: SINGLE ROTATING LOGO */}
+      <div className="logo-bar mobile-logo-bar">
+        <img src={mobileLogos[mobileIndex]} className="mobile-logo" />
+      </div>
 
-        {soldImages.length > 0 && (
-          <div className="tile">
-            <img src={soldImages[soldIndex]} alt="" />
-          </div>
-        )}
-      </section>
+      {/* RIGHT */}
+      <div className="header-right">
+        <FaBars />
+      </div>
 
-      {/* INVENTORY */}
-      <section className="section">
-        <h2>Latest Arrivals</h2>
-
-        <div className="grid">
-          {cars.slice(0, 6).map((c) => (
-            <Link key={c._id} href={`/car/${c._id}`} className="card">
-              <img src={c.images?.[0]} alt="" />
-              <p>{c.make} {c.model}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-    </Layout>
+    </header>
   );
 }
