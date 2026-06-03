@@ -15,7 +15,9 @@ a {
   text-decoration: none;
 }
 
-/* HEADER */
+/* =======================
+   HEADER
+======================= */
 
 .site-header {
   height: 80px;
@@ -45,23 +47,39 @@ a {
   justify-content: center;
 }
 
+/* LOGO CONTAINER (IMPORTANT FIX) */
 .logo-box {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
+  overflow: hidden;
 }
 
+/* LOGO IMAGES */
 .logo-box img {
   width: 50px;
   height: 50px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
+/* SIMPLE MARQUEE ANIMATION (THIS FIXES MOBILE ISSUE) */
+.logo-box {
+  animation: logoScroll 12s linear infinite;
+}
+
+@keyframes logoScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* PHONE */
 .phone {
   color: white;
   font-size: 18px;
 }
 
+/* ICON BUTTON */
 .icon-btn {
   background: none;
   border: none;
@@ -70,7 +88,9 @@ a {
   font-size: 20px;
 }
 
-/* MOBILE MENU */
+/* =======================
+   MOBILE MENU
+======================= */
 
 .mobile-menu {
   display: none;
@@ -94,7 +114,9 @@ a {
   font-size: 24px;
 }
 
-/* MOBILE LOGO */
+/* =======================
+   MOBILE LOGO FIX
+======================= */
 
 .mobile-logo {
   display: none;
@@ -106,7 +128,9 @@ a {
   object-fit: contain;
 }
 
-/* HERO */
+/* =======================
+   HERO (FIXED DUPLICATES)
+======================= */
 
 .banner {
   position: relative;
@@ -114,25 +138,43 @@ a {
   overflow: hidden;
 }
 
+/* background image support */
+.banner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+}
+
+/* fallback image support */
 .banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* ✅ MOBILE FIX */
-@media (max-width: 768px) {
-  .banner {
-    height: 45vh;
-  }
-
-  .banner img {
-    object-fit: contain;   /* 👈 key change */
-    background: #000;      /* fills empty space nicely */
-  }
+/* overlay */
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
 }
 
-/* CONTENT */
+/* text */
+.banner-text {
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
+  z-index: 2;
+  color: white;
+}
+
+/* =======================
+   CONTENT
+======================= */
 
 .welcome-section,
 .inventory,
@@ -141,11 +183,9 @@ a {
 }
 
 /* SOLD */
-
 .sold-tile {
   max-width: 800px;
   margin: auto;
-
   background: #111;
   border-radius: 12px;
   overflow: hidden;
@@ -163,7 +203,6 @@ a {
 }
 
 /* INVENTORY */
-
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
@@ -177,24 +216,39 @@ a {
   border-radius: 8px;
 }
 
-/* MOBILE */
+/* =======================
+   MOBILE FIXES (IMPORTANT)
+======================= */
 
 @media (max-width: 768px) {
 
-  /* Hide ONLY nav links, NOT phone */
-  .header-left a:not(.phone),
-  .header-right a {
+  /* KEEP LOGOS VISIBLE */
+  .logo-box {
+    gap: 8px;
+    transform: none !important;
+    animation: none; /* stop glitchy scroll on small screens */
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .logo-box::-webkit-scrollbar {
     display: none;
   }
 
-  /* keep phone visible */
+  .logo-box img {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* PHONE STAYS VISIBLE */
   .phone {
     display: flex !important;
     align-items: center;
     gap: 6px;
     padding: 8px;
     border: none;
-    z-index: 9999;
+    font-size: 14px;
   }
 
   .phone-text {
@@ -205,23 +259,9 @@ a {
     font-size: 22px;
   }
 
-  /* logos */
-  .desktop-logos {
-    display: none;
-  }
-
-  .mobile-logo {
-    display: block;
-  }
-
-  /* banner fix */
+  /* HERO FIX */
   .banner {
     height: 45vh;
-  }
-
-  .banner img {
-    object-fit: contain;
-    background: #000;
   }
 
   .banner-text {
@@ -230,65 +270,12 @@ a {
     bottom: 15px;
   }
 
+  /* SOLD IMAGE */
   .sold-tile img {
     height: 250px;
   }
 }
 
-.banner {
-  position: relative;
-  height: 70vh;
-  overflow: hidden;
-}
-
-/* background layer */
-.banner-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.05);
-  transition: background-image 1s ease-in-out;
-}
-
-/* dark overlay for luxury look */
-.banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-}
-
-/* text stays above everything */
-.banner-text {
-  position: absolute;
-  left: 40px;
-  bottom: 40px;
-  z-index: 2;
-  background: rgba(0,0,0,0.4);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.banner-text h1 {
-  font-size: 40px;
-}
-
-.banner-text p {
-  color: #ccc;
-}
-
-/* MOBILE FIX */
-@media (max-width: 768px) {
-  .banner {
-    height: 50vh;
-  }
-
-  .banner-text {
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
-  }
-}
 /* =======================
    LUXURY ABOUT PAGE
 ======================= */
@@ -315,11 +302,7 @@ a {
 .lux-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(0,0,0,0.4),
-    rgba(0,0,0,0.85)
-  );
+  background: radial-gradient(circle at center, rgba(0,0,0,0.4), rgba(0,0,0,0.85));
 }
 
 .lux-hero-content {
@@ -341,7 +324,6 @@ a {
 }
 
 /* SECTIONS */
-
 .lux-section {
   padding: 100px 20px;
   max-width: 900px;
@@ -360,24 +342,17 @@ a {
   font-size: 16px;
 }
 
-/* alternating luxury feel */
 .lux-section.dark {
   background: #0a0a0a;
 }
 
 /* animation */
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* MOBILE */
+/* MOBILE TEXT */
 @media (max-width: 768px) {
   .lux-hero-content h1 {
     font-size: 30px;
@@ -389,57 +364,7 @@ a {
   }
 }
 
-.phone-btn {
-  background: #111;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  color: white;
-  border: 1px solid #333;
-  transition: 0.3s;
-}
-
-.phone-btn:hover {
-  background: #c40000;
-  border-color: #c40000;
-}
-
-.phone {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: white;
-  font-size: 14px;
-  padding: 6px 10px;
-  border: 1px solid #222;
-  border-radius: 6px;
-  transition: 0.3s;
-  white-space: nowrap;
-}
-
-/* ICON ALWAYS VISIBLE */
-.phone-icon {
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-/* MOBILE FIX */
-@media (max-width: 768px) {
-  .phone {
-    padding: 8px;
-    border: none;
-    gap: 0;
-  }
-
-  .phone-text {
-    display: none; /* hide number only */
-  }
-
-  .phone-icon {
-    font-size: 20px;
-  }
-}
-
+/* PHONE STYLE */
 .phone {
   display: flex !important;
   align-items: center;
@@ -447,6 +372,7 @@ a {
   z-index: 9999;
 }
 
+/* SOLD BADGE */
 .sold-badge {
   position: absolute;
   top: 15px;
