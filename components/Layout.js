@@ -15,54 +15,44 @@ export default function Layout({ children, cars = [] }) {
     '/images/bentley.png',
   ];
 
-  const mobileLogo = '/images/ferrari.png';
-
   return (
     <div className="site">
 
-      {/* HEADER */}
-      <header className="header">
+      {/* ===== HEADER (GLOBAL FIXED) ===== */}
+      <header className="header-modern">
 
         {/* LEFT */}
-        <div className="header-left">
+        <div className="nav-left">
           <a href="tel:1234567890" className="phone">
             <FaPhone />
           </a>
 
-          <nav className="nav-left">
-            <Link href="/">Home</Link>
-            <Link href="/Inventory">Stock</Link>
-            <Link href="/Sellyourcar">Sell</Link>
-          </nav>
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
         </div>
 
         {/* CENTER LOGOS */}
-        <div className="logo-row">
+        <div className="logo-center">
           {logoRow.map((l, i) => (
-            <img key={i} src={l} className="logo" />
+            <img key={i} src={l} className="logo-small" />
           ))}
         </div>
 
         {/* RIGHT */}
-        <div className="header-right">
-          <nav className="nav-right">
-            <Link href="/NewsAndEvents">Insights</Link>
-            <Link href="/About">About</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
+        <div className="nav-right">
 
-          <button onClick={() => setSearchOpen(true)} className="icon-btn">
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
+
+          <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
 
-          <button onClick={() => setMenuOpen(!menuOpen)} className="icon-btn">
+          <button className="icon-btn" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
-        </div>
-
-        {/* MOBILE LOGO */}
-        <div className="mobile-logo">
-          <img src={mobileLogo} />
         </div>
 
         {/* MOBILE MENU */}
@@ -74,12 +64,12 @@ export default function Layout({ children, cars = [] }) {
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
         </nav>
+
       </header>
 
       {/* PAGE CONTENT */}
       <main className="page">{children}</main>
 
-      {/* SEARCH */}
       <SearchOverlay cars={cars} isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
