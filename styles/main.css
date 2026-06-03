@@ -45,47 +45,48 @@ a {
   flex: 1;
   display: flex;
   justify-content: center;
+  align-items: center;
+  overflow: visible;
 }
 
-/* LOGO CONTAINER (IMPORTANT FIX) */
+/* =======================
+   LOGOS (IMPORTANT FIX)
+======================= */
+
 .logo-box {
   display: flex;
   gap: 12px;
   align-items: center;
-  overflow: hidden;
+  justify-content: center;
+  flex-wrap: nowrap;
 }
 
-/* LOGO IMAGES */
 .logo-box img {
   width: 50px;
   height: 50px;
   object-fit: contain;
   flex-shrink: 0;
+  display: block;
 }
 
-/* SIMPLE MARQUEE ANIMATION (THIS FIXES MOBILE ISSUE) */
-.logo-box {
-  animation: logoScroll 12s linear infinite;
-}
+/* =======================
+   PHONE
+======================= */
 
-@keyframes logoScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* PHONE */
 .phone {
   color: white;
   font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* ICON BUTTON */
-.icon-btn {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 20px;
+.phone-icon {
+  font-size: 18px;
+}
+
+.phone-text {
+  display: inline;
 }
 
 /* =======================
@@ -115,21 +116,7 @@ a {
 }
 
 /* =======================
-   MOBILE LOGO FIX
-======================= */
-
-.mobile-logo {
-  display: none;
-}
-
-.mobile-logo img {
-  width: 45px;
-  height: 45px;
-  object-fit: contain;
-}
-
-/* =======================
-   HERO (FIXED DUPLICATES)
+   HERO
 ======================= */
 
 .banner {
@@ -138,16 +125,6 @@ a {
   overflow: hidden;
 }
 
-/* background image support */
-.banner-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.05);
-}
-
-/* fallback image support */
 .banner img {
   width: 100%;
   height: 100%;
@@ -155,7 +132,6 @@ a {
   display: block;
 }
 
-/* overlay */
 .banner::after {
   content: "";
   position: absolute;
@@ -163,7 +139,6 @@ a {
   background: rgba(0,0,0,0.35);
 }
 
-/* text */
 .banner-text {
   position: absolute;
   bottom: 30px;
@@ -205,7 +180,7 @@ a {
 /* INVENTORY */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 15px;
 }
 
@@ -217,19 +192,29 @@ a {
 }
 
 /* =======================
-   MOBILE FIXES (IMPORTANT)
+   MOBILE FIX (CRITICAL)
 ======================= */
 
 @media (max-width: 768px) {
 
-  /* KEEP LOGOS VISIBLE */
+  /* NEVER hide header content */
+  .header-side a,
+  .header-left a,
+  .header-right a {
+    display: flex !important;
+  }
+
+  /* KEEP LOGOS VISIBLE ALWAYS */
   .logo-box {
+    display: flex !important;
     gap: 8px;
-    transform: none !important;
-    animation: none; /* stop glitchy scroll on small screens */
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
+
     overflow-x: auto;
-    scrollbar-width: none;
+    white-space: nowrap;
+
+    -webkit-overflow-scrolling: touch;
   }
 
   .logo-box::-webkit-scrollbar {
@@ -237,18 +222,17 @@ a {
   }
 
   .logo-box img {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 
-  /* PHONE STAYS VISIBLE */
+  /* PHONE ALWAYS VISIBLE */
   .phone {
     display: flex !important;
     align-items: center;
     gap: 6px;
-    padding: 8px;
+    padding: 6px;
     border: none;
-    font-size: 14px;
   }
 
   .phone-text {
@@ -352,7 +336,7 @@ a {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* MOBILE TEXT */
+/* MOBILE ABOUT */
 @media (max-width: 768px) {
   .lux-hero-content h1 {
     font-size: 30px;
@@ -362,14 +346,6 @@ a {
   .lux-section {
     padding: 60px 20px;
   }
-}
-
-/* PHONE STYLE */
-.phone {
-  display: flex !important;
-  align-items: center;
-  color: white;
-  z-index: 9999;
 }
 
 /* SOLD BADGE */
