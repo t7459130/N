@@ -1,28 +1,41 @@
+/* ================= RESET ================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
+html, body {
+  width: 100%;
+  overflow-x: hidden; /* 🔥 FIX RIGHT SIDE GAP */
   background: #0b0b0b;
   color: white;
   font-family: Arial, sans-serif;
 }
 
-/* HEADER */
+/* ================= APP WRAPPER ================= */
+.app {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
 .site-header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  width: 100%;
   height: 80px;
   background: black;
+
+  display: flex; /* 🔥 replace grid (fixes alignment issues) */
+  justify-content: space-between;
+  align-items: center;
+
   padding: 0 20px;
   position: sticky;
   top: 0;
+  z-index: 9999;
 }
 
-/* NAV */
+/* ================= NAV ================= */
 .nav-left,
 .nav-right {
   display: flex;
@@ -35,36 +48,28 @@ body {
   color: white;
   text-decoration: none;
   font-size: 14px;
+  white-space: nowrap;
 }
 
-/* LOGOS */
+/* ================= CENTER LOGOS ================= */
 .logo-box {
   display: flex;
-  gap: 10px;
   justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  flex: 1; /* 🔥 forces perfect centering */
+  min-width: 0;
 }
 
 .logo-box img {
-  width: 40px;
-  height: 40px;
+  width: 30px;   /* 🔥 FIX HUGE LOGOS */
+  height: 30px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
-/* MOBILE LOGO */
-.mobile-logo {
-  display: none;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.mobile-logo img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-/* BUTTONS */
+/* ================= PHONE ICON ================= */
 .icon-btn {
   background: none;
   border: none;
@@ -72,16 +77,30 @@ body {
   cursor: pointer;
 }
 
-/* MOBILE MENU */
+/* ================= MOBILE LOGO ================= */
+.mobile-logo {
+  display: none;
+}
+
+.mobile-logo img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+/* ================= MOBILE MENU ================= */
 .mobile-menu {
   display: none;
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.95);
+
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
+
+  z-index: 9999;
 }
 
 .mobile-menu.open {
@@ -90,27 +109,37 @@ body {
 
 .mobile-menu a {
   color: white;
-  font-size: 20px;
+  font-size: 22px;
+  text-decoration: none;
 }
 
-/* PAGE */
+/* ================= PAGE ================= */
 .page {
+  width: 100%;
   padding: 30px 20px;
+  overflow-x: hidden;
 }
 
-/* BANNER */
-.banner img {
+/* ================= BANNER ================= */
+.banner {
   width: 100%;
   height: 60vh;
-  object-fit: cover;
+  overflow: hidden;
 }
 
-/* SECTION */
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* 🔥 removes weird white line issues */
+}
+
+/* ================= SECTIONS ================= */
 .section {
   padding: 40px 20px;
 }
 
-/* GRID */
+/* ================= GRID ================= */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -121,16 +150,18 @@ body {
   width: 100%;
   height: 140px;
   object-fit: cover;
+  display: block;
 }
 
-/* TILE */
+/* ================= TILE ================= */
 .tile img {
   width: 100%;
   max-height: 400px;
   object-fit: cover;
+  display: block;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 .footer {
   background: black;
   padding: 20px;
@@ -144,23 +175,35 @@ body {
 }
 
 .footer-logos img {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
+
   .nav-left,
   .nav-right {
     display: none;
   }
 
-  .mobile-logo {
-    display: block;
-  }
-
   .logo-box {
     display: none;
+  }
+
+  .mobile-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .mobile-logo img {
+    width: 38px;
+    height: 38px;
   }
 }
