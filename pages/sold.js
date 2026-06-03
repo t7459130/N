@@ -87,6 +87,7 @@ function SoldContent() {
         <title>Previously Sold Vehicles</title>
       </Head>
 
+      {/* HEADER */}
       <header className="header" style={{ position: 'relative' }}>
         <div className="header-left">
           <a href="tel:07777777777" className="call-me">
@@ -164,13 +165,16 @@ function SoldContent() {
         </nav>
       </header>
 
+      {/* BANNER (FIXED WHITE LINE ISSUE) */}
       {images.length > 0 && (
         <section
           className="banner"
           style={{
             position: 'relative',
             height: '70vh',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            lineHeight: 0,
+            fontSize: 0
           }}
         >
           <img
@@ -180,11 +184,12 @@ function SoldContent() {
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover'
+              objectFit: 'cover',
+              display: 'block'
             }}
           />
 
-          <div className="banner-text">
+          <div className="banner-text" style={{ lineHeight: 1.4, fontSize: '16px' }}>
             <h1>Previously Sold Vehicles</h1>
             <p>
               A showcase of luxury, prestige and performance vehicles
@@ -194,23 +199,19 @@ function SoldContent() {
         </section>
       )}
 
+      {/* WELCOME */}
       <section className="welcome-section">
         <div className="welcome-container">
           <h2>
             Recently <span>Sold</span>
           </h2>
 
-          <p>
-            Every vehicle below has successfully found its new owner.
-          </p>
-
-          <p>
-            We specialise in sourcing exceptional supercars,
-            prestige vehicles and luxury SUVs.
-          </p>
+          <p>Every vehicle below has successfully found its new owner.</p>
+          <p>We specialise in sourcing exceptional supercars, prestige vehicles and luxury SUVs.</p>
         </div>
       </section>
 
+      {/* SOLD GRID */}
       <main>
         <section className="latest-arrivals">
           <h2>Sold Inventory</h2>
@@ -220,14 +221,12 @@ function SoldContent() {
               <div
                 key={index}
                 className="car-card"
-                style={{
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
+                style={{ position: 'relative', overflow: 'hidden' }}
               >
                 <img
                   src={img}
                   alt="Sold Vehicle"
+                  style={{ display: 'block', width: '100%' }}
                 />
 
                 <div
@@ -254,12 +253,14 @@ function SoldContent() {
         </section>
       </main>
 
+      {/* SEARCH */}
       <SearchOverlay
         cars={[]}
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
       />
 
+      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
@@ -295,4 +296,3 @@ export default function SoldPage() {
     </AdminProvider>
   );
 }
-
