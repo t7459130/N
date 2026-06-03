@@ -19,7 +19,7 @@ a {
 }
 
 /* =========================
-   HEADER BASE
+   HEADER
 ========================= */
 
 .site-header {
@@ -34,21 +34,13 @@ a {
   z-index: 9999;
 }
 
-/* LEFT SIDE (phone) */
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* RIGHT SIDE (nav/search) */
+.header-left,
 .header-right {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* CENTER LOGO AREA */
 .header-center {
   flex: 1;
   display: flex;
@@ -57,7 +49,7 @@ a {
 }
 
 /* =========================
-   PHONE ICON
+   PHONE
 ========================= */
 
 .phone {
@@ -68,15 +60,10 @@ a {
   border: 1px solid #222;
   border-radius: 6px;
   font-size: 14px;
-  white-space: nowrap;
-}
-
-.phone-icon {
-  font-size: 18px;
 }
 
 /* =========================
-   DESKTOP LOGO ROTATION
+   DESKTOP LOGO ROTATION (RESTORED)
 ========================= */
 
 .logo-box {
@@ -85,17 +72,19 @@ a {
   height: 60px;
 }
 
+/* IMPORTANT: restore your smooth fade rotation */
 .logo-box img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
+
   opacity: 0;
-  animation: logoFade 10s infinite;
+  animation: logoFade 10s infinite ease-in-out;
 }
 
-/* stagger each logo */
+/* stagger */
 .logo-box img:nth-child(1) { animation-delay: 0s; }
 .logo-box img:nth-child(2) { animation-delay: 2s; }
 .logo-box img:nth-child(3) { animation-delay: 4s; }
@@ -103,23 +92,22 @@ a {
 .logo-box img:nth-child(5) { animation-delay: 8s; }
 
 @keyframes logoFade {
-  0% { opacity: 0; transform: scale(0.9); }
-  10% { opacity: 1; transform: scale(1); }
-  30% { opacity: 1; }
-  40% { opacity: 0; transform: scale(1.05); }
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  35% { opacity: 1; }
+  50% { opacity: 0; }
   100% { opacity: 0; }
 }
 
 /* =========================
-   MOBILE LOGO (FIXED)
-   ONLY ONE ROTATING LOGO
+   MOBILE LOGO (FIXED BEHAVIOR)
 ========================= */
 
 .mobile-logo {
   display: none;
+  position: relative;
   width: 45px;
   height: 45px;
-  position: relative;
 }
 
 .mobile-logo img {
@@ -128,11 +116,11 @@ a {
   width: 100%;
   height: 100%;
   object-fit: contain;
+
   opacity: 0;
-  animation: mobileLogoFade 10s infinite;
+  animation: mobileLogoFade 10s infinite ease-in-out;
 }
 
-/* SAME rotation sequence but SINGLE stack */
 .mobile-logo img:nth-child(1) { animation-delay: 0s; }
 .mobile-logo img:nth-child(2) { animation-delay: 2s; }
 .mobile-logo img:nth-child(3) { animation-delay: 4s; }
@@ -142,45 +130,13 @@ a {
 @keyframes mobileLogoFade {
   0% { opacity: 0; }
   10% { opacity: 1; }
-  30% { opacity: 1; }
-  40% { opacity: 0; }
+  35% { opacity: 1; }
+  50% { opacity: 0; }
   100% { opacity: 0; }
 }
 
 /* =========================
-   NAV ICON BUTTONS
-========================= */
-
-.icon-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-.mobile-menu {
-  display: none;
-}
-
-.mobile-menu.open {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.97);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  z-index: 99999;
-}
-
-/* =========================
-   HERO
+   HERO (UNCHANGED STYLE)
 ========================= */
 
 .banner {
@@ -253,28 +209,27 @@ a {
 }
 
 /* =========================
-   MOBILE RULES (IMPORTANT FIX)
+   MOBILE RULES (FIXED)
 ========================= */
 
 @media (max-width: 768px) {
 
-  /* hide desktop center logos */
+  /* hide desktop logo stack ONLY */
   .logo-box {
     display: none;
   }
 
-  /* show mobile rotating logo */
+  /* show mobile rotating single logo */
   .mobile-logo {
     display: block;
   }
 
-  /* keep phone visible left */
+  /* keep phone readable */
   .phone {
     font-size: 12px;
     padding: 6px 8px;
   }
 
-  /* reduce banner height */
   .banner {
     height: 45vh;
   }
@@ -285,7 +240,6 @@ a {
     bottom: 15px;
   }
 
-  /* nav spacing */
   .header-right {
     gap: 10px;
   }
