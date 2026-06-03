@@ -1,6 +1,4 @@
-/* =======================
-   RESET
-======================= */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -18,10 +16,7 @@ a {
   text-decoration: none;
 }
 
-/* =======================
-   HEADER
-======================= */
-
+/* HEADER */
 .site-header {
   height: 80px;
   background: #000;
@@ -40,71 +35,26 @@ a {
   gap: 15px;
 }
 
-.header-side a {
-  font-size: 14px;
-}
-
 .header-center {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
+/* DESKTOP LOGOS */
 .logo-box {
   display: flex;
   gap: 15px;
   align-items: center;
 }
 
-.logo-box img {
+.desktop-logos img {
   width: 50px;
   height: 50px;
   object-fit: contain;
 }
 
-.phone {
-  color: white;
-  font-size: 18px;
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-/* =======================
-   MOBILE MENU
-======================= */
-
-.mobile-menu {
-  display: none;
-}
-
-.mobile-menu.open {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.97);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  gap: 20px;
-  z-index: 99999;
-}
-
-.mobile-menu a {
-  font-size: 24px;
-}
-
-/* =======================
-   MOBILE LOGO
-======================= */
-
+/* MOBILE LOGO (hidden by default) */
 .mobile-logo {
   display: none;
 }
@@ -115,149 +65,61 @@ a {
   object-fit: contain;
 }
 
-/* =======================
-   HERO
-======================= */
-
-.banner {
-  position: relative;
-  height: 70vh;
-  overflow: hidden;
-}
-
-.banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.banner-text {
-  position: absolute;
-  bottom: 30px;
-  left: 40px;
-  z-index: 2;
+/* ICON BUTTON */
+.icon-btn {
+  background: none;
+  border: none;
   color: white;
+  cursor: pointer;
+  font-size: 20px;
 }
 
-.banner::after {
-  content: "";
-  position: absolute;
+/* PHONE */
+.phone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+/* MOBILE MENU */
+.mobile-menu {
+  display: none;
+}
+
+.mobile-menu.open {
+  position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.97);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 99999;
 }
 
-/* =======================
-   CONTENT
-======================= */
-
-.welcome-section,
-.inventory,
-.sold-section {
-  padding: 40px 20px;
-}
-
-/* SOLD */
-.sold-tile {
-  max-width: 800px;
-  margin: auto;
-  background: #111;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.sold-tile img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-}
-
-.sold-tile p {
-  padding: 15px;
-  color: #ccc;
-}
-
-/* INVENTORY */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 15px;
-}
-
-.card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* =======================
-   MOBILE RULES (ORIGINAL STYLE)
-======================= */
-
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
 
-  .header-left a:not(.phone),
-  .header-right a {
-    display: none;
-  }
-
-  .phone {
-    display: flex !important;
-    align-items: center;
-    gap: 6px;
-    padding: 8px;
-    border: none;
-  }
-
-  .phone-text {
-    display: none;
-  }
-
-  .phone-icon {
-    font-size: 22px;
-  }
-
+  /* hide desktop logos */
   .desktop-logos {
     display: none;
   }
 
+  /* show single logo */
   .mobile-logo {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .banner {
-    height: 45vh;
+  /* phone styling */
+  .phone-text {
+    display: none;
   }
 
-  .banner img {
-    object-fit: contain;
-    background: #000;
+  .phone {
+    padding: 8px;
   }
-
-  .banner-text {
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
-  }
-
-  .sold-tile img {
-    height: 250px;
-  }
-}
-
-/* =======================
-   SOLD BADGE
-======================= */
-
-.sold-badge {
-  position: absolute;
-  top: 15px;
-  right: -40px;
-  background: red;
-  color: white;
-  padding: 10px 60px;
-  transform: rotate(45deg);
-  font-weight: bold;
-  letter-spacing: 2px;
 }

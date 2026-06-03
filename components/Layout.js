@@ -52,8 +52,6 @@ export default function Layout({ children }) {
 
         {/* LEFT SIDE */}
         <div className="header-side header-left">
-
-          {/* CALL BUTTON */}
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
             <span className="phone-text">+44 7826 456793</span>
@@ -66,11 +64,22 @@ export default function Layout({ children }) {
 
         {/* CENTER LOGOS */}
         <div className="header-center">
+
+          {/* DESKTOP: 4 LOGOS */}
           <div className="logo-box desktop-logos">
             {logoBatches[currentBatchIndex].map((logo, i) => (
-              <img key={i} src={logo} alt="" />
+              <img key={i} src={logo} alt="brand logo" />
             ))}
           </div>
+
+          {/* MOBILE: 1 LOGO */}
+          <div className="mobile-logo">
+            <img
+              src={logoBatches[currentBatchIndex][0]}
+              alt="brand logo"
+            />
+          </div>
+
         </div>
 
         {/* RIGHT SIDE */}
@@ -101,11 +110,7 @@ export default function Layout({ children }) {
 
       </header>
 
-      {/* PAGE CONTENT */}
-      <main>
-        {children}
-      </main>
-
+      <main>{children}</main>
     </div>
   );
 }
