@@ -366,3 +366,40 @@ a {
     padding-top: 70px;
   }
 }
+
+/* ===================== FOOTER LOGO FIX ===================== */
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-logo-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+/* optional: keep footer tidy on mobile */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-logo-img {
+    width: 55px;
+    height: 55px;
+  }
+}
