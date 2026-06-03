@@ -14,6 +14,13 @@ body {
   overflow-x: hidden;
 }
 
+/* ===================== GLOBAL LINKS ===================== */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* ===================== HEADER ===================== */
 
 .header {
@@ -30,7 +37,7 @@ body {
   height: 80px;
 }
 
-/* LEFT + RIGHT */
+/* LEFT / RIGHT BLOCKS */
 .header-left,
 .header-icons {
   display: flex;
@@ -38,13 +45,8 @@ body {
   gap: 20px;
 }
 
-/* REMOVE BLUE LINKS */
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* ===================== ICON FIXES ===================== */
 
-/* PHONE ICON FIX (BLACK/WHITE) */
 .call-me {
   color: white;
   display: flex;
@@ -53,6 +55,15 @@ a {
 
 .call-me svg {
   color: white !important;
+}
+
+.search-btn,
+.menu-btn {
+  color: white;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 /* ===================== DESKTOP NAV ===================== */
@@ -149,7 +160,7 @@ a {
   margin-bottom: 12px;
 }
 
-/* ===================== SOLD / GRID ===================== */
+/* ===================== GRID ===================== */
 
 .latest-arrivals {
   background: #0f0f0f;
@@ -247,74 +258,79 @@ a {
   color: #999;
 }
 
-/* ===================== MOBILE FIX ===================== */
+/* ===================== MOBILE FIX (FULL REWRITE) ===================== */
 
 @media (max-width: 768px) {
 
-  /* FIX HEADER */
+  /* HEADER STRUCTURE FIX */
   .header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    height: 70px;
     z-index: 3000;
+    padding: 10px 15px;
   }
 
-  /* REMOVE ALL DESKTOP NAV FROM DOM VISUAL */
-  .desktop-nav {
-    display: none !important;
-  }
-
+  /* REMOVE DESKTOP NAV */
+  .desktop-nav,
   .desktop-logo-bar {
     display: none !important;
   }
 
-  /* CENTER MOBILE LOGO */
+  /* KEEP HEADER CLEAN */
+  .header-left,
+  .header-icons {
+    gap: 12px;
+  }
+
+  /* MOBILE LOGO CENTER */
   .mobile-logo-bar {
     display: flex;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    z-index: 2500;
   }
 
   .mobile-logo {
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
     filter: grayscale(100%) brightness(0) invert(1);
   }
 
-  /* BUTTONS ABOVE MENU */
-  .menu-btn,
-  .search-btn {
-    z-index: 4000;
-    color: white;
+  /* ICONS ALWAYS WHITE */
+  .call-me svg,
+  .search-btn,
+  .menu-btn {
+    color: white !important;
   }
 
-  /* FULL SCREEN MENU FIX */
+  /* HAMBURGER MENU FIX (IMPORTANT) */
   .nav-menu {
-    position: fixed !important;
+    position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.97);
 
-    display: flex;
+    display: none; /* IMPORTANT FIX */
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    transform: translateX(100%);
-    transition: 0.3s ease;
     z-index: 3500;
   }
 
   .nav-menu.active {
-    transform: translateX(0);
+    display: flex; /* IMPORTANT FIX */
   }
 
   .nav-menu ul {
     list-style: none;
     text-align: center;
+    padding: 0;
   }
 
   .nav-menu li {
@@ -327,11 +343,18 @@ a {
     font-weight: 600;
   }
 
+  /* GRID FIX */
   .car-listings {
     grid-template-columns: 1fr;
   }
 
+  /* TEXT SIZE FIX */
   .welcome-section h2 {
     font-size: 32px;
+  }
+
+  /* STOP HEADER OVERLAP ISSUES */
+  body {
+    padding-top: 70px;
   }
 }
