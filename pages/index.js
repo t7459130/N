@@ -1,101 +1,98 @@
-import React, { useState, useEffect } from 'react';
-import Layout from '../components/Layout';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import Layout from "../components/Layout";
+import Link from "next/link";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
-  const [soldImages, setSoldImages] = useState([]);
-  const [soldIndex, setSoldIndex] = useState(0);
-
-  /* HERO IMAGES (STATIC SAFE - NO API) */
-  const headerImages = [
-    '/header/IMG_1.jpg',
-    '/header/IMG_2.jpg',
-    '/header/IMG_3.jpg',
-    '/header/IMG_4.jpg',
-    '/header/IMG_5.jpg',
-  ];
-
+  const [wallpapers, setWallpapers] = useState([]);
   const [heroIndex, setHeroIndex] = useState(0);
-
-  /* HERO ROTATION */
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % headerImages.length);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   /* LOAD CARS */
   useEffect(() => {
-    const load = async () => {
+    const loadCars = async () => {
       try {
-        const res = await fetch('/api/cars');
+        const res = await fetch("/api/cars");
         const data = await res.json();
         setCars(Array.isArray(data.cars) ? data.cars : []);
       } catch {
         setCars([]);
       }
     };
-    load();
+
+    loadCars();
   }, []);
 
-  /* SOLD IMAGES (FROM API - SAFE) */
+  /* LOAD WALLPAPERS */
   useEffect(() => {
-    fetch('/api/images?folder=sold')
-      .then((res) => res.json())
-      .then(setSoldImages)
-      .catch(console.error);
+    const loadImages = async () => {
+      try {
+        const res = await fetch("/api/images");
+        const data = await res.json();
+        setWallpapers(Array.isArray(data) ? data : []);
+      } catch {
+        setWallpapers([]);
+      }
+    };
+
+    loadImages();
   }, []);
 
-  /* SOLD ROTATION */
+  /* ROTATE HERO IMAGES */
   useEffect(() => {
-    if (!soldImages.length) return;
+    if (!wallpapers.length) return;
 
-    const i = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % soldImages.length);
-    }, 3500);
+    const interval = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % wallpapers.length);
+    }, 4000);
 
-    return () => clearInterval(i);
-  }, [soldImages]);
+    return () => clearInterval(interval);
+  }, [wallpapers]);
 
   return (
     <Layout>
-
       {/* HERO */}
       <section className="banner">
-
-        <div
-          className="banner-bg"
-          style={{
-            backgroundImage: `url(${headerImages[heroIndex]})`,
-          }}
-        />
-
-        <div className="banner-overlay" />
+        {wallpapers.length > 0 ? (
+          <img
+            src={wallpapers[heroIndex]}
+            alt="Luxury Car Showroom"
+            className="hero-img"
+          />
+        ) : (
+          <img
+            src="/images/carwallpaper.webp"
+            alt="Luxury Car Showroom"
+            className="hero-img"
+          />
+        )}
 
         <div className="banner-text">
           <h1>Luxury Car Dealership</h1>
           <p>Performance. Prestige. Perfection.</p>
         </div>
-
       </section>
 
       {/* WELCOME */}
       <section className="welcome-section">
         <h2>Welcome</h2>
-        <p>We source and deliver the finest luxury vehicles in the UK.</p>
+        <p>
+          We source and deliver the finest luxury vehicles across the United Kingdom.
+        </p>
       </section>
 
       {/* SOLD */}
       <section className="sold-section">
         <h2>Previously Sold</h2>
 
-        {soldImages.length > 0 && (
+        {wallpapers.length > 0 && (
           <div className="sold-tile">
-            <img src={soldImages[soldIndex]} />
-            <p>Delivered luxury vehicles to clients across the UK and beyond.</p>
+            <img
+              src={wallpapers[(heroIndex + 1) % wallpapers.length]}
+              alt="Previously Sold Luxury Car"
+            />
+            <p>
+              Delivered premium luxury vehicles to clients across the UK and internationally.
+            </p>
           </div>
         )}
       </section>
@@ -105,15 +102,16 @@ export default function Home() {
         <h2>Latest Arrivals</h2>
 
         <div className="grid">
-          {cars.slice(0, 6).map((c) => (
-            <Link key={c._id} href={`/car/${c._id}`} className="card">
-              <img src={c.images?.[0]} />
-              <h3>{c.make} {c.model}</h3>
+          {cars.slice(0, 6).map((car) => (
+            <Link key={car._id} href={`/car/${car._id}`} className="card">
+              <img src={car.images?.[0]} alt={car.make} />
+              <h3>
+                {car.make} {car.model}
+              </h3>
             </Link>
           ))}
         </div>
       </section>
-
     </Layout>
   );
 }
