@@ -8,12 +8,11 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  background: #111;
+  background: #0b0b0b;
   color: white;
-  overflow-x: hidden;
 }
 
-/* ================= HEADER GRID ================= */
+/* ================= HEADER ================= */
 
 .header {
   display: grid;
@@ -26,7 +25,6 @@ body {
   z-index: 1000;
 }
 
-/* NAVS */
 .nav-left,
 .nav-right {
   display: flex;
@@ -44,7 +42,8 @@ a:hover {
   color: white;
 }
 
-/* CENTER LOGOS */
+/* ================= LOGO ================= */
+
 .logo-bar {
   display: flex;
   justify-content: center;
@@ -53,96 +52,127 @@ a:hover {
 
 .logo {
   width: 55px;
-  height: auto;
+  animation: fade 3s infinite;
 }
 
-/* ICONS */
-.icon {
+@keyframes fade {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* ================= ICONS ================= */
+
+.icon,
+.menu-btn {
   color: white;
   cursor: pointer;
+  font-size: 18px;
 }
 
-.menu-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-}
+/* ================= HERO ================= */
 
-/* ================= MOBILE MENU ================= */
-
-.mobile-menu {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.98);
-
-  display: none;
-  flex-direction: column;
+.hero {
+  height: 70vh;
+  background: url('/images/carwallpaper.webp') center/cover;
+  display: flex;
   align-items: center;
   justify-content: center;
-
-  z-index: 2000;
-  gap: 20px;
+  text-align: center;
 }
 
-.mobile-menu.active {
-  display: flex;
+.hero-overlay {
+  background: rgba(0,0,0,0.6);
+  padding: 40px;
+  border-radius: 12px;
 }
 
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  color: white;
-  font-size: 24px;
-  background: none;
-  border: none;
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
 }
 
-/* ================= BANNER ================= */
-
-.banner img {
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
+.hero-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 25px;
+  background: white;
+  color: black;
+  border-radius: 30px;
 }
 
-.banner-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+/* ================= ABOUT ================= */
+
+.about-preview {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.about-preview h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
 /* ================= SOLD ================= */
 
 .sold-section {
-  text-align: center;
   padding: 60px 20px;
+  text-align: center;
 }
 
-.sold-box {
-  width: 80%;
+.sold-card {
+  max-width: 900px;
   margin: auto;
-  height: 400px;
+  background: #151515;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.sold-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.sold-image {
+  height: 300px;
+  background: url('/images/carwallpaper.webp') center/cover;
+}
+
+.sold-content {
+  padding: 20px;
+}
+
+/* ================= INVENTORY ================= */
+
+.inventory-preview {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+}
+
+.card {
+  background: #151515;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.placeholder {
+  height: 200px;
+  background: #222;
+  border-radius: 10px;
 }
 
 /* ================= FOOTER ================= */
 
 .footer {
   text-align: center;
-  padding: 30px;
+  padding: 40px;
   background: black;
 }
 
 .footer-logo {
   width: 60px;
+  margin-bottom: 10px;
 }
 
 /* ================= MOBILE ================= */
@@ -154,13 +184,11 @@ a:hover {
     text-align: center;
   }
 
-  .nav-left,
-  .nav-right {
-    justify-content: center;
-    flex-wrap: wrap;
+  .grid {
+    grid-template-columns: 1fr;
   }
 
-  .logo-bar {
-    margin: 10px 0;
+  .hero h1 {
+    font-size: 28px;
   }
 }

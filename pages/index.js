@@ -29,18 +29,6 @@ function AppContent() {
     '/images/rolls.png',
   ];
 
-  /* CLOSE MENU OUTSIDE */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setIsMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  /* LOGO ROTATION */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBatchIndex((p) => (p + 1) % logoBatches.length);
@@ -59,31 +47,28 @@ function AppContent() {
     <div className="app">
 
       <Head>
-        <title>Car Dealership</title>
+        <title>Luxury Car Dealership</title>
       </Head>
 
       {/* ================= HEADER ================= */}
       <header className="header">
 
-        {/* LEFT NAV */}
         <div className="nav-left">
           <Link href="/">Home</Link>
-          <Link href="/Inventory">Current Stock</Link>
-          <Link href="/Sellyourcar">Sell Your Car</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        {/* CENTER LOGOS */}
         <div className="logo-bar">
           {logoBatches[currentBatchIndex].map((logo, i) => (
             <img key={i} src={logo} className="logo" />
           ))}
         </div>
 
-        {/* RIGHT NAV */}
         <div className="nav-right">
           <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About Us</Link>
-          <Link href="/contact">Contact Us</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
 
           <FaPhone className="icon" />
           <FaSearch className="icon" />
@@ -93,42 +78,80 @@ function AppContent() {
           </button>
         </div>
 
-        {/* MOBILE OVERLAY MENU ONLY */}
-        <nav ref={menuRef} className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        <nav className={`mobile-menu ${isMenuOpen ? 'active' : ''}`} ref={menuRef}>
           <button className="close-btn" onClick={() => setIsMenuOpen(false)}>
             <FaTimes />
           </button>
 
           <Link href="/">Home</Link>
-          <Link href="/Inventory">Current Stock</Link>
-          <Link href="/Sellyourcar">Sell Your Car</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
           <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About Us</Link>
-          <Link href="/contact">Contact Us</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
 
       </header>
 
-      {/* ================= BANNER ================= */}
-      <section className="banner">
-        <img src="/images/carwallpaper.webp" />
-        <div className="banner-text">
-          <h1>Welcome to Our Car Dealership</h1>
+      {/* ================= HERO ================= */}
+      <section className="hero">
+        <div className="hero-overlay">
+          <h1>Luxury & Performance Vehicles</h1>
+          <p>Handpicked supercars, prestige & rare automotive excellence</p>
+          <Link href="/Inventory" className="hero-btn">
+            View Inventory
+          </Link>
         </div>
+      </section>
+
+      {/* ================= FEATURED ABOUT ================= */}
+      <section className="about-preview">
+        <h2>About Us</h2>
+        <p>
+          We are a family-run luxury dealership based in Surrey,
+          specialising in supercars, performance and prestige vehicles.
+        </p>
       </section>
 
       {/* ================= SOLD ================= */}
       <section className="sold-section">
         <h2>Previously Sold Vehicles</h2>
-        <div className="sold-box">
-          <img src="/images/carwallpaper.webp" />
+
+        <div className="sold-card">
+          <div className="sold-image" />
+          <div className="sold-content">
+            <p>We have successfully supplied luxury vehicles across the UK.</p>
+            <Link href="/sold">View Full Gallery</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= INVENTORY ================= */}
+      <section className="inventory-preview">
+        <h2>Latest Arrivals</h2>
+
+        <div className="grid">
+          <div className="card">
+            <div className="placeholder" />
+            <h3>Featured Vehicle</h3>
+          </div>
+
+          <div className="card">
+            <div className="placeholder" />
+            <h3>Featured Vehicle</h3>
+          </div>
+
+          <div className="card">
+            <div className="placeholder" />
+            <h3>Featured Vehicle</h3>
+          </div>
         </div>
       </section>
 
       {/* ================= FOOTER ================= */}
       <footer className="footer">
         <img src={footerLogos[currentFooterLogoIndex]} className="footer-logo" />
-        <p>Surrey, UK</p>
+        <p>Surrey, UK • Luxury Car Dealership</p>
       </footer>
 
     </div>
