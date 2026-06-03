@@ -1,36 +1,27 @@
-// src/ContactUs.js
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Layout from '../components/Layout';
 
-const ContactUs = () => {
+export default function Contact() {
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle email subscription logic here
-    alert(`Subscribed with email: ${email}`);
-    setEmail(''); // Clear the input field after submission
-  };
-
   return (
-    <div className="contact-us">
-      <h2>Contact Us</h2>
-      <p>If you have any questions or inquiries, feel free to reach out to us!</p>
-      <p>Email: info@cardealership.com</p>
-      <p>Phone: (123) 456-7890</p>
+    <Layout>
+      <div className="page">
 
-      <h3>Mailing List Subscription</h3>
-      <form onSubmit={handleSubmit} className="mailing-form">
+        <h1>Contact Us</h1>
+
+        <p>Email: info@yourdealership.com</p>
+        <p>Phone: 123-456-7890</p>
+
         <input
-          type="email"
-          placeholder="Enter your email address"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Email"
         />
-        <button type="submit">Subscribe</button>
-      </form>
-    </div>
-  );
-};
 
-export default ContactUs;
+        <button>Subscribe</button>
+
+      </div>
+    </Layout>
+  );
+}
