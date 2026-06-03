@@ -45,7 +45,7 @@ a {
   gap: 20px;
 }
 
-/* ===================== ICON FIXES ===================== */
+/* ===================== ICONS ===================== */
 
 .call-me {
   color: white;
@@ -258,11 +258,11 @@ a {
   color: #999;
 }
 
-/* ===================== MOBILE FIX (FULL REWRITE) ===================== */
+/* ===================== MOBILE FIX (CLEAN REWRITE) ===================== */
 
 @media (max-width: 768px) {
 
-  /* HEADER STRUCTURE FIX */
+  /* HEADER */
   .header {
     position: fixed;
     top: 0;
@@ -282,10 +282,10 @@ a {
   /* KEEP HEADER CLEAN */
   .header-left,
   .header-icons {
-    gap: 12px;
+    gap: 10px;
   }
 
-  /* MOBILE LOGO CENTER */
+  /* CENTER MOBILE LOGO */
   .mobile-logo-bar {
     display: flex;
     position: absolute;
@@ -302,35 +302,43 @@ a {
     filter: grayscale(100%) brightness(0) invert(1);
   }
 
-  /* ICONS ALWAYS WHITE */
+  /* ICONS WHITE */
   .call-me svg,
   .search-btn,
   .menu-btn {
     color: white !important;
   }
 
-  /* HAMBURGER MENU FIX (IMPORTANT) */
+  /* ===================== FIXED MENU OVERLAY ===================== */
+
   .nav-menu {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.97);
 
-    display: none; /* IMPORTANT FIX */
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
+    /* IMPORTANT FIX: prevent ghost menu */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: all 0.25s ease;
     z-index: 3500;
   }
 
   .nav-menu.active {
-    display: flex; /* IMPORTANT FIX */
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .nav-menu ul {
     list-style: none;
     text-align: center;
-    padding: 0;
   }
 
   .nav-menu li {
@@ -343,17 +351,17 @@ a {
     font-weight: 600;
   }
 
-  /* GRID FIX */
+  /* GRID */
   .car-listings {
     grid-template-columns: 1fr;
   }
 
-  /* TEXT SIZE FIX */
+  /* TEXT */
   .welcome-section h2 {
     font-size: 32px;
   }
 
-  /* STOP HEADER OVERLAP ISSUES */
+  /* FIX HEADER OVERLAP */
   body {
     padding-top: 70px;
   }
