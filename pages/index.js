@@ -36,14 +36,13 @@ function HomeContent() {
 
   const footerLogos = logoRow;
 
-  /* CLOSE MENU OUTSIDE CLICK */
+  /* CLOSE MENU */
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
@@ -53,7 +52,6 @@ function HomeContent() {
     const i = setInterval(() => {
       setMobileLogoIndex((p) => (p + 1) % mobileLogos.length);
     }, 2500);
-
     return () => clearInterval(i);
   }, []);
 
@@ -67,11 +65,9 @@ function HomeContent() {
 
   useEffect(() => {
     if (!soldImages.length) return;
-
     const i = setInterval(() => {
       setSoldIndex((p) => (p + 1) % soldImages.length);
     }, 3500);
-
     return () => clearInterval(i);
   }, [soldImages]);
 
@@ -86,7 +82,6 @@ function HomeContent() {
         setCars([]);
       }
     };
-
     load();
   }, []);
 
@@ -113,16 +108,11 @@ function HomeContent() {
           </nav>
         </div>
 
-        {/* CENTER LOGOS (DESKTOP 4 STATIC) */}
-        <div className="logo-row desktop-only">
+        {/* CENTER LOGOS (DESKTOP ONLY) */}
+        <div className="logo-row">
           {logoRow.map((logo, i) => (
-            <img key={i} src={logo} className="logo-small" />
+            <img key={i} src={logo} className="logo-small" alt="" />
           ))}
-        </div>
-
-        {/* MOBILE LOGO (1 CYCLING) */}
-        <div className="mobile-only mobile-logo">
-          <img src={mobileLogos[mobileLogoIndex]} alt="logo" />
         </div>
 
         {/* RIGHT */}
@@ -140,6 +130,11 @@ function HomeContent() {
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
+        </div>
+
+        {/* MOBILE LOGO ONLY */}
+        <div className="mobile-logo">
+          <img src={mobileLogos[mobileLogoIndex]} alt="" />
         </div>
 
         {/* MOBILE MENU */}
@@ -169,14 +164,14 @@ function HomeContent() {
         <p>We source and deliver the finest luxury vehicles in the UK.</p>
       </section>
 
-      {/* ================= SOLD CAROUSEL ================= */}
+      {/* ================= SOLD ================= */}
       <section className="sold-section">
         <h2>Previously Sold</h2>
 
         {soldImages.length > 0 && (
           <div className="sold-tile">
             <img src={soldImages[soldIndex]} />
-            <p>Recently delivered luxury vehicles to happy clients worldwide.</p>
+            <p>Luxury vehicles successfully delivered to clients across the UK.</p>
           </div>
         )}
       </section>
@@ -199,7 +194,7 @@ function HomeContent() {
       <footer className="footer">
         <div className="footer-logos">
           {footerLogos.map((l, i) => (
-            <img key={i} src={l} />
+            <img key={i} src={l} alt="" />
           ))}
         </div>
       </footer>
