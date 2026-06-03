@@ -4,15 +4,24 @@ import { FaBars, FaTimes, FaPhone } from 'react-icons/fa';
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
+  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
   const [mobileLogoIndex, setMobileLogoIndex] = useState(0);
 
   const menuRef = useRef(null);
 
-  const desktopLogos = [
-    '/images/ferrari.png',
-    '/images/lamborghini.png',
-    '/images/rolls.png',
-    '/images/bentley.png',
+  const logoBatches = [
+    [
+      '/images/ferrari.png',
+      '/images/lamborghini.png',
+      '/images/rolls.png',
+      '/images/bentley.png',
+    ],
+    [
+      '/images/aston.png',
+      '/images/pagani.png',
+      '/images/bugatti.png',
+      '/images/mercedes.png',
+    ],
   ];
 
   const mobileLogos = [
@@ -21,6 +30,7 @@ export default function Layout({ children }) {
     '/images/rolls.png',
     '/images/bentley.png',
     '/images/aston.png',
+    '/images/pagani.png',
     '/images/bugatti.png',
     '/images/mercedes.png',
     '/images/porsche.png',
@@ -42,8 +52,20 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMobileLogoIndex((prev) => (prev + 1) % mobileLogos.length);
-    }, 2500);
+      setCurrentBatchIndex(
+        (prev) => (prev + 1) % logoBatches.length
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMobileLogoIndex(
+        (prev) => (prev + 1) % mobileLogos.length
+      );
+    }, 1500);
 
     return () => clearInterval(interval);
   }, []);
@@ -52,8 +74,6 @@ export default function Layout({ children }) {
     <div className="app">
 
       <header className="site-header">
-
-        {/* LEFT */}
 
         <div className="header-side header-left">
           <a href="tel:1234567890" className="phone">
@@ -65,17 +85,11 @@ export default function Layout({ children }) {
           <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        {/* CENTER */}
-
         <div className="header-center">
 
           <div className="logo-box desktop-logos">
-            {desktopLogos.map((logo, i) => (
-              <img
-                key={i}
-                src={logo}
-                alt=""
-              />
+            {logoBatches[currentBatchIndex].map((logo, i) => (
+              <img key={i} src={logo} alt="" />
             ))}
           </div>
 
@@ -87,8 +101,6 @@ export default function Layout({ children }) {
           </div>
 
         </div>
-
-        {/* RIGHT */}
 
         <div className="header-side header-right">
           <Link href="/sold">Sold</Link>
@@ -103,8 +115,6 @@ export default function Layout({ children }) {
             {open ? <FaTimes /> : <FaBars />}
           </button>
         </div>
-
-        {/* MOBILE MENU */}
 
         <nav
           ref={menuRef}
@@ -121,7 +131,7 @@ export default function Layout({ children }) {
 
       </header>
 
-      <main className="page">
+      <main>
         {children}
       </main>
 
