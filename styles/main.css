@@ -1,140 +1,45 @@
-/* ================= RESET ================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: #0b0b0b;
-  color: white;
-  font-family: Arial, sans-serif;
-}
-
-/* ================= GLOBAL ================= */
-a {
-  color: white;
-  text-decoration: none;
-}
-
-/* ================= HEADER ================= */
+/* HEADER */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   height: 80px;
   padding: 0 20px;
-
   background: black;
   position: sticky;
   top: 0;
   z-index: 9999;
 }
 
-/* LEFT NAV */
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.header-left a {
-  font-size: 14px;
-}
-
-/* PHONE */
-.call-me {
+/* DESKTOP LOGO STRIP */
+.logo-bar {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 18px;
-}
-
-/* LEFT NAV LINKS */
-.nav-left {
-  display: flex;
   gap: 15px;
-}
-
-/* RIGHT NAV */
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.nav-right {
-  display: flex;
-  gap: 15px;
-}
-
-/* ================= DESKTOP LOGO ROW (CENTER) ================= */
-.logo-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-
   flex: 1;
 }
 
-/* FORCE LOGO SIZE (IMPORTANT FIX) */
-.logo-small {
-  width: 38px !important;
-  height: 38px !important;
+.desktop-logo {
+  width: 55px;
+  height: 55px;
   object-fit: contain;
-  display: block;
+  transition: all 0.4s ease;
 }
 
-/* ================= MOBILE LOGO (CENTER SINGLE CYCLING) ================= */
-.mobile-logo {
+/* MOBILE LOGO */
+.mobile-logo-bar {
   display: none;
 }
 
-.mobile-logo img {
+.mobile-logo {
   width: 45px;
   height: 45px;
   object-fit: contain;
-  display: block;
+  transition: opacity 0.3s ease;
 }
 
-/* ================= BUTTONS ================= */
-button {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* ================= MOBILE MENU ================= */
-.mobile-menu {
-  display: none;
-
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.97);
-
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  gap: 25px;
-
-  z-index: 99999;
-}
-
-.mobile-menu a {
-  font-size: 22px;
-}
-
-.mobile-menu.active {
-  display: flex;
-}
-
-/* ================= BANNER ================= */
+/* HERO */
 .banner {
   position: relative;
   height: 70vh;
@@ -151,111 +56,49 @@ button {
   position: absolute;
   bottom: 40px;
   left: 40px;
-
   background: rgba(0,0,0,0.4);
   padding: 20px;
   border-radius: 10px;
 }
 
-/* ================= SECTIONS ================= */
-.welcome-section,
-.inventory,
-.sold-section {
-  padding: 40px 20px;
-}
-
-/* ================= SOLD TILE (FIX FOR BIG IMAGE ISSUE) ================= */
+/* SOLD */
 .sold-tile {
   max-width: 800px;
-  margin: 0 auto;
-
+  margin: auto;
   background: #111;
   border-radius: 12px;
   overflow: hidden;
-
-  text-align: center;
 }
 
 .sold-tile img {
   width: 100%;
   height: 400px;
   object-fit: cover;
-  display: block;
 }
 
-.sold-tile p {
-  padding: 15px;
-  font-size: 14px;
-  color: #ccc;
-}
-
-/* ================= INVENTORY GRID ================= */
+/* INVENTORY */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
 }
 
-.card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* ================= FOOTER ================= */
-.footer {
-  background: black;
-  padding: 25px;
-  text-align: center;
-}
-
-.footer-logos {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.footer-logos img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-
-/* ================= MOBILE ================= */
+/* MOBILE */
 @media (max-width: 768px) {
-
-  .nav-left,
-  .nav-right {
+  .logo-bar.desktop-logo-bar {
     display: none;
   }
 
-  /* center logo properly */
-  .logo-row {
-    display: none;
-  }
-
-  .mobile-logo {
+  .mobile-logo-bar {
     display: flex;
+    flex: 1;
     justify-content: center;
     align-items: center;
-
-    flex: 1;
-  }
-
-  .header {
-    justify-content: space-between;
-    padding: 0 15px;
   }
 
   .banner-text {
     left: 15px;
     right: 15px;
     bottom: 15px;
-  }
-
-  .sold-tile img {
-    height: 250px;
   }
 }

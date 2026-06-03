@@ -1,86 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import Layout from '../components/Layout';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { FaBars, FaTimes, FaPhone, FaSearch } from 'react-icons/fa';
 
-export default function Home() {
-  const [cars, setCars] = useState([]);
-  const [soldImages, setSoldImages] = useState([]);
-  const [soldIndex, setSoldIndex] = useState(0);
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  /* LOAD CARS */
+  /* DESKTOP LOGO BATCHES (4 AT A TIME) */
+  const logoBatches = [
+    [
+      '/images/ferrari.png',
+      '/images/lamborghini.png',
+      '/images/rolls.png',
+      '/images/bentley.png',
+    ],
+    [
+      '/images/aston.png',
+      '/images/pagani.png',
+      '/images/bugatti.png',
+      '/images/mercedes.png',
+    ],
+    [
+      '/images/porsche.png',
+      '/images/ferrari.png',
+      '/images/rolls.png',
+      '/images/lambo.png',
+    ],
+  ];
+
+  const mobileLogos = [
+    '/images/lamborghini.png',
+    '/images/ferrari.png',
+    '/images/porsche.png',
+    '/images/pagani.png',
+    '/images/mercedes.png',
+    '/images/aston.png',
+    '/images/bugatti.png',
+    '/images/bentley.png',
+    '/images/rolls.png',
+  ];
+
+  const [batchIndex, setBatchIndex] = useState(0);
+  const [mobileIndex, setMobileIndex] = useState(0);
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch('/api/cars');
-        const data = await res.json();
-        setCars(Array.isArray(data.cars) ? data.cars : []);
-      } catch {
-        setCars([]);
-      }
-    };
-    load();
-  }, []);
-
-  /* SOLD IMAGES */
-  useEffect(() => {
-    fetch('/api/images')
-      .then((res) => res.json())
-      .then(setSoldImages)
-      .catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (!soldImages.length) return;
-
     const i = setInterval(() => {
-      setSoldIndex((p) => (p + 1) % soldImages.length);
-    }, 3500);
+      setBatchIndex((prev) => (prev + 1) % logoBatches.length);
+    }, 3000);
 
     return () => clearInterval(i);
-  }, [soldImages]);
+  }, []);
+
+  useEffect(() => {
+    const i = setInterval(() => {
+      setMobileIndex((prev) => (prev + 1) % mobileLogos.length);
+    }, 1200);
+
+    return () => clearInterval(i);
+  }, []);
 
   return (
-    <Layout>
-      {/* HERO */}
-      <section className="banner">
-        <img src="/images/carwallpaper.webp" />
-        <div className="banner-text">
-          <h1>Luxury Car Dealership</h1>
-          <p>Performance. Prestige. Perfection.</p>
-        </div>
-      </section>
+    <header className="header">
 
-      {/* WELCOME */}
-      <section className="welcome-section">
-        <h2>Welcome</h2>
-        <p>We source and deliver the finest luxury vehicles in the UK.</p>
-      </section>
+      {/* LEFT */}
+      <div className="header-left">
+        <a href="tel:1234567890" className="call-me">
+          <FaPhone size={18} />
+        </a>
+      </div>
 
-      {/* SOLD */}
-      <section className="sold-section">
-        <h2>Previously Sold</h2>
+      {/* DESKTOP LOGOS (4 UP ROTATING) */}
+      <div className="logo-bar desktop-logo-bar">
+        {logoBatches[batchIndex].map((logo, i) => (
+          <img key={i} src={logo} className="desktop-logo" />
+        ))}
+      </div>
 
-        {soldImages.length > 0 && (
-          <div className="sold-tile">
-            <img src={soldImages[soldIndex]} />
-            <p>Delivered luxury vehicles to clients across the UK and beyond.</p>
-          </div>
-        )}
-      </section>
+      {/* RIGHT ICONS */}
+      <div className="header-icons">
+        <FaSearch />
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
 
-      {/* INVENTORY */}
-      <section className="inventory">
-        <h2>Latest Arrivals</h2>
+      {/* MOBILE LOGO (SINGLE ROTATING) */}
+      <div className="logo-bar mobile-logo-bar">
+        <img
+          src={mobileLogos[mobileIndex]}
+          className="mobile-logo"
+          alt="logo"
+        />
+      </div>
 
-        <div className="grid">
-          {cars.slice(0, 6).map((c) => (
-            <Link key={c._id} href={`/car/${c._id}`} className="card">
-              <img src={c.images?.[0]} />
-              <h3>{c.make} {c.model}</h3>
-            </Link>
-          ))}
-        </div>
-      </section>
-    </Layout>
+    </header>
   );
 }

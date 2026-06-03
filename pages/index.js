@@ -7,20 +7,6 @@ export default function Home() {
   const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
 
-  /* LOAD CARS */
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch('/api/cars');
-        const data = await res.json();
-        setCars(Array.isArray(data.cars) ? data.cars : []);
-      } catch {
-        setCars([]);
-      }
-    };
-    load();
-  }, []);
-
   /* SOLD IMAGES */
   useEffect(() => {
     fetch('/api/images')
@@ -39,11 +25,26 @@ export default function Home() {
     return () => clearInterval(i);
   }, [soldImages]);
 
+  /* CARS */
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/cars');
+        const data = await res.json();
+        setCars(Array.isArray(data.cars) ? data.cars : []);
+      } catch {
+        setCars([]);
+      }
+    };
+    load();
+  }, []);
+
   return (
     <Layout>
       {/* HERO */}
       <section className="banner">
-        <img src="/images/carwallpaper.webp" />
+        <img src="/images/carwallpaper.webp" alt="Banner" />
+
         <div className="banner-text">
           <h1>Luxury Car Dealership</h1>
           <p>Performance. Prestige. Perfection.</p>
@@ -62,7 +63,7 @@ export default function Home() {
 
         {soldImages.length > 0 && (
           <div className="sold-tile">
-            <img src={soldImages[soldIndex]} />
+            <img src={soldImages[soldIndex]} alt="Sold car" />
             <p>Delivered luxury vehicles to clients across the UK and beyond.</p>
           </div>
         )}
@@ -75,7 +76,7 @@ export default function Home() {
         <div className="grid">
           {cars.slice(0, 6).map((c) => (
             <Link key={c._id} href={`/car/${c._id}`} className="card">
-              <img src={c.images?.[0]} />
+              <img src={c.images?.[0]} alt={`${c.make} ${c.model}`} />
               <h3>{c.make} {c.model}</h3>
             </Link>
           ))}
