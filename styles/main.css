@@ -319,3 +319,39 @@ a {
   background: #c40000;
   border-color: #c40000;
 }
+
+.phone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-size: 14px;
+  padding: 6px 10px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+/* ICON ALWAYS VISIBLE */
+.phone-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .phone {
+    padding: 8px;
+    border: none;
+    gap: 0;
+  }
+
+  .phone-text {
+    display: none; /* hide number only */
+  }
+
+  .phone-icon {
+    font-size: 20px;
+  }
+}
