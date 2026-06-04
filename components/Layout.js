@@ -24,6 +24,7 @@ export default function Layout({ children }) {
     ],
   ];
 
+  // Mobile logos - all brands
   const mobileLogos = [
     '/images/bentley.png',
     '/images/ferrari.png',
@@ -34,6 +35,7 @@ export default function Layout({ children }) {
     '/images/mercedes.png',
   ];
 
+  /* CLOSE MENU ON OUTSIDE CLICK */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -44,6 +46,7 @@ export default function Layout({ children }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  /* LOGO ROTATION */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentLogoIndex((prev) => (prev + 1) % mobileLogos.length);
@@ -53,23 +56,20 @@ export default function Layout({ children }) {
 
   return (
     <div className="app">
-
+      {/* HEADER */}
       <header className="site-header">
-
-        {/* LEFT (desktop only + mobile phone icon) */}
-        <div className="header-left">
-          <a href="tel:+447826456793" className="phone-icon">
+        {/* LEFT */}
+        <div className="header-side header-left">
+          <a href="tel:+447826456793" className="phone">
             <FaPhone />
+            <span className="phone-text">+44 7826 456793</span>
           </a>
-
-          <div className="desktop-only nav-links">
-            <Link href="/">Home</Link>
-            <Link href="/Inventory">Stock</Link>
-            <Link href="/Sellyourcar">Sell</Link>
-          </div>
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        {/* CENTER MOBILE LOGO */}
+        {/* CENTER - MOBILE LOGO */}
         <div className="header-mobile-logo">
           <img
             src={mobileLogos[currentLogoIndex]}
@@ -78,7 +78,7 @@ export default function Layout({ children }) {
           />
         </div>
 
-        {/* DESKTOP CENTER LOGOS */}
+        {/* CENTER LOGOS (DESKTOP ONLY) */}
         <div className="header-center desktop-logos">
           <div className="logo-box">
             {desktopLogoBatches[Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length].map((logo, i) => (
@@ -87,22 +87,15 @@ export default function Layout({ children }) {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
-        <div className="header-right">
-
+        {/* RIGHT */}
+        <div className="header-side header-right">
           <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
-
-          {/* desktop links */}
-          <div className="desktop-only nav-links">
-            <Link href="/sold">Sold</Link>
-            <Link href="/NewsAndEvents">Insights</Link>
-            <Link href="/About">About</Link>
-            <Link href="/contact">Contact</Link>
-          </div>
-
-          {/* hamburger (mobile + desktop) */}
+          <Link href="/sold">Sold</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
           <button className="icon-btn" onClick={() => setOpen(!open)}>
             {open ? <FaTimes /> : <FaBars />}
           </button>
@@ -113,7 +106,6 @@ export default function Layout({ children }) {
           ref={menuRef}
           className={`mobile-menu ${open ? 'open' : ''}`}
         >
-          <a href="tel:+447826456793">Call Us</a>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/sold">Sold</Link>
@@ -122,14 +114,15 @@ export default function Layout({ children }) {
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
         </nav>
-
       </header>
 
+      {/* SEARCH OVERLAY */}
       <SearchOverlay
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
       />
 
+      {/* PAGE CONTENT */}
       <main>{children}</main>
     </div>
   );
