@@ -119,9 +119,9 @@ export default function Home() {
           WELCOME
       ========================= */}
       <section className="welcome-section">
-        <h2>Welcome</h2>
+        <h2>Welcome to Excellence</h2>
         <p>
-          We source and deliver the finest luxury vehicles across the United Kingdom.
+          Discover an exclusive selection of premium luxury vehicles sourced from across the world. Each car is hand-picked, meticulously inspected, and presented to the highest standards.
         </p>
       </section>
 
@@ -138,7 +138,7 @@ export default function Home() {
               alt="Sold Luxury Vehicle"
             />
             <p>
-              Delivered premium luxury vehicles to clients across the UK and internationally.
+              A curated collection of exceptional vehicles delivered to discerning clients across the UK and internationally. Each transaction represents our commitment to finding the perfect match between car and owner.
             </p>
           </div>
         )}
@@ -150,40 +150,46 @@ export default function Home() {
       <section className="inventory">
         <h2 className="section-title">Latest Arrivals</h2>
 
-        <div className="car-grid">
-          {cars.slice(0, 8).map((car) => (
-            <Link key={car._id} href={`/car/${car._id}`} className="car-card">
+        {cars.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#b0b0b0' }}>
+            <p style={{ fontSize: '1.1rem' }}>No vehicles currently available</p>
+          </div>
+        ) : (
+          <div className="car-grid">
+            {cars.slice(0, 8).map((car) => (
+              <Link key={car._id} href={`/car/${car._id}`} className="car-card">
 
-              <div className="car-image-wrapper">
-                <img
-                  src={car.images?.[0]}
-                  alt={`${car.make} ${car.model}`}
-                />
+                <div className="car-image-wrapper">
+                  <img
+                    src={car.images?.[0]}
+                    alt={`${car.make} ${car.model}`}
+                  />
 
-                <div className="price-tag">
-                  £{Number(car.price).toLocaleString()}
-                </div>
-              </div>
-
-              <div className="car-info">
-                <h3>
-                  {car.year} {car.make} {car.model}
-                </h3>
-
-                <div className="car-meta">
-                  <span>{car.mileage?.toLocaleString()} miles</span>
-                  <span>{car.fuelType}</span>
-                  <span>{car.transmission}</span>
+                  <div className="price-tag">
+                    £{Number(car.price).toLocaleString()}
+                  </div>
                 </div>
 
-                <button className="view-btn">
-                  View Details
-                </button>
-              </div>
+                <div className="car-info">
+                  <h3>
+                    {car.year} {car.make} {car.model}
+                  </h3>
 
-            </Link>
-          ))}
-        </div>
+                  <div className="car-meta">
+                    <span>{car.mileage?.toLocaleString()} miles</span>
+                    <span>{car.fuelType}</span>
+                    <span>{car.transmission}</span>
+                  </div>
+
+                  <button className="view-btn">
+                    View Details
+                  </button>
+                </div>
+
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
     </Layout>
