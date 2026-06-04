@@ -58,8 +58,8 @@ export default function Layout({ children }) {
     <div className="app">
       {/* HEADER */}
       <header className="site-header">
-        {/* LEFT */}
-        <div className="header-side header-left">
+        {/* DESKTOP: LEFT */}
+        <div className="header-side header-left desktop-only">
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
             <span className="phone-text">+44 7826 456793</span>
@@ -67,6 +67,13 @@ export default function Layout({ children }) {
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
+        </div>
+
+        {/* MOBILE: LEFT (PHONE ICON ONLY) */}
+        <div className="header-mobile-left mobile-only">
+          <a href="tel:+447826456793" className="phone">
+            <FaPhone />
+          </a>
         </div>
 
         {/* CENTER - MOBILE LOGO */}
@@ -87,8 +94,8 @@ export default function Layout({ children }) {
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="header-side header-right">
+        {/* DESKTOP: RIGHT */}
+        <div className="header-side header-right desktop-only">
           <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
@@ -96,6 +103,16 @@ export default function Layout({ children }) {
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
+          <button className="icon-btn" onClick={() => setOpen(!open)}>
+            {open ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
+        {/* MOBILE: RIGHT (SEARCH + MENU) */}
+        <div className="header-mobile-right mobile-only">
+          <button className="icon-btn" onClick={() => setSearchOpen(true)}>
+            <FaSearch />
+          </button>
           <button className="icon-btn" onClick={() => setOpen(!open)}>
             {open ? <FaTimes /> : <FaBars />}
           </button>
