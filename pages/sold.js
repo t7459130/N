@@ -93,7 +93,6 @@ function SoldContent() {
           <img className="hero-img" src={images[currentImage]} alt="Sold vehicle" />
 
           <div className="banner-text">
-            <h1>Previously Sold Vehicles</h1>
             <p>Luxury, prestige and performance delivered across the UK</p>
           </div>
         </section>
