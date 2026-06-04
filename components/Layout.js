@@ -24,7 +24,6 @@ export default function Layout({ children }) {
     ],
   ];
 
-  // Mobile logos - all brands
   const mobileLogos = [
     '/images/bentley.png',
     '/images/ferrari.png',
@@ -56,21 +55,23 @@ export default function Layout({ children }) {
 
   return (
     <div className="app">
+
       {/* HEADER */}
       <header className="site-header">
 
-        {/* LEFT (DESKTOP ONLY NAV) */}
+        {/* LEFT (desktop nav only) */}
         <div className="header-side header-left desktop-only">
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
             <span className="phone-text">+44 7826 456793</span>
           </a>
+
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        {/* CENTER - MOBILE LOGO ONLY */}
+        {/* MOBILE LOGO (always visible on mobile) */}
         <div className="header-mobile-logo">
           <img
             src={mobileLogos[currentLogoIndex]}
@@ -79,7 +80,7 @@ export default function Layout({ children }) {
           />
         </div>
 
-        {/* CENTER LOGOS (DESKTOP ONLY) */}
+        {/* DESKTOP CENTER LOGOS */}
         <div className="header-center desktop-logos">
           <div className="logo-box">
             {desktopLogoBatches[Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length].map((logo, i) => (
@@ -88,28 +89,46 @@ export default function Layout({ children }) {
           </div>
         </div>
 
-        {/* RIGHT (DESKTOP ONLY NAV) */}
-        <div className="header-side header-right desktop-only">
+        {/* RIGHT (desktop only + hamburger always visible) */}
+        <div className="header-side header-right">
+
           <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
-          <Link href="/sold">Sold</Link>
-          <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About</Link>
-          <Link href="/contact">Contact</Link>
+
+          {/* desktop links */}
+          <div className="desktop-only">
+            <Link href="/sold">Sold</Link>
+            <Link href="/NewsAndEvents">Insights</Link>
+            <Link href="/About">About</Link>
+            <Link href="/contact">Contact</Link>
+          </div>
+
+          {/* hamburger always visible */}
           <button className="icon-btn" onClick={() => setOpen(!open)}>
             {open ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        {/* MOBILE MENU (NO LINKS AT ALL) */}
+        {/* MOBILE MENU (FIXED — links restored) */}
         <nav
           ref={menuRef}
           className={`mobile-menu ${open ? 'open' : ''}`}
-        />
+        >
+          <a href="tel:+447826456793">Call Us</a>
+
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/sold">Sold</Link>
+          <Link href="/Sellyourcar">Sell</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
+        </nav>
+
       </header>
 
-      {/* SEARCH OVERLAY */}
+      {/* SEARCH */}
       <SearchOverlay
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
