@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+```jsx
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
-import { FaSearch } from 'react-icons/fa';
 
 import { AdminProvider, useAdmin } from '../components/AdminContext';
 import SearchOverlay from '../components/SearchOverlay';
@@ -13,23 +12,6 @@ function SoldContent() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [images, setImages] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
-
-  const logoBatches = [
-    [
-      '/images/ferrari.png',
-      '/images/lamborghini.png',
-      '/images/rolls.png',
-      '/images/bentley.png',
-    ],
-    [
-      '/images/aston.png',
-      '/images/pagani.png',
-      '/images/bugatti.png',
-      '/images/mercedes.png',
-    ],
-  ];
-
-  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
 
   // LOAD SOLD IMAGES
   useEffect(() => {
@@ -50,15 +32,6 @@ function SoldContent() {
     return () => clearInterval(interval);
   }, [images]);
 
-  // LOGO ROTATION (MATCH HOMEPAGE SPEED)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="app">
 
@@ -66,37 +39,65 @@ function SoldContent() {
         <title>Previously Sold Vehicles</title>
       </Head>
 
-      {/* HERO */}
       {images.length > 0 && (
         <section className="banner">
+
           <img
+            className="hero-img"
             src={images[currentImage]}
             alt="Sold Vehicle"
           />
 
           <div className="banner-text">
             <h1>Previously Sold Vehicles</h1>
+
             <p>
-              A showcase of luxury, prestige and performance vehicles supplied across the UK.
+              A showcase of luxury, prestige and performance vehicles supplied
+              across the UK.
             </p>
           </div>
+
         </section>
       )}
 
-      {/* WELCOME */}
       <section className="welcome-section">
         <h2>Recently Sold</h2>
-        <p>Every vehicle below has successfully found its new owner.</p>
+
+        <p>
+          Every vehicle below has successfully found its new owner.
+        </p>
       </section>
 
-      {/* SOLD GRID */}
       <section className="inventory">
-        <h2>Sold Inventory</h2>
+
+        <h2
+          style={{
+            textAlign: 'center',
+            marginBottom: '30px',
+            color: 'var(--accent)',
+            fontFamily: 'Playfair Display',
+          }}
+        >
+          Sold Inventory
+        </h2>
 
         <div className="grid">
+
           {images.map((img, index) => (
-            <div key={index} className="card" style={{ position: 'relative' }}>
-              <img src={img} alt="Sold Vehicle" />
+            <div
+              key={index}
+              className="card"
+              style={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '12px',
+              }}
+            >
+
+              <img
+                src={img}
+                alt="Sold Vehicle"
+              />
 
               <div
                 style={{
@@ -112,16 +113,19 @@ function SoldContent() {
                   fontWeight: 'bold',
                   letterSpacing: '2px',
                   fontSize: '13px',
+                  zIndex: 2,
                 }}
               >
                 SOLD
               </div>
+
             </div>
           ))}
+
         </div>
+
       </section>
 
-      {/* SEARCH OVERLAY */}
       <SearchOverlay
         cars={[]}
         isOpen={isSearchOpen}
@@ -141,3 +145,4 @@ export default function SoldPage() {
     </AdminProvider>
   );
 }
+```
