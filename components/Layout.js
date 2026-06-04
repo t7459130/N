@@ -24,7 +24,6 @@ export default function Layout({ children }) {
     ],
   ];
 
-  // Mobile logos - all brands
   const mobileLogos = [
     '/images/bentley.png',
     '/images/ferrari.png',
@@ -35,7 +34,6 @@ export default function Layout({ children }) {
     '/images/mercedes.png',
   ];
 
-  /* CLOSE MENU ON OUTSIDE CLICK */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -46,7 +44,6 @@ export default function Layout({ children }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  /* LOGO ROTATION */
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentLogoIndex((prev) => (prev + 1) % mobileLogos.length);
@@ -56,49 +53,56 @@ export default function Layout({ children }) {
 
   return (
     <div className="app">
-      {/* HEADER */}
+
       <header className="site-header">
-        {/* LEFT */}
-        <div className="header-side header-left">
-          <a href="tel:+447826456793" className="phone">
-            <FaPhone />
-            <span className="phone-text">+44 7826 456793</span>
-          </a>
-          <Link href="/">Home</Link>
-          <Link href="/Inventory">Stock</Link>
-          <Link href="/Sellyourcar">Sell</Link>
-        </div>
 
-        {/* CENTER - MOBILE LOGO */}
-        <div className="header-mobile-logo">
-          <img
-            src={mobileLogos[currentLogoIndex]}
-            alt="Brand logo"
-            className="rotating-logo"
-          />
-        </div>
+        {/* TOP BAR */}
+        <div className="header-top">
 
-        {/* CENTER LOGOS (DESKTOP ONLY) */}
-        <div className="header-center desktop-logos">
-          <div className="logo-box">
-            {desktopLogoBatches[Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length].map((logo, i) => (
-              <img key={i} src={logo} alt="logo" />
-            ))}
+          <div className="header-left">
+            <a href="tel:+447826456793" className="phone">
+              <FaPhone />
+              <span className="phone-text">+44 7826 456793</span>
+            </a>
+
+            <Link href="/">Home</Link>
+            <Link href="/Inventory">Stock</Link>
+            <Link href="/Sellyourcar">Sell</Link>
           </div>
+
+          <div className="header-right">
+            <button className="icon-btn" onClick={() => setSearchOpen(true)}>
+              <FaSearch />
+            </button>
+
+            <button className="icon-btn" onClick={() => setOpen(!open)}>
+              {open ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
+
         </div>
 
-        {/* RIGHT */}
-        <div className="header-side header-right">
-          <button className="icon-btn" onClick={() => setSearchOpen(true)}>
-            <FaSearch />
-          </button>
-          <Link href="/sold">Sold</Link>
-          <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About</Link>
-          <Link href="/contact">Contact</Link>
-          <button className="icon-btn" onClick={() => setOpen(!open)}>
-            {open ? <FaTimes /> : <FaBars />}
-          </button>
+        {/* LOGO ROW */}
+        <div className="header-logo-row">
+
+          <div className="header-mobile-logo">
+            <img
+              src={mobileLogos[currentLogoIndex]}
+              alt="Brand logo"
+              className="rotating-logo"
+            />
+          </div>
+
+          <div className="header-center desktop-logos">
+            <div className="logo-box">
+              {desktopLogoBatches[
+                Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length
+              ].map((logo, i) => (
+                <img key={i} src={logo} alt="logo" />
+              ))}
+            </div>
+          </div>
+
         </div>
 
         {/* MOBILE MENU */}
@@ -114,15 +118,14 @@ export default function Layout({ children }) {
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
         </nav>
+
       </header>
 
-      {/* SEARCH OVERLAY */}
       <SearchOverlay
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
       />
 
-      {/* PAGE CONTENT */}
       <main>{children}</main>
     </div>
   );
