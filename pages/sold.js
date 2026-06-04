@@ -229,7 +229,7 @@ function SoldContent() {
 		  loading="lazy"
                   style={{ 
                      width: '100%',
-                     height: '320px'.
+                     height: '320px',
                      objectFit: 'contain',
                      background: '#000',
                      display: 'block'                  
