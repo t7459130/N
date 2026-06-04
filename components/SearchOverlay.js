@@ -11,16 +11,16 @@ export default function SearchOverlay({ isOpen, onClose }) {
       </button>
 
       <div className="search-container">
-        <h2>Vehicle Lookup</h2>
-        <p className="search-subtitle">Powered by CarQuery</p>
+        <h2>Check Vehicle MOT</h2>
+        <p className="search-subtitle">Official UK Government MOT Checker</p>
 
-        {/* Embed CarQuery iframe */}
+        {/* Embed Check MOT service */}
         <iframe
-          src="https://www.carquery.app/"
-          title="Vehicle Lookup"
+          src="https://www.check-mot.service.gov.uk/"
+          title="Check MOT"
           style={{
             width: '100%',
-            height: '600px',
+            height: '700px',
             border: 'none',
             borderRadius: '8px',
           }}
@@ -45,7 +45,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
           border: 1px solid #2a2f4a;
           border-radius: 12px;
           padding: 40px;
-          max-width: 800px;
+          max-width: 900px;
           width: 100%;
           color: #f5f5f5;
           margin-top: 50px;
@@ -61,6 +61,11 @@ export default function SearchOverlay({ isOpen, onClose }) {
           cursor: pointer;
           font-size: 28px;
           z-index: 10000;
+          transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+          color: #f5f5f5;
         }
 
         h2 {
@@ -73,15 +78,21 @@ export default function SearchOverlay({ isOpen, onClose }) {
         .search-subtitle {
           color: #b0b0b0;
           margin-bottom: 20px;
+          font-size: 0.95rem;
         }
 
         @media (max-width: 600px) {
           .search-container {
             padding: 20px;
+            margin-top: 20px;
           }
 
           h2 {
             font-size: 1.5rem;
+          }
+
+          iframe {
+            height: 500px !important;
           }
         }
       `}</style>
