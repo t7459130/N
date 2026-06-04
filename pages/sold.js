@@ -80,7 +80,7 @@ function SoldContent() {
       {/* HEADER */}
       <header className="site-header">
         {/* DESKTOP: LEFT */}
-        <div className="header-side header-left desktop-only" style={{ display: 'none' }}>
+        <div className="header-side header-left desktop-only">
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
             <span className="phone-text">+44 7826 456793</span>
@@ -91,7 +91,7 @@ function SoldContent() {
         </div>
 
         {/* MOBILE: LEFT (PHONE ICON ONLY) */}
-        <div className="header-mobile-left mobile-only" style={{ display: 'flex' }}>
+        <div className="header-mobile-left mobile-only">
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
           </a>
@@ -107,7 +107,7 @@ function SoldContent() {
         </div>
 
         {/* CENTER LOGOS (DESKTOP ONLY) */}
-        <div className="header-center desktop-logos" style={{ display: 'none' }}>
+        <div className="header-center desktop-logos">
           <div className="logo-box">
             {desktopLogoBatches[Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length].map((logo, i) => (
               <img key={i} src={logo} alt="logo" />
@@ -116,7 +116,7 @@ function SoldContent() {
         </div>
 
         {/* DESKTOP: RIGHT */}
-        <div className="header-side header-right desktop-only" style={{ display: 'none' }}>
+        <div className="header-side header-right desktop-only">
           <button className="icon-btn" onClick={() => setIsSearchOpen(true)}>
             <FaSearch />
           </button>
@@ -130,7 +130,7 @@ function SoldContent() {
         </div>
 
         {/* MOBILE: RIGHT (SEARCH + MENU) */}
-        <div className="header-mobile-right mobile-only" style={{ display: 'flex' }}>
+        <div className="header-mobile-right mobile-only">
           <button className="icon-btn" onClick={() => setIsSearchOpen(true)}>
             <FaSearch />
           </button>
