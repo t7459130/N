@@ -14,31 +14,6 @@ export default function SearchOverlay({ isOpen, onClose }) {
         <h2>Vehicle Lookup</h2>
         <p className="search-subtitle">Check your vehicle details instantly</p>
 
-        <div className="search-input-group">
-          <input
-            type="text"
-            placeholder="Enter registration (e.g. AB12CDE)"
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                const plate = e.target.value.trim();
-                if (plate) {
-                  window.open(`https://www.check-mot.service.gov.uk/`, '_blank');
-                }
-              }
-            }}
-          />
-          <button 
-            onClick={(e) => {
-              const input = e.target.parentElement.querySelector('input');
-              if (input.value.trim()) {
-                window.open(`https://www.check-mot.service.gov.uk/`, '_blank');
-              }
-            }}
-          >
-            Search
-          </button>
-        </div>
-
         <div className="services-grid">
           <a 
             href="https://www.check-mot.service.gov.uk/" 
@@ -114,49 +89,8 @@ export default function SearchOverlay({ isOpen, onClose }) {
 
         .search-subtitle {
           color: #b0b0b0;
-          margin-bottom: 25px;
-          font-size: 0.95rem;
-        }
-
-        .search-input-group {
-          display: flex;
-          gap: 10px;
           margin-bottom: 30px;
-        }
-
-        input {
-          flex: 1;
-          padding: 12px 16px;
-          background: #0a0e27;
-          border: 1px solid #2a2f4a;
-          border-radius: 6px;
-          color: #f5f5f5;
-          font-size: 16px;
-          font-family: inherit;
-        }
-
-        input::placeholder {
-          color: #b0b0b0;
-        }
-
-        input:focus {
-          outline: none;
-          border-color: #c9a961;
-        }
-
-        button {
-          padding: 12px 24px;
-          background: #c9a961;
-          color: #0a0e27;
-          border: none;
-          border-radius: 6px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background 0.3s ease;
-        }
-
-        button:hover {
-          background: #d4b87a;
+          font-size: 0.95rem;
         }
 
         .services-grid {
@@ -219,14 +153,6 @@ export default function SearchOverlay({ isOpen, onClose }) {
 
           .service-card {
             padding: 20px;
-          }
-
-          .search-input-group {
-            flex-direction: column;
-          }
-
-          button {
-            width: 100%;
           }
         }
       `}</style>
