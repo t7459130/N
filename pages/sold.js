@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FaSearch, FaPhone } from 'react-icons/fa';
+import { FaSearch, FaPhone, FaBars, FaTimes } from 'react-icons/fa';
+import { useRef } from 'react';
 
 import { AdminProvider, useAdmin } from '../components/AdminContext';
 import SearchOverlay from '../components/SearchOverlay';
@@ -10,24 +11,36 @@ function SoldContent() {
   const { isAdmin } = useAdmin();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [images, setImages] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
-  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
+  const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
+  const menuRef = useRef(null);
 
-  const logoBatches = [
+  const mobileLogos = [
+    '/images/bentley.png',
+    '/images/ferrari.png',
+    '/images/aston.png',
+    '/images/bugatti.png',
+    '/images/pagani.png',
+    '/images/porsche.png',
+    '/images/mercedes.png',
+  ];
+
+  const desktopLogoBatches = [
     ['/images/ferrari.png', '/images/lamborghini.png', '/images/rolls.png', '/images/bentley.png'],
     ['/images/aston.png', '/images/pagani.png', '/images/bugatti.png', '/images/mercedes.png'],
   ];
 
   // Load images
   useEffect(() => {
-    fetch('/api/images')
+    fetch('/api/wallpaper-images')
       .then((res) => res.json())
-      .then((data) => setImages(data))
+      .then((data) => setImages(Array.isArray(data) ? data : []))
       .catch(() => setImages([]));
   }, []);
 
-  // hero slider
+  // Hero slider
   useEffect(() => {
     if (!images.length) return;
 
@@ -38,92 +51,149 @@ function SoldContent() {
     return () => clearInterval(interval);
   }, [images]);
 
-  // logo rotation (same as homepage)
+  // Logo rotation
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentBatchIndex((prev) => (prev + 1) % logoBatches.length);
-    }, 3000);
+      setCurrentLogoIndex((prev) => (prev + 1) % mobileLogos.length);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, []);
 
+  // Close menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className="app">
-
       <Head>
         <title>Previously Sold Vehicles</title>
       </Head>
 
-      {/* HEADER (IDENTICAL TO HOMEPAGE STRUCTURE) */}
+      {/* HEADER */}
       <header className="site-header">
-
-        <div className="header-side header-left">
-          <a href="tel:07777777777" className="phone">
+        {/* DESKTOP: LEFT */}
+        <div className="header-side header-left desktop-only" style={{ display: 'none' }}>
+          <a href="tel:+447826456793" className="phone">
             <FaPhone />
-            <span className="phone-text">Call</span>
+            <span className="phone-text">+44 7826 456793</span>
           </a>
-
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        <div className="header-center">
+        {/* MOBILE: LEFT (PHONE ICON ONLY) */}
+        <div className="header-mobile-left mobile-only" style={{ display: 'flex' }}>
+          <a href="tel:+447826456793" className="phone">
+            <FaPhone />
+          </a>
+        </div>
+
+        {/* CENTER - MOBILE LOGO */}
+        <div className="header-mobile-logo">
+          <img
+            src={mobileLogos[currentLogoIndex]}
+            alt="Brand logo"
+            className="rotating-logo"
+          />
+        </div>
+
+        {/* CENTER LOGOS (DESKTOP ONLY) */}
+        <div className="header-center desktop-logos" style={{ display: 'none' }}>
           <div className="logo-box">
-            {logoBatches[currentBatchIndex].map((logo, i) => (
+            {desktopLogoBatches[Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length].map((logo, i) => (
               <img key={i} src={logo} alt="logo" />
             ))}
           </div>
         </div>
 
-        <div className="header-side header-right">
-          <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About</Link>
-          <Link href="/contact">Contact</Link>
-
+        {/* DESKTOP: RIGHT */}
+        <div className="header-side header-right desktop-only" style={{ display: 'none' }}>
           <button className="icon-btn" onClick={() => setIsSearchOpen(true)}>
             <FaSearch />
           </button>
+          <Link href="/sold">Sold</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
+          <button className="icon-btn" onClick={() => setOpen(!open)}>
+            {open ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
+
+        {/* MOBILE: RIGHT (SEARCH + MENU) */}
+        <div className="header-mobile-right mobile-only" style={{ display: 'flex' }}>
+          <button className="icon-btn" onClick={() => setIsSearchOpen(true)}>
+            <FaSearch />
+          </button>
+          <button className="icon-btn" onClick={() => setOpen(!open)}>
+            {open ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
+        {/* MOBILE MENU */}
+        <nav
+          ref={menuRef}
+          className={`mobile-menu ${open ? 'open' : ''}`}
+        >
+          <Link href="/">Home</Link>
+          <Link href="/Inventory">Stock</Link>
+          <Link href="/sold">Sold</Link>
+          <Link href="/Sellyourcar">Sell</Link>
+          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/About">About</Link>
+          <Link href="/contact">Contact</Link>
+        </nav>
       </header>
 
-      {/* HERO (MATCHES HOMEPAGE BANNER EXACTLY) */}
-      {images.length > 0 && (
-        <section className="banner">
+      {/* HERO BANNER */}
+      <section className="banner">
+        {images.length > 0 ? (
           <img className="hero-img" src={images[currentImage]} alt="Sold vehicle" />
+        ) : (
+          <img className="hero-img" src="/images/carwallpaper.webp" alt="Sold vehicle" />
+        )}
 
-          <div className="banner-text">
-            <h1>Previously Sold Vehicles</h1>
-            <p>Luxury, prestige and performance delivered across the UK</p>
-          </div>
-        </section>
-      )}
-
-      {/* WELCOME (SAME STYLE AS HOMEPAGE) */}
-      <section className="welcome-section">
-        <h2>Recently Sold</h2>
-        <p>Every vehicle below has successfully found its new owner.</p>
+        <div className="banner-text">
+          <h1>Previously Sold</h1>
+          <p>Luxury vehicles delivered across the UK and internationally</p>
+        </div>
       </section>
 
-      {/* SOLD GRID (USES HOMEPAGE CAR GRID SYSTEM) */}
+      {/* WELCOME SECTION */}
+      <section className="welcome-section">
+        <h2>Recently Sold Vehicles</h2>
+        <p>Every vehicle below has successfully found its new home with our discerning clients.</p>
+      </section>
+
+      {/* SOLD GRID */}
       <section className="inventory">
         <h2 className="section-title">Sold Inventory</h2>
 
-        <div className="car-grid">
-          {images.map((img, index) => (
-            <div key={index} className="car-card">
-
-              <div className="car-image-wrapper">
-                <img src={img} alt="Sold vehicle" />
-
-                <div className="price-tag" style={{ background: '#c40000' }}>
-                  SOLD
+        {images.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#b0b0b0' }}>
+            <p style={{ fontSize: '1.1rem' }}>Loading sold vehicles...</p>
+          </div>
+        ) : (
+          <div className="car-grid">
+            {images.map((img, index) => (
+              <div key={index} className="car-card">
+                <div className="car-image-wrapper">
+                  <img src={img} alt="Sold luxury vehicle" />
+                  <div className="price-tag sold-tag">SOLD</div>
                 </div>
               </div>
-
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* SEARCH OVERLAY */}
@@ -133,11 +203,11 @@ function SoldContent() {
         onClose={() => setIsSearchOpen(false)}
       />
 
-      {/* FOOTER (SAME SIMPLE FOOTER STYLE AS HOMEPAGE) */}
+      {/* FOOTER */}
       <footer>
-        Nabil's Surrey Supercars • Surrey, UK • 07777777777
+        <p>Nabil's Surrey Supercars • Surrey, England • +44 7826 456793</p>
+        <p>&copy; 2025 All Rights Reserved</p>
       </footer>
-
     </div>
   );
 }

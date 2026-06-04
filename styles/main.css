@@ -35,7 +35,7 @@ body {
 .site-header {
   background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   border-bottom: 1px solid var(--border);
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -43,6 +43,7 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  min-height: 80px;
 }
 
 .header-side {
@@ -411,6 +412,11 @@ body {
   border-radius: 4px;
   font-weight: 700;
   font-size: 0.95rem;
+}
+
+.price-tag.sold-tag {
+  background: #c40000;
+  color: white;
 }
 
 .car-info {
