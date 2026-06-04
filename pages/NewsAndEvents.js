@@ -1,5 +1,3 @@
-// pages/NewsAndEvents.js (make sure it's under /pages directory)
-
 import React from 'react';
 import Layout from '../components/Layout';
 
@@ -38,22 +36,32 @@ const eventsData = [
 
 const NewsAndEvents = () => {
   return (
-    <div className="news-and-events">
-      <h2>News and Events</h2>
-      <div className="events-list">
-        {eventsData.map((event) => (
-          <div key={event.id} className="event-card">
-            <h3>{event.title}</h3>
-            <p><strong>Date:</strong> {event.date}</p>
-            <p>{event.description}</p>
-          </div>
-        ))}
+    <div className="news-page">
+      <div className="news-header">
+        <h1>News & Events</h1>
+        <p>Stay informed about our latest updates and exclusive events</p>
+      </div>
+
+      <div className="events-container">
+        <div className="events-list">
+          {eventsData.map((event) => (
+            <div key={event.id} className="event-card">
+              <div className="event-date">
+                <span className="date-text">{event.date.split(' ')[0]}</span>
+              </div>
+              <div className="event-content">
+                <h3>{event.title}</h3>
+                <p className="event-date-full">{event.date}</p>
+                <p className="event-description">{event.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-// 👇 Wrap the component with Layout
 export default function NewsAndEventsPage() {
   return (
     <Layout>

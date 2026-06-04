@@ -43,27 +43,33 @@ export default function About() {
 
       {/* STORY */}
       <section className="lux-section">
-        <h2>Our Mission</h2>
-        <p>
-          We exist to source and deliver the finest supercars and prestige vehicles
-          with unmatched attention to detail and customer experience.
-        </p>
+        <div className="lux-container">
+          <h2>Our Mission</h2>
+          <p>
+            We exist to source and deliver the finest supercars and prestige vehicles
+            with unmatched attention to detail and customer experience.
+          </p>
+        </div>
       </section>
 
       <section className="lux-section dark">
-        <h2>Vehicle Sourcing</h2>
-        <p>
-          Every vehicle is hand-selected from trusted partners across the UK and Europe,
-          ensuring provenance, condition and specification meet elite standards.
-        </p>
+        <div className="lux-container">
+          <h2>Vehicle Sourcing</h2>
+          <p>
+            Every vehicle is hand-selected from trusted partners across the UK and Europe,
+            ensuring provenance, condition and specification meet elite standards.
+          </p>
+        </div>
       </section>
 
       <section className="lux-section">
-        <h2>Delivery Experience</h2>
-        <p>
-          From enquiry to handover, every step is curated to feel seamless, personal
-          and premium — as expected from a luxury automotive house.
-        </p>
+        <div className="lux-container">
+          <h2>Delivery Experience</h2>
+          <p>
+            From enquiry to handover, every step is curated to feel seamless, personal
+            and premium — as expected from a luxury automotive house.
+          </p>
+        </div>
       </section>
     </Layout>
   );

@@ -20,11 +20,15 @@ const Typewriter = ({ text, speed = 60 }) => {
 
 const ContactUs = () => {
   const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Subscribed with email: ${email}`);
-    setEmail('');
+    setSubmitted(true);
+    setTimeout(() => {
+      setEmail('');
+      setSubmitted(false);
+    }, 2000);
   };
 
   return (
@@ -36,53 +40,71 @@ const ContactUs = () => {
 
         <div className="hero-content">
           <h1>
-            <Typewriter text="Excellence in Motion" />
+            <Typewriter text="Excellence in Motion" speed={50} />
           </h1>
 
           <p>
-            <Typewriter text="A curated automotive experience inspired by Rolls-Royce craftsmanship." />
+            <Typewriter text="A curated automotive experience inspired by Rolls-Royce craftsmanship." speed={40} />
           </p>
         </div>
       </div>
 
       {/* CONTACT DETAILS */}
-      <div className="contact-section">
-        <h2>Contact Us</h2>
+      <section className="contact-section">
+        <div className="contact-container">
+          <h2>Get In Touch</h2>
 
-        <p>
-          If you have any enquiries about our vehicles, inventory, or services,
-          our team is here to assist you.
-        </p>
+          <p className="contact-intro">
+            If you have any enquiries about our vehicles, inventory, or services,
+            our team is here to assist you with premium customer care.
+          </p>
 
-        <div className="contact-grid">
-          <div className="contact-card">
-            <h3>Email</h3>
-            <p>surreyexotics@gmail.com</p>
-          </div>
+          <div className="contact-grid">
+            <div className="contact-card">
+              <h3>📧 Email</h3>
+              <p>
+                <a href="mailto:surreyexotics@gmail.com">surreyexotics@gmail.com</a>
+              </p>
+            </div>
 
-          <div className="contact-card">
-            <h3>Phone</h3>
-            <p>+44 7826 456793</p>
+            <div className="contact-card">
+              <h3>📞 Phone</h3>
+              <p>
+                <a href="tel:+447826456793">+44 7826 456793</a>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* MAILING LIST */}
-      <div className="contact-section dark">
-        <h2>Join Our Private List</h2>
-        <p>Receive exclusive vehicle drops and private collection updates.</p>
+      <section className="contact-section dark">
+        <div className="contact-container">
+          <h2>Private Inventory Access</h2>
+          <p className="contact-intro">
+            Join our exclusive mailing list to receive updates on rare vehicles and private collection drops.
+          </p>
 
-        <form onSubmit={handleSubmit} className="mailing-form">
-          <input
-            type="email"
-            placeholder="Enter your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button type="submit">Subscribe</button>
-        </form>
-      </div>
+          <form onSubmit={handleSubmit} className="mailing-form">
+            <div className="form-group">
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit" className="submit-btn">
+                {submitted ? '✓ Subscribed' : 'Subscribe'}
+              </button>
+            </div>
+          </form>
+
+          {submitted && (
+            <p className="success-message">Thank you for subscribing to our private list.</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 };
