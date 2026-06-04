@@ -646,3 +646,60 @@ footer {
   align-items: center;
 }
 
+@media (max-width: 768px) {
+
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    min-height: 90px;
+    flex-wrap: nowrap !important;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  /* LEFT */
+  .header-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  /* CENTER LOGO (FORCED TRUE CENTER) */
+  .header-mobile-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* RIGHT */
+  .header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  /* IMPORTANT: prevent desktop logos showing */
+  .desktop-logos {
+    display: none !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+.phone-icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+
