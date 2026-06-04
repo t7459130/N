@@ -1,43 +1,48 @@
+// pages/api/vehicle-lookup.js
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Use GET" });
-  }
-
   const { plate } = req.query;
 
   if (!plate) {
-    return res.status(400).json({ error: "Plate required" });
+    return res.status(400).json({ error: 'Registration plate required' });
   }
 
-  const cleanPlate = plate.replace(/\s/g, "").toUpperCase();
-
   try {
+    const cleanPlate = plate.replace(/\s/g, '').toUpperCase();
+
+    // Free UK MOT API - no auth needed
     const response = await fetch(
-      "https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles",
+      `https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration=${cleanPlate}`,
       {
-        method: "POST",
+        method: 'GET',
         headers: {
-          "x-api-key": process.env.VES_API_KEY,
-          "Content-Type": "application/json",
+          'Accept': 'application/json',
         },
-        body: JSON.stringify({
-          registrationNumber: cleanPlate,
-        }),
       }
     );
 
     const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: data?.errors?.[0]?.detail || "Vehicle not found",
+    if (!Array.isArray(data) || data.length === 0) {
+      return res.status(404).json({ 
+        error: 'Vehicle not found' 
       });
     }
 
-    return res.status(200).json(data);
+    const vehicle = data[0];
 
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(200).json({
+      registrationNumber: vehicle.registration,
+      make: vehicle.make || 'Unknown',
+      model: vehicle.model || 'Unknown',
+      colour: vehicle.primaryColour || 'Unknown',
+      fuelType: vehicle.fuelType || 'Unknown',
+      motStatus: vehicle.motTestResult,
+      motExpiry: vehicle.expiryDate || 'N/A',
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ 
+      error: 'Unable to lookup vehicle' 
+    });
   }
 }
