@@ -2,38 +2,7 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 
 export default function SearchOverlay({ isOpen, onClose }) {
-  const [plate, setPlate] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [vehicle, setVehicle] = useState(null);
-  const [error, setError] = useState("");
-
   if (!isOpen) return null;
-
-  const searchPlate = async () => {
-    setLoading(true);
-    setError("");
-    setVehicle(null);
-
-    try {
-      const cleanPlate = plate.replace(/\s/g, "").toUpperCase();
-      
-      // Call your backend API instead
-      const response = await fetch(
-        `/api/vehicle-lookup?plate=${cleanPlate}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Vehicle not found");
-      }
-
-      const data = await response.json();
-      setVehicle(data);
-    } catch (err) {
-      setError("Vehicle not found or invalid registration. Try another number.");
-      console.error(err);
-    }
-    setLoading(false);
-  };
 
   return (
     <div className="search-overlay">
@@ -42,54 +11,20 @@ export default function SearchOverlay({ isOpen, onClose }) {
       </button>
 
       <div className="search-container">
-        <h2>UK Vehicle Lookup</h2>
-        <p className="search-subtitle">Check MOT status and vehicle details</p>
+        <h2>Vehicle Lookup</h2>
+        <p className="search-subtitle">Powered by CarQuery</p>
 
-        <div className="search-input-group">
-          <input
-            value={plate}
-            onChange={(e) => setPlate(e.target.value.toUpperCase())}
-            placeholder="e.g. AB12CDE"
-            maxLength="7"
-            onKeyPress={(e) => e.key === "Enter" && searchPlate()}
-          />
-          <button onClick={searchPlate} disabled={!plate || loading}>
-            {loading ? "Searching..." : "Search"}
-          </button>
-        </div>
-
-        {loading && <p className="status loading">Loading vehicle data...</p>}
-        {error && <p className="status error">⚠️ {error}</p>}
-
-        {vehicle && (
-          <div className="vehicle-result">
-            <h3>{vehicle.make} {vehicle.model}</h3>
-            <div className="result-grid">
-              <div className="result-item">
-                <span className="label">Registration:</span>
-                <span className="value">{vehicle.registrationNumber}</span>
-              </div>
-              <div className="result-item">
-                <span className="label">MOT Status:</span>
-                <span className={`value ${vehicle.motStatus?.toLowerCase().replace(/\s/g, '-')}`}>
-                  {vehicle.motStatus}
-                </span>
-              </div>
-              <div className="result-item">
-                <span className="label">MOT Expires:</span>
-                <span className="value">{vehicle.motExpiry}</span>
-              </div>
-              <div className="result-item">
-                <span className="label">Colour:</span>
-                <span className="value">{vehicle.colour}</span>
-              </div>
-              <div className="result-item">
-                <span className="label">Fuel Type:</span>
-                <span className="value">{vehicle.fuelType}</span>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Embed CarQuery iframe */}
+        <iframe
+          src="https://www.carquery.app/"
+          title="Vehicle Lookup"
+          style={{
+            width: '100%',
+            height: '600px',
+            border: 'none',
+            borderRadius: '8px',
+          }}
+        />
       </div>
 
       <style jsx>{`
@@ -110,7 +45,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
           border: 1px solid #2a2f4a;
           border-radius: 12px;
           padding: 40px;
-          max-width: 600px;
+          max-width: 800px;
           width: 100%;
           color: #f5f5f5;
           margin-top: 50px;
@@ -126,11 +61,6 @@ export default function SearchOverlay({ isOpen, onClose }) {
           cursor: pointer;
           font-size: 28px;
           z-index: 10000;
-          transition: color 0.3s ease;
-        }
-
-        .close-btn:hover {
-          color: #f5f5f5;
         }
 
         h2 {
@@ -142,129 +72,16 @@ export default function SearchOverlay({ isOpen, onClose }) {
 
         .search-subtitle {
           color: #b0b0b0;
-          margin-bottom: 25px;
-          font-size: 0.95rem;
-        }
-
-        .search-input-group {
-          display: flex;
-          gap: 10px;
-          margin-bottom: 25px;
-        }
-
-        input {
-          flex: 1;
-          padding: 12px 16px;
-          background: #0a0e27;
-          border: 1px solid #2a2f4a;
-          border-radius: 6px;
-          color: #f5f5f5;
-          font-size: 16px;
-          font-family: inherit;
-        }
-
-        input::placeholder {
-          color: #b0b0b0;
-        }
-
-        input:focus {
-          outline: none;
-          border-color: #c9a961;
-        }
-
-        button {
-          padding: 12px 24px;
-          background: #c9a961;
-          color: #0a0e27;
-          border: none;
-          border-radius: 6px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background 0.3s ease;
-        }
-
-        button:hover:not(:disabled) {
-          background: #d4b87a;
-        }
-
-        button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .status {
-          padding: 12px 16px;
-          border-radius: 6px;
           margin-bottom: 20px;
-          text-align: center;
-        }
-
-        .status.loading {
-          background: rgba(201, 169, 97, 0.1);
-          color: #c9a961;
-        }
-
-        .status.error {
-          background: rgba(196, 0, 0, 0.1);
-          color: #ff6b6b;
-        }
-
-        .vehicle-result {
-          background: #0a0e27;
-          padding: 20px;
-          border-radius: 8px;
-          border: 1px solid #2a2f4a;
-        }
-
-        .vehicle-result h3 {
-          color: #c9a961;
-          font-size: 1.5rem;
-          margin-bottom: 20px;
-        }
-
-        .result-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 15px;
-        }
-
-        .result-item {
-          display: flex;
-          justify-content: space-between;
-          padding: 10px 0;
-          border-bottom: 1px solid #2a2f4a;
-        }
-
-        .result-item:last-child {
-          border-bottom: none;
-        }
-
-        .label {
-          color: #b0b0b0;
-          font-weight: 500;
-        }
-
-        .value {
-          color: #f5f5f5;
-          font-weight: 600;
         }
 
         @media (max-width: 600px) {
           .search-container {
-            padding: 30px 20px;
-            margin-top: 20px;
+            padding: 20px;
           }
 
           h2 {
             font-size: 1.5rem;
-          }
-
-          .search-input-group {
-            flex-direction: column;
-          }
-
-          button {
-            width: 100%;
           }
         }
       `}</style>
