@@ -604,3 +604,45 @@ footer {
   }
 }
 
+@media (max-width: 768px) {
+  .site-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 1rem;
+    min-height: 100px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  /* IMPORTANT: prevents wrapping chaos */
+  .site-header {
+    flex-wrap: unset !important;
+  }
+}
+
+.phone-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-mobile-logo {
+  position: static; /* override old absolute behaviour */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
