@@ -58,8 +58,9 @@ export default function Layout({ children }) {
     <div className="app">
       {/* HEADER */}
       <header className="site-header">
-        {/* LEFT */}
-        <div className="header-side header-left">
+
+        {/* LEFT (DESKTOP ONLY NAV) */}
+        <div className="header-side header-left desktop-only">
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
             <span className="phone-text">+44 7826 456793</span>
@@ -69,7 +70,7 @@ export default function Layout({ children }) {
           <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        {/* CENTER - MOBILE LOGO */}
+        {/* CENTER - MOBILE LOGO ONLY */}
         <div className="header-mobile-logo">
           <img
             src={mobileLogos[currentLogoIndex]}
@@ -87,8 +88,8 @@ export default function Layout({ children }) {
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="header-side header-right">
+        {/* RIGHT (DESKTOP ONLY NAV) */}
+        <div className="header-side header-right desktop-only">
           <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
@@ -101,19 +102,11 @@ export default function Layout({ children }) {
           </button>
         </div>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE MENU (NO LINKS AT ALL) */}
         <nav
           ref={menuRef}
           className={`mobile-menu ${open ? 'open' : ''}`}
-        >
-          <Link href="/">Home</Link>
-          <Link href="/Inventory">Stock</Link>
-          <Link href="/sold">Sold</Link>
-          <Link href="/Sellyourcar">Sell</Link>
-          <Link href="/NewsAndEvents">Insights</Link>
-          <Link href="/About">About</Link>
-          <Link href="/contact">Contact</Link>
-        </nav>
+        />
       </header>
 
       {/* SEARCH OVERLAY */}
