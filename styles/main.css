@@ -546,3 +546,66 @@ footer {
     justify-content: space-between;
   }
 }
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+}
+
+.header-side {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.header-center.desktop-logos {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.header-mobile-logo {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  .site-header {
+    flex-wrap: wrap;
+  }
+
+  /* hide desktop logo strip */
+  .desktop-logos {
+    display: none !important;
+  }
+
+  /* hide clutter from left/right (this is what fixes your issue) */
+  .header-left a,
+  .header-right a {
+    display: none;
+  }
+
+  /* keep only icons + hamburger + phone if needed */
+  .header-right {
+    gap: 10px;
+  }
+
+  /* show mobile rotating logo only */
+  .header-mobile-logo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 6px 0;
+  }
+
+  .rotating-logo {
+    height: 28px;
+  }
+
+  /* optional: make menu button always visible */
+  .icon-btn {
+    display: flex;
+  }
+}
