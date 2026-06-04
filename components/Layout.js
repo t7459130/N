@@ -59,7 +59,7 @@ export default function Layout({ children }) {
       {/* HEADER */}
       <header className="site-header">
         {/* DESKTOP: LEFT */}
-        <div className="header-side header-left desktop-only">
+        <div className="header-side header-left desktop-only" style={{ display: 'none' }}>
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
             <span className="phone-text">+44 7826 456793</span>
@@ -70,7 +70,7 @@ export default function Layout({ children }) {
         </div>
 
         {/* MOBILE: LEFT (PHONE ICON ONLY) */}
-        <div className="header-mobile-left mobile-only">
+        <div className="header-mobile-left mobile-only" style={{ display: 'flex' }}>
           <a href="tel:+447826456793" className="phone">
             <FaPhone />
           </a>
@@ -86,7 +86,7 @@ export default function Layout({ children }) {
         </div>
 
         {/* CENTER LOGOS (DESKTOP ONLY) */}
-        <div className="header-center desktop-logos">
+        <div className="header-center desktop-logos" style={{ display: 'none' }}>
           <div className="logo-box">
             {desktopLogoBatches[Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length].map((logo, i) => (
               <img key={i} src={logo} alt="logo" />
@@ -95,7 +95,7 @@ export default function Layout({ children }) {
         </div>
 
         {/* DESKTOP: RIGHT */}
-        <div className="header-side header-right desktop-only">
+        <div className="header-side header-right desktop-only" style={{ display: 'none' }}>
           <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
@@ -109,7 +109,7 @@ export default function Layout({ children }) {
         </div>
 
         {/* MOBILE: RIGHT (SEARCH + MENU) */}
-        <div className="header-mobile-right mobile-only">
+        <div className="header-mobile-right mobile-only" style={{ display: 'flex' }}>
           <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>
