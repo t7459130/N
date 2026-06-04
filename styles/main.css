@@ -528,3 +528,13 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.desktop-only {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+}
