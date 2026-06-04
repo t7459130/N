@@ -710,3 +710,37 @@ footer {
     font-size: 2rem;
   }
 }
+
+/* SOLD PAGE FIX - IMAGE FITTING */
+.latest-arrivals {
+  padding: 5rem 2rem;
+}
+
+.car-listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.car-listings .car-card {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* THIS fixes the zoom issue */
+.car-listings .car-card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;   /* key fix */
+  display: block;
+}
+
+/* SOLD ribbon stays clean */
+.car-listings .car-card div {
+  pointer-events: none;
+}
