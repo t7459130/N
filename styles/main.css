@@ -613,3 +613,40 @@ footer {
   text-align: center;
   padding: 0 1rem; /* ✅ prevents edge overlap */
 }
+
+.banner-text {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.8rem; /* ✅ fixes H1/P overlap */
+
+  padding: 0 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.banner-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0; /* ❌ remove default margin */
+  line-height: 1.1; /* ✅ prevents stacking collision */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: -1px;
+}
+
+.banner-text p {
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin: 0; /* ❌ remove default margin */
+  line-height: 1.4; /* ✅ fixes overlap/stacking */
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
