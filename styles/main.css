@@ -7,12 +7,12 @@
 }
 
 :root {
-  --primary: #0a0e27;
-  --secondary: #1a1f3a;
-  --accent: #c9a961;
-  --text: #f5f5f5;
-  --text-muted: #b0b0b0;
-  --border: #2a2f4a;
+  --primary: #000000;      /* Black */
+  --secondary: #111111;    /* Soft black / charcoal */
+  --accent: #D4AF37;       /* Classic gold */
+  --text: #FFFFFF;         /* White */
+  --text-muted: #CCCCCC;   /* Light gray */
+  --border: #333333;  
 }
 
 body {
