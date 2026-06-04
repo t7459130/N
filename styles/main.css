@@ -571,6 +571,8 @@ footer {
 
 /* INVENTORY PAGE */
 
+/* INVENTORY PAGE */
+
 .inventory-page {
   max-width: 1500px;
   margin: 0 auto;
@@ -596,7 +598,7 @@ footer {
 
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 30px;
 }
 
@@ -617,12 +619,17 @@ footer {
 
 .inventory-image {
   position: relative;
+  height: 300px;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .inventory-image img {
   width: 100%;
-  height: 240px;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
   display: block;
 }
 
@@ -635,6 +642,7 @@ footer {
   padding: 8px 14px;
   border-radius: 30px;
   font-weight: 600;
+  z-index: 2;
 }
 
 .inventory-info {
@@ -677,13 +685,28 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .inventory-image {
+    height: 260px;
+  }
+
   .inventory-image img {
-    height: 220px;
-    object-fit: cover;
+    object-fit: contain;
+  }
+
+  .inventory .card img {
+    height: 260px;
+    object-fit: contain;
+  }
+
+  .car-image-wrapper {
+    height: 240px;
+  }
+
+  .car-image-wrapper img {
+    object-fit: contain;
   }
 
   .inventory-header h1 {
     font-size: 2rem;
   }
-
 }
