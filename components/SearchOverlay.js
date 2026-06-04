@@ -17,15 +17,9 @@ export default function SearchOverlay({ isOpen, onClose }) {
     try {
       const cleanPlate = plate.replace(/\s/g, "").toUpperCase();
       
-      // Using public DVLA MOT API endpoint
+      // Call your backend API instead
       const response = await fetch(
-        `https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration=${cleanPlate}`,
-        {
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-          },
-        }
+        `/api/vehicle-lookup?plate=${cleanPlate}`
       );
 
       if (!response.ok) {
@@ -33,22 +27,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
       }
 
       const data = await response.json();
-
-      if (data && data.length > 0) {
-        const latestMot = data[0];
-        setVehicle({
-          registrationNumber: latestMot.registration,
-          make: latestMot.make || "Unknown",
-          model: latestMot.model || "Unknown",
-          colour: latestMot.primaryColour || "Unknown",
-          fuelType: latestMot.fuelType || "Unknown",
-          motStatus: latestMot.motTestResult || "Unknown",
-          motExpiry: latestMot.expiryDate || "N/A",
-          year: latestMot.registeredKeeper || "N/A",
-        });
-      } else {
-        setError("No vehicle found. Check your registration number.");
-      }
+      setVehicle(data);
     } catch (err) {
       setError("Vehicle not found or invalid registration. Try another number.");
       console.error(err);
