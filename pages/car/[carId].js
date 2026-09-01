@@ -11,7 +11,7 @@ function CarDetail({ cars }) {
   // Wait for router.query to be defined on first render
   if (!carId) return <p>Loading...</p>;
 
-  const car = cars?.find((c) => String(c.id) === carId);
+  const car = cars?.find((c) => String(c._id) === carId);
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
