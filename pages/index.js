@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import Link from "next/link";
+import ThumbnailStrip from "../components/ThumbnailStrip";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
@@ -10,6 +11,13 @@ export default function Home() {
 
   const [soldImages, setSoldImages] = useState([]);
   const [soldIndex, setSoldIndex] = useState(0);
+
+  // Tracks which image is being previewed per car (keyed by car id),
+  // so scrolling the thumbnail strip on one card doesn't affect others.
+  const [previewIndices, setPreviewIndices] = useState({});
+  const getPreviewIndex = (carId) => previewIndices[carId] || 0;
+  const setPreviewIndex = (carId, index) =>
+    setPreviewIndices((prev) => ({ ...prev, [carId]: index }));
 
   /* =========================
      LOAD CARS
@@ -161,7 +169,7 @@ export default function Home() {
 
                 <div className="car-image-wrapper">
                   <img
-                    src={car.images?.[0]}
+                    src={car.images?.[getPreviewIndex(car._id)] || car.images?.[0]}
                     alt={`${car.make} ${car.model}`}
                   />
 
@@ -184,6 +192,16 @@ export default function Home() {
                   <button className="view-btn">
                     View Details
                   </button>
+                </div>
+
+                <div style={{ padding: '0 1.5rem 1.5rem' }}>
+                  <ThumbnailStrip
+                    images={car.images}
+                    currentIndex={getPreviewIndex(car._id)}
+                    onSelect={(index) => setPreviewIndex(car._id, index)}
+                    visibleCount={6}
+                    theme="dark"
+                  />
                 </div>
 
               </Link>

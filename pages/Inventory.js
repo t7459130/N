@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Link from 'next/link';
+import ThumbnailStrip from '../components/ThumbnailStrip';
 
 export default function Inventory() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Tracks which image is being previewed per car (keyed by car id),
+  // so scrolling the thumbnail strip on one card doesn't affect others.
+  const [previewIndices, setPreviewIndices] = useState({});
+
+  const getPreviewIndex = (carId) => previewIndices[carId] || 0;
+  const setPreviewIndex = (carId, index) =>
+    setPreviewIndices((prev) => ({ ...prev, [carId]: index }));
 
   useEffect(() => {
     fetch('/api/cars')
@@ -37,10 +46,10 @@ export default function Inventory() {
           <div className="inventory-grid">
             {cars.map(car => (
               <Link key={car._id} href={`/car/${car._id}`} className="inventory-card">
-                
+
                 <div className="inventory-image">
                   <img
-                    src={car.images?.[0]}
+                    src={car.images?.[getPreviewIndex(car._id)] || car.images?.[0]}
                     alt={`${car.make} ${car.model}`}
                   />
                   <div className="inventory-price">
@@ -60,6 +69,16 @@ export default function Inventory() {
                   </div>
 
                   <button className="view-details">View Details</button>
+                </div>
+
+                <div style={{ padding: '0 12px 12px' }}>
+                  <ThumbnailStrip
+                    images={car.images}
+                    currentIndex={getPreviewIndex(car._id)}
+                    onSelect={(index) => setPreviewIndex(car._id, index)}
+                    visibleCount={6}
+                    theme="light"
+                  />
                 </div>
               </Link>
             ))}
