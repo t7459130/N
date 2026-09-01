@@ -23,27 +23,35 @@ export default function ThumbnailStrip({
 
   const maxStart = Math.max(0, images.length - visibleCount);
 
+  const ensureVisible = (index) => {
+    setStart((s) => {
+      if (index < s) return index;
+      if (index > s + visibleCount - 1) return Math.max(0, index - visibleCount + 1);
+      return s;
+    });
+  };
+
   const shiftLeft = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setStart((s) => Math.max(0, s - 1));
+    const nextIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+    onSelect(nextIndex);
+    ensureVisible(nextIndex);
   };
 
   const shiftRight = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setStart((s) => Math.min(maxStart, s + 1));
+    const nextIndex = (currentIndex + 1) % images.length;
+    onSelect(nextIndex);
+    ensureVisible(nextIndex);
   };
 
   const handleSelect = (index) => (e) => {
     e.preventDefault();
     e.stopPropagation();
     onSelect(index);
-    if (index < start) {
-      setStart(index);
-    } else if (index > start + visibleCount - 1) {
-      setStart(Math.max(0, index - visibleCount + 1));
-    }
+    ensureVisible(index);
   };
 
   const visible = images.slice(start, start + visibleCount);
@@ -57,8 +65,7 @@ export default function ThumbnailStrip({
         type="button"
         className="thumb-arrow"
         onClick={shiftLeft}
-        disabled={start === 0}
-        aria-label="Scroll thumbnails left"
+        aria-label="Previous image"
       >
         <FaChevronLeft size={12} />
       </button>
@@ -82,8 +89,7 @@ export default function ThumbnailStrip({
         type="button"
         className="thumb-arrow"
         onClick={shiftRight}
-        disabled={start >= maxStart}
-        aria-label="Scroll thumbnails right"
+        aria-label="Next image"
       >
         <FaChevronRight size={12} />
       </button>
