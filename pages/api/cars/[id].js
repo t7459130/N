@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 
 export default async function handler(req, res) {
   const client = await clientPromise;
-  const db = client.db('your_db_name'); // change this!
+  const db = client.db(); // uses the default database from MONGODB_URI, same as /api/cars
 
   const { id } = req.query;
 

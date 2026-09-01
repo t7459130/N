@@ -1,21 +1,37 @@
 // pages/car/[carId].js
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import ThumbnailStrip from '../../components/ThumbnailStrip';
 
-function CarDetail({ cars }) {
+function CarDetail() {
   const router = useRouter();
   const { carId } = router.query;
 
-  // Wait for router.query to be defined on first render
-  if (!carId) return <p>Loading...</p>;
-
-  const car = cars?.find((c) => String(c._id) === carId);
-
+  const [car, setCar] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (!car) return <p>Car not found</p>;
+  useEffect(() => {
+    if (!carId) return; // router.query isn't populated yet on first render
+
+    setLoading(true);
+    setNotFound(false);
+    setCurrentIndex(0);
+
+    fetch(`/api/cars/${carId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('not found');
+        return res.json();
+      })
+      .then((data) => setCar(data))
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
+  }, [carId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (notFound || !car) return <p>Car not found</p>;
 
   const nextImage = () => {
     setCurrentIndex((prev) => (prev + 1) % car.images.length);
