@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import Head from 'next/head';
 import Layout from '../components/Layout';
 import Link from 'next/link';
 
@@ -81,6 +82,14 @@ export default function Inventory() {
 
   return (
     <Layout>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       <div className="stock-page">
         <div className="stock-header">
           <h1>Current Stock</h1>
@@ -166,7 +175,7 @@ export default function Inventory() {
                 )}
               </div>
             ) : (
-              <div className="stock-grid">
+              <div className="stock-list">
                 {filteredCars.map((car) => (
                   <Link key={car._id} href={`/car/${car._id}`} className="stock-card">
                     <div className="stock-image">
@@ -177,26 +186,28 @@ export default function Inventory() {
                     </div>
 
                     <div className="stock-body">
-                      <h3>
-                        {car.make} {car.model}
-                      </h3>
+                      <div className="stock-body-top">
+                        <h3>
+                          {car.make} {car.model}
+                        </h3>
 
-                      <p className="stock-price">£{Number(car.price).toLocaleString()}</p>
+                        <p className="stock-price">£{Number(car.price).toLocaleString()}</p>
 
-                      <div className="stock-meta">
-                        <div className="meta-item">
-                          <span className="meta-label">Year</span>
-                          <span className="meta-value">{car.year || '—'}</span>
-                        </div>
-                        <div className="meta-item">
-                          <span className="meta-label">Colour</span>
-                          <span className="meta-value">{car.colour || '—'}</span>
-                        </div>
-                        <div className="meta-item">
-                          <span className="meta-label">Mileage</span>
-                          <span className="meta-value">
-                            {car.mileage != null ? Number(car.mileage).toLocaleString() : '—'}
-                          </span>
+                        <div className="stock-meta">
+                          <div className="meta-item">
+                            <span className="meta-label">Year</span>
+                            <span className="meta-value">{car.year || '—'}</span>
+                          </div>
+                          <div className="meta-item">
+                            <span className="meta-label">Colour</span>
+                            <span className="meta-value">{car.colour || '—'}</span>
+                          </div>
+                          <div className="meta-item">
+                            <span className="meta-label">Mileage</span>
+                            <span className="meta-value">
+                              {car.mileage != null ? Number(car.mileage).toLocaleString() : '—'}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
@@ -215,6 +226,7 @@ export default function Inventory() {
           background: #ffffff;
           color: #1a1a1a;
           padding: 2.5rem 2rem 4rem;
+          font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         .stock-header {
@@ -367,17 +379,17 @@ export default function Inventory() {
           background: #fff;
         }
 
-        .stock-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-          gap: 28px;
+        .stock-list {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
         }
 
         .stock-card {
           text-decoration: none;
           color: inherit;
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           border: 1px solid #eee;
           border-radius: 6px;
           overflow: hidden;
@@ -390,7 +402,8 @@ export default function Inventory() {
         }
 
         .stock-image {
-          width: 100%;
+          width: 380px;
+          flex-shrink: 0;
           aspect-ratio: 370 / 250;
           background: #f4f4f4;
           overflow: hidden;
@@ -404,29 +417,33 @@ export default function Inventory() {
         }
 
         .stock-body {
-          padding: 1.1rem 1.2rem 1.3rem;
+          flex: 1;
+          padding: 1.5rem 2rem;
           display: flex;
-          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+        }
+
+        .stock-body-top {
+          flex: 1;
         }
 
         .stock-body h3 {
-          font-size: 1rem;
-          font-weight: 700;
+          font-size: 1.15rem;
+          font-weight: 600;
           margin: 0 0 0.3rem;
         }
 
         .stock-price {
-          font-size: 1.15rem;
+          font-size: 1.3rem;
           font-weight: 700;
           margin: 0 0 1rem;
         }
 
         .stock-meta {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 0.5rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid #eee;
+          display: flex;
+          gap: 2.5rem;
         }
 
         .meta-item {
@@ -443,16 +460,14 @@ export default function Inventory() {
         }
 
         .meta-value {
-          font-size: 0.85rem;
-          font-weight: 600;
+          font-size: 0.9rem;
+          font-weight: 500;
           color: #1a1a1a;
         }
 
         .stock-cta {
-          margin-top: 1rem;
-          display: block;
-          text-align: center;
-          padding: 0.65rem;
+          flex-shrink: 0;
+          padding: 0.75rem 1.75rem;
           border: 1px solid #111;
           border-radius: 4px;
           font-size: 0.82rem;
@@ -460,6 +475,7 @@ export default function Inventory() {
           letter-spacing: 0.5px;
           text-transform: uppercase;
           color: #111;
+          white-space: nowrap;
           transition: background 0.2s ease, color 0.2s ease;
         }
 
@@ -483,6 +499,24 @@ export default function Inventory() {
           .stock-sidebar {
             position: static;
           }
+
+          .stock-card {
+            flex-direction: column;
+          }
+
+          .stock-image {
+            width: 100%;
+          }
+
+          .stock-body {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .stock-cta {
+            width: 100%;
+            text-align: center;
+          }
         }
 
         @media (max-width: 480px) {
@@ -490,8 +524,9 @@ export default function Inventory() {
             padding: 1.5rem 1rem 3rem;
           }
 
-          .stock-grid {
-            grid-template-columns: 1fr;
+          .stock-meta {
+            flex-wrap: wrap;
+            gap: 1.25rem;
           }
         }
       `}</style>
