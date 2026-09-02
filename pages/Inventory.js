@@ -178,6 +178,15 @@ export default function Inventory() {
               <div className="stock-list">
                 {filteredCars.map((car) => (
                   <Link key={car._id} href={`/car/${car._id}`} className="stock-card">
+                    <div className="card-title-row">
+                      <h3>
+                        {car.make} {car.model}
+                      </h3>
+                      <span className="card-year">{car.year}</span>
+                    </div>
+
+                    <hr className="card-divider" />
+
                     <div className="stock-image">
                       <img
                         src={car.images?.[0]}
@@ -185,33 +194,30 @@ export default function Inventory() {
                       />
                     </div>
 
-                    <div className="stock-body">
-                      <div className="stock-body-top">
-                        <h3>
-                          {car.make} {car.model}
-                        </h3>
+                    <hr className="card-divider" />
 
-                        <p className="stock-price">£{Number(car.price).toLocaleString()}</p>
-
-                        <div className="stock-meta">
-                          <div className="meta-item">
-                            <span className="meta-label">Year</span>
-                            <span className="meta-value">{car.year || '—'}</span>
-                          </div>
-                          <div className="meta-item">
-                            <span className="meta-label">Colour</span>
-                            <span className="meta-value">{car.colour || '—'}</span>
-                          </div>
-                          <div className="meta-item">
-                            <span className="meta-label">Mileage</span>
-                            <span className="meta-value">
-                              {car.mileage != null ? Number(car.mileage).toLocaleString() : '—'}
-                            </span>
-                          </div>
+                    <div className="card-footer">
+                      <div className="stock-meta">
+                        <div className="meta-item">
+                          <span className="meta-label">Year</span>
+                          <span className="meta-value">{car.year || '—'}</span>
+                        </div>
+                        <div className="meta-item">
+                          <span className="meta-label">Colour</span>
+                          <span className="meta-value">{car.colour || '—'}</span>
+                        </div>
+                        <div className="meta-item">
+                          <span className="meta-label">Mileage</span>
+                          <span className="meta-value">
+                            {car.mileage != null ? Number(car.mileage).toLocaleString() : '—'}
+                          </span>
                         </div>
                       </div>
 
-                      <span className="stock-cta">View Vehicle</span>
+                      <div className="card-footer-right">
+                        <p className="stock-price">£{Number(car.price).toLocaleString()}</p>
+                        <span className="stock-cta">View Vehicle</span>
+                      </div>
                     </div>
                   </Link>
                 ))}
@@ -382,31 +388,51 @@ export default function Inventory() {
         .stock-list {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 40px;
         }
 
         .stock-card {
           text-decoration: none;
           color: inherit;
-          display: flex;
-          flex-direction: row;
-          border: 1px solid #eee;
-          border-radius: 6px;
-          overflow: hidden;
-          transition: box-shadow 0.2s ease, transform 0.2s ease;
+          display: block;
+          transition: opacity 0.2s ease;
         }
 
         .stock-card:hover {
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-          transform: translateY(-2px);
+          opacity: 0.92;
+        }
+
+        .card-title-row {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          padding-bottom: 0.85rem;
+        }
+
+        .card-title-row h3 {
+          font-size: 1.4rem;
+          font-weight: 600;
+          margin: 0;
+          color: #1a1a1a;
+        }
+
+        .card-year {
+          font-size: 1rem;
+          color: #888;
+        }
+
+        .card-divider {
+          border: none;
+          border-top: 1px solid #ddd;
+          margin: 0;
         }
 
         .stock-image {
-          width: 380px;
-          flex-shrink: 0;
-          aspect-ratio: 370 / 250;
+          width: 100%;
+          aspect-ratio: 16 / 9;
           background: #f4f4f4;
           overflow: hidden;
+          margin: 1.25rem 0;
         }
 
         .stock-image img {
@@ -416,29 +442,13 @@ export default function Inventory() {
           display: block;
         }
 
-        .stock-body {
-          flex: 1;
-          padding: 1.5rem 2rem;
+        .card-footer {
+          padding-top: 1.1rem;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 2rem;
-        }
-
-        .stock-body-top {
-          flex: 1;
-        }
-
-        .stock-body h3 {
-          font-size: 1.15rem;
-          font-weight: 600;
-          margin: 0 0 0.3rem;
-        }
-
-        .stock-price {
-          font-size: 1.3rem;
-          font-weight: 700;
-          margin: 0 0 1rem;
+          flex-wrap: wrap;
         }
 
         .stock-meta {
@@ -453,35 +463,49 @@ export default function Inventory() {
         }
 
         .meta-label {
-          font-size: 0.68rem;
+          font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 0.5px;
           color: #999;
         }
 
         .meta-value {
-          font-size: 0.9rem;
+          font-size: 0.95rem;
           font-weight: 500;
           color: #1a1a1a;
         }
 
+        .card-footer-right {
+          display: flex;
+          align-items: center;
+          gap: 1.75rem;
+          margin-left: auto;
+        }
+
+        .stock-price {
+          font-size: 1.4rem;
+          font-weight: 700;
+          margin: 0;
+          white-space: nowrap;
+        }
+
         .stock-cta {
           flex-shrink: 0;
-          padding: 0.75rem 1.75rem;
+          padding: 0.95rem 2.5rem;
+          background: #111;
           border: 1px solid #111;
           border-radius: 4px;
-          font-size: 0.82rem;
+          font-size: 0.9rem;
           font-weight: 600;
           letter-spacing: 0.5px;
           text-transform: uppercase;
-          color: #111;
+          color: #fff;
           white-space: nowrap;
-          transition: background 0.2s ease, color 0.2s ease;
+          transition: background 0.2s ease;
         }
 
         .stock-card:hover .stock-cta {
-          background: #111;
-          color: #fff;
+          background: #333;
         }
 
         .loading,
@@ -500,22 +524,15 @@ export default function Inventory() {
             position: static;
           }
 
-          .stock-card {
-            flex-direction: column;
-          }
-
-          .stock-image {
-            width: 100%;
-          }
-
-          .stock-body {
+          .card-footer {
             flex-direction: column;
             align-items: flex-start;
           }
 
-          .stock-cta {
+          .card-footer-right {
+            margin-left: 0;
             width: 100%;
-            text-align: center;
+            justify-content: space-between;
           }
         }
 
@@ -527,6 +544,11 @@ export default function Inventory() {
           .stock-meta {
             flex-wrap: wrap;
             gap: 1.25rem;
+          }
+
+          .stock-cta {
+            width: 100%;
+            text-align: center;
           }
         }
       `}</style>
