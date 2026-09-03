@@ -237,7 +237,7 @@ body {
   padding: 0 2rem;
 }
 
-.mobile-menu a {
+.mobile-menu-links a {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -257,7 +257,7 @@ body {
   border-bottom: none;
 }
 
-.mobile-menu a:hover {
+.mobile-menu-links a:hover {
   color: var(--accent-hover);
 }
 

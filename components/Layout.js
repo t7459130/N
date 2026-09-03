@@ -125,8 +125,6 @@ export default function Layout({ children }) {
 
         {/* DESKTOP: RIGHT */}
         <div className="header-side header-right desktop-only">
-          <Link href="/sold">Sold</Link>
-          <Link href="/FinanceAndWarranty">Finance &amp; Warranty</Link>
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
