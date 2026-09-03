@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;600&display=swap');
 
 * {
   margin: 0;
@@ -9,15 +9,24 @@
 :root {
   --primary: #ffffff;
   --secondary: #ffffff;
-  --accent: #c9a961;
-  --on-accent: #000000;
+  --accent: #000000;
+  --accent-hover: #333333;
+  --on-accent: #ffffff;
   --text: #000000;
   --text-muted: #555555;
   --border: #e0e0e0;
 }
 
+/* HEADINGS - Romans International uses Montserrat, uppercase, wide tracking */
+h1, h2, h3,
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
   background: var(--primary);
   color: var(--text);
   overflow-x: hidden;
@@ -70,10 +79,12 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--accent);
+  color: var(--text);
   text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 0.9rem;
+  letter-spacing: 1px;
   transition: opacity 0.3s ease;
 }
 
@@ -88,14 +99,17 @@ body {
 .site-header a {
   color: var(--text);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
   font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   transition: color 0.3s ease;
   position: relative;
 }
 
 .site-header a:hover {
-  color: var(--accent);
+  color: var(--accent-hover);
 }
 
 .site-header a::after {
@@ -182,40 +196,112 @@ body {
 }
 
 .icon-btn:hover {
-  color: var(--accent);
+  color: var(--accent-hover);
 }
 
-/* MOBILE MENU */
+/* SEARCH ICON - pinned to the far left of the header, both breakpoints */
+.header-search-slot {
+  display: flex;
+  align-items: center;
+}
+
+/* MOBILE MENU - Romans-style: full-width panel that drops down below the
+   header, with a divided link list, a black phone bar, and social icons. */
 .mobile-menu {
   position: fixed;
   top: 0;
-  right: -100%;
-  width: 80%;
-  height: 100vh;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 100vh;
+  overflow-y: auto;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
-  padding: 6rem 2rem 2rem;
-  gap: 1.5rem;
-  transition: right 0.3s ease;
+  padding: 6.5rem 0 0;
+  gap: 0;
+  transform: translateY(-100%);
+  transition: transform 0.35s ease;
   z-index: 999;
-  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 .mobile-menu.open {
-  right: 0;
+  transform: translateY(0);
+}
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
 }
 
 .mobile-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   color: var(--text);
   text-decoration: none;
-  font-size: 1.1rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
   font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid var(--border);
   transition: color 0.3s ease;
 }
 
+.mobile-menu-links a:last-child {
+  border-bottom: none;
+}
+
 .mobile-menu a:hover {
-  color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.mobile-menu .nav-chevron {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.mobile-menu-phone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: #000000;
+  color: #ffffff;
+  padding: 1.15rem 1rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  text-decoration: none;
+  margin-top: 0.75rem;
+  transition: background 0.3s ease;
+}
+
+.mobile-menu-phone:hover {
+  background: #262626;
+}
+
+.mobile-menu-socials {
+  display: flex;
+  justify-content: center;
+  gap: 1.75rem;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.mobile-menu-socials a {
+  color: var(--text);
+  font-size: 1.05rem;
+  transition: color 0.3s ease;
+}
+
+.mobile-menu-socials a:hover {
+  color: var(--accent-hover);
 }
 
 /* HERO / BANNER */
@@ -298,7 +384,7 @@ body.home-page .site-header a::after {
 }
 
 .banner-text h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -309,7 +395,7 @@ body.home-page .site-header a::after {
 .banner-text p {
   font-size: 1.3rem;
   font-weight: 300;
-  color: var(--accent);
+  color: #ffffff;
   letter-spacing: 2px;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 }
@@ -323,7 +409,7 @@ body.home-page .site-header a::after {
 }
 
 .welcome-section h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -346,7 +432,7 @@ body.home-page .site-header a::after {
 }
 
 .sold-section h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
@@ -390,7 +476,7 @@ body.home-page .site-header a::after {
 }
 
 .section-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   text-align: center;
@@ -422,7 +508,7 @@ body.home-page .site-header a::after {
 .car-card:hover {
   border-color: var(--accent);
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(201, 169, 97, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .car-image-wrapper {
@@ -468,7 +554,7 @@ body.home-page .site-header a::after {
 }
 
 .car-info h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--text);
@@ -502,7 +588,7 @@ body.home-page .site-header a::after {
 }
 
 .view-btn:hover {
-  background: #d4b87a;
+  background: var(--accent-hover);
 }
 
 /* PAGE STYLING */
@@ -510,6 +596,7 @@ body.home-page .site-header a::after {
 .news-page,
 .services-page,
 .sell-page,
+.finance-page,
 .contact-page {
   padding: 0;
 }
@@ -517,7 +604,8 @@ body.home-page .site-header a::after {
 .inventory-header,
 .news-header,
 .services-header,
-.sell-header {
+.sell-header,
+.finance-header {
   padding: 3rem 2rem;
   background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   border-bottom: 1px solid var(--border);
@@ -527,8 +615,9 @@ body.home-page .site-header a::after {
 .inventory-header h1,
 .news-header h1,
 .services-header h1,
-.sell-header h1 {
-  font-family: 'Playfair Display', serif;
+.sell-header h1,
+.finance-header h1 {
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--accent);
@@ -538,7 +627,8 @@ body.home-page .site-header a::after {
 .inventory-header p,
 .news-header p,
 .services-header p,
-.sell-header p {
+.sell-header p,
+.finance-header p {
   color: var(--text-muted);
   font-size: 1rem;
 }
@@ -568,7 +658,7 @@ body.home-page .site-header a::after {
 .inventory-card:hover {
   border-color: var(--accent);
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(201, 169, 97, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .inventory-image {
@@ -608,7 +698,7 @@ body.home-page .site-header a::after {
 }
 
 .inventory-info h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -641,7 +731,7 @@ body.home-page .site-header a::after {
 }
 
 .view-details:hover {
-  background: #d4b87a;
+  background: var(--accent-hover);
 }
 
 .loading,
@@ -677,7 +767,7 @@ body.home-page .site-header a::after {
 
 .event-card:hover {
   border-color: var(--accent);
-  box-shadow: 0 5px 20px rgba(201, 169, 97, 0.1);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
 
 .event-date {
@@ -694,7 +784,7 @@ body.home-page .site-header a::after {
 }
 
 .event-content h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -739,7 +829,7 @@ body.home-page .site-header a::after {
 .service-card:hover {
   border-color: var(--accent);
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(201, 169, 97, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .service-icon {
@@ -748,7 +838,7 @@ body.home-page .site-header a::after {
 }
 
 .service-card h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--accent);
@@ -788,10 +878,10 @@ body.home-page .site-header a::after {
 }
 
 .contact-hero h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--accent);
+  color: #ffffff;
   margin-bottom: 1rem;
 }
 
@@ -816,7 +906,7 @@ body.home-page .site-header a::after {
 }
 
 .contact-section h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: var(--accent);
@@ -846,7 +936,7 @@ body.home-page .site-header a::after {
 }
 
 .contact-card h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--accent);
@@ -906,7 +996,7 @@ body.home-page .site-header a::after {
 }
 
 .submit-btn:hover {
-  background: #d4b87a;
+  background: var(--accent-hover);
 }
 
 .success-message {
@@ -951,7 +1041,7 @@ body.home-page .site-header a::after {
 }
 
 .form-section h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--accent);
@@ -1020,7 +1110,293 @@ body.home-page .site-header a::after {
 }
 
 .submit-button:hover {
-  background: #d4b87a;
+  background: var(--accent-hover);
+}
+
+/* ========================================
+   FINANCE & WARRANTY PAGE
+======================================== */
+.finance-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.finance-intro {
+  max-width: 800px;
+  margin: 0 auto 3.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.finance-block + .finance-block {
+  margin-top: 4.5rem;
+}
+
+.finance-block-heading {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.finance-block-heading h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.finance-block-heading p {
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.finance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.finance-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2.25rem 2rem;
+  transition: all 0.3s ease;
+}
+
+.finance-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.finance-card.featured {
+  border-color: #111;
+  border-width: 2px;
+}
+
+.finance-card .featured-badge {
+  position: absolute;
+  top: -0.9rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.finance-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.finance-card .plan-tagline {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.finance-card .plan-example {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 1.25rem 0;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.finance-card .plan-example .amount {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.finance-card .plan-example .period {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.finance-card .plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+  flex: 1;
+}
+
+.finance-card .plan-features li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.finance-card .plan-features li::before {
+  content: '—';
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.finance-card .plan-cta {
+  align-self: flex-start;
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 0.85rem 2rem;
+  border-radius: 2px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.finance-card .plan-cta:hover {
+  background: #333;
+}
+
+.finance-representative-example {
+  margin-top: 2.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.finance-representative-example strong {
+  color: var(--text);
+}
+
+.warranty-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.warranty-card {
+  text-align: center;
+  padding: 2.5rem 2rem;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.warranty-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.warranty-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.warranty-card .warranty-duration {
+  display: inline-block;
+  background: #111;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  margin-bottom: 1.25rem;
+}
+
+.warranty-card p.warranty-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.warranty-card .plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-align: left;
+}
+
+.warranty-card .plan-features li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.warranty-card .plan-features li::before {
+  content: '—';
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.finance-faq {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.finance-faq-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.finance-faq-item h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.6rem;
+}
+
+.finance-faq-item p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .finance-container {
+    padding: 2.5rem 1rem;
+  }
+
+  .finance-block + .finance-block {
+    margin-top: 3rem;
+  }
 }
 
 /* LUXURY STYLING - About Page */
@@ -1059,10 +1435,10 @@ body.home-page .site-header a::after {
 }
 
 .lux-hero-content h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--accent);
+  color: #ffffff;
   margin-bottom: 1rem;
 }
 
@@ -1089,7 +1465,7 @@ body.home-page .site-header a::after {
 }
 
 .lux-section h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: var(--accent);
@@ -1110,7 +1486,7 @@ body.home-page .site-header a::after {
 }
 
 .testimonials h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--accent);
@@ -1136,7 +1512,7 @@ body.home-page .site-header a::after {
 
 .testimonial-card:hover {
   border-color: var(--accent);
-  box-shadow: 0 5px 20px rgba(201, 169, 97, 0.1);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
 
 .testimonial-card .quote {
@@ -1221,7 +1597,8 @@ footer {
   .inventory-header,
   .news-header,
   .services-header,
-  .sell-header {
+  .sell-header,
+  .finance-header {
     padding: 2rem 1rem;
   }
 
@@ -1313,7 +1690,7 @@ footer {
   background: #ffffff;
   color: #1a1a1a;
   padding: 2.5rem 2rem 4rem;
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .stock-layout {
