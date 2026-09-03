@@ -156,7 +156,7 @@ export default function Layout({ children }) {
             <Link href="/Inventory" onClick={() => setOpen(false)}>Current Stock</Link>
             <Link href="/Sellyourcar" onClick={() => setOpen(false)}>Sell Your Car</Link>
             <Link href="/sold" onClick={() => setOpen(false)}>Sold</Link>
-            <Link href="/FinanceAndWarranty" onClick={() => setOpen(false)}>Finance &amp; Warranty</Link>
+            <Link href="/Financeandwarranty" onClick={() => setOpen(false)}>Finance &amp; Warranty</Link>
             <Link href="/NewsAndEvents" onClick={() => setOpen(false)}>Insights</Link>
             <Link href="/About" onClick={() => setOpen(false)}>
               About Us
