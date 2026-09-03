@@ -389,7 +389,7 @@ export default function Inventory() {
         }
 
         .stock-image {
-          flex: 0 0 400px;
+          flex: 0 0 260px;
           aspect-ratio: 4 / 3;
           background: #f5f5f5;
           overflow: hidden;
@@ -518,6 +518,7 @@ export default function Inventory() {
           .stock-image {
             flex: 0 0 auto;
             width: 100%;
+            aspect-ratio: 16 / 9;
           }
         }
 

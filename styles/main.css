@@ -236,6 +236,13 @@ body.home-page .banner {
   min-height: 100vh;
 }
 
+@media (max-width: 768px) {
+  body.home-page .banner {
+    height: 70vh;
+    min-height: 500px;
+  }
+}
+
 body.home-page .site-header {
   position: absolute;
   top: 0;
