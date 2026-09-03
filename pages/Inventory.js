@@ -513,12 +513,17 @@ export default function Inventory() {
 
           .stock-row {
             flex-direction: column;
+            align-items: stretch;
           }
 
           .stock-image {
             flex: 0 0 auto;
             width: 100%;
             aspect-ratio: 16 / 9;
+          }
+
+          .stock-info {
+            width: 100%;
           }
         }
 
@@ -532,12 +537,19 @@ export default function Inventory() {
             gap: 0.6rem 0;
           }
 
+          .stock-row {
+            padding: 1.75rem 0 2.25rem;
+          }
+
           .spec-row-cta {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            gap: 1rem;
+            margin-top: 0.25rem;
           }
 
           .stock-cta {
+            display: block;
             width: 100%;
             text-align: center;
           }
