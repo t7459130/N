@@ -60,21 +60,13 @@ export default function Layout({ children }) {
       <header className="site-header">
         {/* DESKTOP: LEFT */}
         <div className="header-side header-left desktop-only">
-          <a href="tel:+447826456793" className="phone">
-            <FaPhone />
-            <span className="phone-text">+44 7826 456793</span>
-          </a>
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
         </div>
 
-        {/* MOBILE: LEFT (PHONE ICON ONLY) */}
-        <div className="header-mobile-left mobile-only">
-          <a href="tel:+447826456793" className="phone">
-            <FaPhone />
-          </a>
-        </div>
+        {/* MOBILE: LEFT (empty now that the phone moved to the right) */}
+        <div className="header-mobile-left mobile-only" />
 
         {/* CENTER - MOBILE LOGO */}
         <div className="header-mobile-logo">
@@ -103,13 +95,19 @@ export default function Layout({ children }) {
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
+          <a href="tel:+447826456793" className="icon-btn phone-icon-only" aria-label="Call us">
+            <FaPhone />
+          </a>
           <button className="icon-btn" onClick={() => setOpen(!open)}>
             {open ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        {/* MOBILE: RIGHT (SEARCH + MENU) */}
+        {/* MOBILE: RIGHT (PHONE + SEARCH + MENU) */}
         <div className="header-mobile-right mobile-only">
+          <a href="tel:+447826456793" className="icon-btn phone-icon-only" aria-label="Call us">
+            <FaPhone />
+          </a>
           <button className="icon-btn" onClick={() => setSearchOpen(true)}>
             <FaSearch />
           </button>

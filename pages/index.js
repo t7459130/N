@@ -19,6 +19,13 @@ export default function Home() {
   const setPreviewIndex = (carId, index) =>
     setPreviewIndices((prev) => ({ ...prev, [carId]: index }));
 
+  // Marks <body> so the transparent, full-screen hero header (styled in
+  // main.css under `body.home-page`) only applies on this page.
+  useEffect(() => {
+    document.body.classList.add('home-page');
+    return () => document.body.classList.remove('home-page');
+  }, []);
+
   /* =========================
      LOAD CARS
   ========================= */

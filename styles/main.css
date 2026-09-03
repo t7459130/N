@@ -7,12 +7,13 @@
 }
 
 :root {
-  --primary: #000000;
-  --secondary: #000000;
+  --primary: #ffffff;
+  --secondary: #ffffff;
   --accent: #c9a961;
-  --text: #f5f5f5;
-  --text-muted: #b0b0b0;
-  --border: #2a2f4a;
+  --on-accent: #000000;
+  --text: #000000;
+  --text-muted: #555555;
+  --border: #e0e0e0;
 }
 
 body {
@@ -227,6 +228,34 @@ body {
   justify-content: center;
 }
 
+/* HOMEPAGE ONLY: header merges transparently into a full-screen hero.
+   Scoped via a `home-page` class added to <body> from pages/index.js
+   so every other page keeps the normal solid header. */
+body.home-page .banner {
+  height: 100vh;
+  min-height: 100vh;
+}
+
+body.home-page .site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+body.home-page .site-header a,
+body.home-page .icon-btn {
+  color: #ffffff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+body.home-page .site-header a::after {
+  background: #ffffff;
+}
+
 .hero-img {
   position: absolute;
   top: 0;
@@ -411,7 +440,7 @@ body {
   top: 1rem;
   right: 1rem;
   background: var(--accent);
-  color: var(--primary);
+  color: var(--on-accent);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-weight: 700;
@@ -456,7 +485,7 @@ body {
 .view-btn {
   margin-top: auto;
   background: var(--accent);
-  color: var(--primary);
+  color: var(--on-accent);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
@@ -557,7 +586,7 @@ body {
   top: 1rem;
   right: 1rem;
   background: var(--accent);
-  color: var(--primary);
+  color: var(--on-accent);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-weight: 700;
@@ -595,7 +624,7 @@ body {
 .view-details {
   margin-top: auto;
   background: var(--accent);
-  color: var(--primary);
+  color: var(--on-accent);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
@@ -648,7 +677,7 @@ body {
   min-width: 100px;
   padding: 1rem;
   background: var(--accent);
-  color: var(--primary);
+  color: var(--on-accent);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -859,7 +888,7 @@ body {
 
 .submit-btn {
   background: var(--accent);
-  color: var(--primary);
+  color: var(--on-accent);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
@@ -972,7 +1001,7 @@ body {
 
 .submit-button {
   background: var(--accent);
-  color: var(--primary);
+  color: var(--on-accent);
   border: none;
   padding: 1rem 2rem;
   border-radius: 4px;
