@@ -24,22 +24,16 @@ export default function Inventory() {
       });
   }, []);
 
-  const makeCounts = useMemo(() => {
-    const counts = {};
-    cars.forEach((c) => {
-      if (!c.make) return;
-      counts[c.make] = (counts[c.make] || 0) + 1;
-    });
-    return Object.entries(counts).sort((a, b) => a[0].localeCompare(b[0]));
+  const makes = useMemo(() => {
+    const set = new Set();
+    cars.forEach((c) => c.make && set.add(c.make));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [cars]);
 
-  const bodyStyleCounts = useMemo(() => {
-    const counts = {};
-    cars.forEach((c) => {
-      if (!c.bodyStyle) return;
-      counts[c.bodyStyle] = (counts[c.bodyStyle] || 0) + 1;
-    });
-    return Object.entries(counts).sort((a, b) => a[0].localeCompare(b[0]));
+  const bodyStyles = useMemo(() => {
+    const set = new Set();
+    cars.forEach((c) => c.bodyStyle && set.add(c.bodyStyle));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [cars]);
 
   const toggleMake = (make) => {
@@ -78,7 +72,13 @@ export default function Inventory() {
     return result;
   }, [cars, selectedMakes, selectedBodyStyles, sortBy]);
 
-  const hasActiveFilters = selectedMakes.length > 0 || selectedBodyStyles.length > 0;
+  // Split into two even columns for the sidebar's two-column filter lists
+  const splitInTwo = (arr) => {
+    const mid = Math.ceil(arr.length / 2);
+    return [arr.slice(0, mid), arr.slice(mid)];
+  };
+  const [makeColA, makeColB] = splitInTwo(makes);
+  const [styleColA, styleColB] = splitInTwo(bodyStyles);
 
   return (
     <Layout>
@@ -91,58 +91,76 @@ export default function Inventory() {
         />
       </Head>
       <div className="stock-page">
-        <div className="stock-header">
-          <h1>Current Stock</h1>
-          <p>
-            {loading
-              ? 'Loading vehicles...'
-              : `${filteredCars.length} vehicle${filteredCars.length === 1 ? '' : 's'} available`}
-          </p>
-        </div>
-
         <div className="stock-layout">
           <aside className="stock-sidebar">
+            <button type="button" className="view-full-stock" onClick={clearFilters}>
+              View Full Stock List
+            </button>
+
             <div className="filter-block">
               <h3>Search By Manufacturer</h3>
-              <ul className="filter-list">
-                {makeCounts.map(([make, count]) => (
-                  <li key={make}>
-                    <button
-                      type="button"
-                      className={`filter-item${selectedMakes.includes(make) ? ' active' : ''}`}
-                      onClick={() => toggleMake(make)}
-                    >
-                      {make} <span>({count})</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {bodyStyleCounts.length > 0 && (
-              <div className="filter-block">
-                <h3>Body Style</h3>
-                <ul className="filter-checklist">
-                  {bodyStyleCounts.map(([style, count]) => (
-                    <li key={style}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={selectedBodyStyles.includes(style)}
-                          onChange={() => toggleBodyStyle(style)}
-                        />
-                        {style} <span>({count})</span>
-                      </label>
+              <div className="filter-columns">
+                <ul className="filter-list">
+                  {makeColA.map((make) => (
+                    <li key={make}>
+                      <button
+                        type="button"
+                        className={`filter-item${selectedMakes.includes(make) ? ' active' : ''}`}
+                        onClick={() => toggleMake(make)}
+                      >
+                        {make}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <ul className="filter-list">
+                  {makeColB.map((make) => (
+                    <li key={make}>
+                      <button
+                        type="button"
+                        className={`filter-item${selectedMakes.includes(make) ? ' active' : ''}`}
+                        onClick={() => toggleMake(make)}
+                      >
+                        {make}
+                      </button>
                     </li>
                   ))}
                 </ul>
               </div>
-            )}
+            </div>
 
-            {hasActiveFilters && (
-              <button type="button" className="clear-filters" onClick={clearFilters}>
-                Clear Filters
-              </button>
+            {bodyStyles.length > 0 && (
+              <div className="filter-block">
+                <h3>Search By Bodystyle</h3>
+                <div className="filter-columns">
+                  <ul className="filter-list">
+                    {styleColA.map((style) => (
+                      <li key={style}>
+                        <button
+                          type="button"
+                          className={`filter-item${selectedBodyStyles.includes(style) ? ' active' : ''}`}
+                          onClick={() => toggleBodyStyle(style)}
+                        >
+                          {style}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <ul className="filter-list">
+                    {styleColB.map((style) => (
+                      <li key={style}>
+                        <button
+                          type="button"
+                          className={`filter-item${selectedBodyStyles.includes(style) ? ' active' : ''}`}
+                          onClick={() => toggleBodyStyle(style)}
+                        >
+                          {style}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             )}
           </aside>
 
@@ -168,25 +186,14 @@ export default function Inventory() {
             ) : filteredCars.length === 0 ? (
               <div className="no-vehicles">
                 <p>No vehicles match your current filters</p>
-                {hasActiveFilters && (
-                  <button type="button" className="clear-filters inline" onClick={clearFilters}>
-                    Clear Filters
-                  </button>
-                )}
+                <button type="button" className="view-full-stock inline" onClick={clearFilters}>
+                  View Full Stock List
+                </button>
               </div>
             ) : (
               <div className="stock-list">
                 {filteredCars.map((car) => (
-                  <Link key={car._id} href={`/car/${car._id}`} className="stock-card">
-                    <div className="card-title-row">
-                      <h3>
-                        {car.make} {car.model}
-                      </h3>
-                      <span className="card-year">{car.year}</span>
-                    </div>
-
-                    <hr className="card-divider" />
-
+                  <Link key={car._id} href={`/car/${car._id}`} className="stock-row">
                     <div className="stock-image">
                       <img
                         src={car.images?.[0]}
@@ -194,29 +201,34 @@ export default function Inventory() {
                       />
                     </div>
 
-                    <hr className="card-divider" />
-
-                    <div className="card-footer">
-                      <div className="stock-meta">
-                        <div className="meta-item">
-                          <span className="meta-label">Year</span>
-                          <span className="meta-value">{car.year || '—'}</span>
-                        </div>
-                        <div className="meta-item">
-                          <span className="meta-label">Colour</span>
-                          <span className="meta-value">{car.colour || '—'}</span>
-                        </div>
-                        <div className="meta-item">
-                          <span className="meta-label">Mileage</span>
-                          <span className="meta-value">
-                            {car.mileage != null ? Number(car.mileage).toLocaleString() : '—'}
-                          </span>
-                        </div>
+                    <div className="stock-info">
+                      <div className="info-title-row">
+                        <h3>
+                          {car.make} {car.model}
+                        </h3>
+                        <span className="info-price">
+                          £{Number(car.price).toLocaleString()}
+                        </span>
                       </div>
 
-                      <div className="card-footer-right">
-                        <p className="stock-price">£{Number(car.price).toLocaleString()}</p>
-                        <span className="stock-cta">View Vehicle</span>
+                      <div className="spec-list">
+                        <div className="spec-row">
+                          <span className="spec-label">Year:</span>
+                          <span className="spec-value">{car.year || '—'}</span>
+                        </div>
+                        <div className="spec-row">
+                          <span className="spec-label">Colour:</span>
+                          <span className="spec-value">{car.colour || '—'}</span>
+                        </div>
+                        <div className="spec-row spec-row-cta">
+                          <div className="spec-row-inner">
+                            <span className="spec-label">Mileage:</span>
+                            <span className="spec-value">
+                              {car.mileage != null ? Number(car.mileage).toLocaleString() : '—'}
+                            </span>
+                          </div>
+                          <span className="stock-cta">View Vehicle</span>
+                        </div>
                       </div>
                     </div>
                   </Link>
@@ -235,24 +247,6 @@ export default function Inventory() {
           font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        .stock-header {
-          max-width: 1400px;
-          margin: 0 auto 2rem;
-        }
-
-        .stock-header h1 {
-          font-size: 2rem;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          margin: 0 0 0.35rem;
-        }
-
-        .stock-header p {
-          color: #777;
-          font-size: 0.95rem;
-          margin: 0;
-        }
-
         .stock-layout {
           max-width: 1400px;
           margin: 0 auto;
@@ -266,50 +260,74 @@ export default function Inventory() {
         .stock-sidebar {
           position: sticky;
           top: 1rem;
-          border: 1px solid #e5e5e5;
-          border-radius: 6px;
-          padding: 1.5rem;
+        }
+
+        .view-full-stock {
+          display: block;
+          width: 100%;
+          background: none;
+          border: 1px solid #111;
+          border-radius: 2px;
+          padding: 0.9rem 1rem;
+          font-size: 0.82rem;
+          font-weight: 600;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          color: #111;
+          cursor: pointer;
+          margin-bottom: 2rem;
+          transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .view-full-stock:hover {
+          background: #111;
+          color: #fff;
+        }
+
+        .view-full-stock.inline {
+          width: auto;
+          display: inline-block;
+          margin: 1rem 0 0;
+          padding: 0.75rem 1.75rem;
         }
 
         .filter-block + .filter-block {
-          margin-top: 1.75rem;
-          padding-top: 1.75rem;
-          border-top: 1px solid #eee;
+          margin-top: 2rem;
         }
 
         .filter-block h3 {
-          font-size: 0.75rem;
+          font-size: 0.95rem;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 1px;
-          color: #999;
-          margin: 0 0 0.9rem;
+          letter-spacing: 0.5px;
+          color: #111;
+          margin: 0 0 1rem;
         }
 
-        .filter-list,
-        .filter-checklist {
+        .filter-columns {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0 0.5rem;
+        }
+
+        .filter-list {
           list-style: none;
           margin: 0;
           padding: 0;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 0.6rem;
         }
 
         .filter-item {
           background: none;
           border: none;
           padding: 0;
-          font-size: 0.9rem;
-          color: #333;
+          font-size: 0.88rem;
+          color: #444;
           cursor: pointer;
           text-align: left;
           transition: color 0.15s ease;
-        }
-
-        .filter-item span {
-          color: #aaa;
-          font-size: 0.8rem;
         }
 
         .filter-item:hover {
@@ -319,46 +337,7 @@ export default function Inventory() {
         .filter-item.active {
           font-weight: 700;
           color: #000;
-        }
-
-        .filter-checklist label {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 0.9rem;
-          color: #333;
-          cursor: pointer;
-        }
-
-        .filter-checklist input {
-          accent-color: #000;
-        }
-
-        .filter-checklist span {
-          color: #aaa;
-          font-size: 0.8rem;
-        }
-
-        .clear-filters {
-          margin-top: 1.5rem;
-          width: 100%;
-          padding: 0.6rem;
-          background: #111;
-          color: #fff;
-          border: none;
-          border-radius: 4px;
-          font-size: 0.85rem;
-          cursor: pointer;
-        }
-
-        .clear-filters:hover {
-          background: #333;
-        }
-
-        .clear-filters.inline {
-          margin-top: 1rem;
-          width: auto;
-          padding: 0.6rem 1.5rem;
+          text-decoration: underline;
         }
 
         /* MAIN */
@@ -388,51 +367,32 @@ export default function Inventory() {
         .stock-list {
           display: flex;
           flex-direction: column;
-          gap: 40px;
         }
 
-        .stock-card {
+        .stock-row {
+          display: flex;
+          gap: 2.5rem;
+          align-items: flex-start;
+          padding: 2.5rem 0;
+          border-bottom: 1px solid #e5e5e5;
           text-decoration: none;
           color: inherit;
-          display: block;
           transition: opacity 0.2s ease;
         }
 
-        .stock-card:hover {
+        .stock-list a.stock-row:first-child {
+          padding-top: 0;
+        }
+
+        .stock-row:hover {
           opacity: 0.92;
         }
 
-        .card-title-row {
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          padding-bottom: 0.85rem;
-        }
-
-        .card-title-row h3 {
-          font-size: 1.4rem;
-          font-weight: 600;
-          margin: 0;
-          color: #1a1a1a;
-        }
-
-        .card-year {
-          font-size: 1rem;
-          color: #888;
-        }
-
-        .card-divider {
-          border: none;
-          border-top: 1px solid #ddd;
-          margin: 0;
-        }
-
         .stock-image {
-          width: 100%;
-          aspect-ratio: 16 / 9;
-          background: #f4f4f4;
+          flex: 0 0 400px;
+          aspect-ratio: 4 / 3;
+          background: #f5f5f5;
           overflow: hidden;
-          margin: 1.25rem 0;
         }
 
         .stock-image img {
@@ -442,69 +402,96 @@ export default function Inventory() {
           display: block;
         }
 
-        .card-footer {
-          padding-top: 1.1rem;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 2rem;
-          flex-wrap: wrap;
-        }
-
-        .stock-meta {
-          display: flex;
-          gap: 2.5rem;
-        }
-
-        .meta-item {
+        .stock-info {
+          flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 0.2rem;
+          min-width: 0;
         }
 
-        .meta-label {
-          font-size: 0.7rem;
+        .info-title-row {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 1rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid #ddd;
+          margin-bottom: 1.75rem;
+        }
+
+        .info-title-row h3 {
+          font-size: 1.3rem;
+          font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
-          color: #999;
-        }
-
-        .meta-value {
-          font-size: 0.95rem;
-          font-weight: 500;
+          letter-spacing: 1px;
+          margin: 0;
           color: #1a1a1a;
         }
 
-        .card-footer-right {
-          display: flex;
-          align-items: center;
-          gap: 1.75rem;
-          margin-left: auto;
+        .info-price {
+          font-size: 1rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: #333;
+          white-space: nowrap;
         }
 
-        .stock-price {
-          font-size: 1.4rem;
-          font-weight: 700;
-          margin: 0;
-          white-space: nowrap;
+        .spec-list {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+        }
+
+        .spec-row {
+          display: flex;
+          align-items: baseline;
+          gap: 0.6rem;
+        }
+
+        .spec-label {
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          font-size: 0.78rem;
+          font-weight: 600;
+          color: #999;
+          width: 80px;
+          flex-shrink: 0;
+        }
+
+        .spec-value {
+          font-size: 1rem;
+          color: #222;
+        }
+
+        .spec-row-cta {
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .spec-row-inner {
+          display: flex;
+          align-items: baseline;
+          gap: 0.6rem;
         }
 
         .stock-cta {
           flex-shrink: 0;
           padding: 0.95rem 2.5rem;
           background: #111;
-          border: 1px solid #111;
-          border-radius: 4px;
-          font-size: 0.9rem;
+          border-radius: 2px;
+          font-size: 0.85rem;
           font-weight: 600;
-          letter-spacing: 0.5px;
+          letter-spacing: 1px;
           text-transform: uppercase;
           color: #fff;
           white-space: nowrap;
           transition: background 0.2s ease;
         }
 
-        .stock-card:hover .stock-cta {
+        .stock-row:hover .stock-cta {
           background: #333;
         }
 
@@ -524,15 +511,13 @@ export default function Inventory() {
             position: static;
           }
 
-          .card-footer {
+          .stock-row {
             flex-direction: column;
-            align-items: flex-start;
           }
 
-          .card-footer-right {
-            margin-left: 0;
+          .stock-image {
+            flex: 0 0 auto;
             width: 100%;
-            justify-content: space-between;
           }
         }
 
@@ -541,9 +526,14 @@ export default function Inventory() {
             padding: 1.5rem 1rem 3rem;
           }
 
-          .stock-meta {
-            flex-wrap: wrap;
-            gap: 1.25rem;
+          .filter-columns {
+            grid-template-columns: 1fr;
+            gap: 0.6rem 0;
+          }
+
+          .spec-row-cta {
+            flex-direction: column;
+            align-items: flex-start;
           }
 
           .stock-cta {
