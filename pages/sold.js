@@ -496,7 +496,7 @@ function SoldContent() {
 
       {/* FOOTER */}
       <footer>
-        <p></p>
+        
       </footer>
     </Layout>
   );
