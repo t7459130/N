@@ -7,37 +7,40 @@ import { AdminProvider, useAdmin } from '../components/AdminContext';
    SOLD VEHICLE PROFILES
    --------------------------------------------------------------------
    /api/sold-images reads every photo in public/header and returns them
-   as a flat list, naturally sorted by filename (IMG_2 before IMG_10),
-   with no car data attached. These profiles were written by looking at
-   the actual photos you sent us and group them back into the individual
-   cars they show:
+   as a flat list of URLs, with no car data attached. Every photo in that
+   folder is a real camera file named IMG_<number>.<ext> (some with a
+   " - Copy" or " (1)" suffix from duplicate saves) — the number itself is
+   sequential from the camera roll, so instead of assuming a fixed photo
+   COUNT per car and slicing the array by position (fragile: any stray,
+   missing, or duplicate file anywhere in the folder shifts every position
+   after it, and silently mixes cars together), each car below is defined
+   by the actual IMG-number RANGE its photos fall in. Every photo is bucketed
+   into whichever car's range contains its number, wherever it happens to
+   land in the array. This only breaks if a photo's number itself falls
+   outside every listed range (it lands in "Recently Sold" as a catch-all)
+   or two cars' number ranges genuinely overlap (they don't, below).
 
-      1. Mercedes-Benz 350 SL (R107)          — 11 photos
-      2. Bentley Bentayga First Edition       — 23 photos
-      3. Mercedes-Benz SLK (R172 AMG Sport)   — 22 photos (incl. 1 badge shot)
-      4. Ferrari F40                          — 26 photos
-      5. Bentley Continental GTC              — 14 photos
-      6. Range Rover Evoque HSE               — 10 photos
-      7. BMW 1 Series M135i                   —  5 photos
-      8. Aston Martin Vanquish S              — 20 photos (incl. copies)
-      9. Mercedes-Benz SLK (second example)   — 21 photos (incl. copies)
-     10. Ferrari F40 (second example)         — 42 photos
-     11. Mercedes-Benz A-Class AMG Line       — 12 photos
-                                       Total:   206 photos
+      1. Mercedes-Benz 350 SL (R107)          — IMG_5749 to IMG_5850
+      2. Bentley Bentayga First Edition       — IMG_5875 to IMG_5941
+      3. Mercedes-Benz SLK (R172 AMG Sport)   — IMG_5945 to IMG_6362
+      4. Ferrari F40                          — IMG_6363 to IMG_6685
+      5. Bentley Continental GTC              — IMG_6687 to IMG_6770
+      6. Range Rover Evoque HSE               — IMG_6801 to IMG_6964
+      7. BMW 1 Series M135i                   — IMG_7127 to IMG_7199
+      8. Aston Martin Vanquish S              — IMG_7211 to IMG_7401
+      9. Mercedes-Benz SLK (second example)   — IMG_7511 to IMG_7552
+     10. Ferrari F40 (second example)         — IMG_7562 to IMG_7703
+     11. Mercedes-Benz A-Class AMG Line       — IMG_7779 to IMG_7862
 
-   IMPORTANT: this only groups correctly if public/header's filenames sort
-   (naturally, by name) into those same eleven contiguous blocks, in that
-   order and with those exact counts. That was true for this upload, but if
-   you add, remove, or rename photos in public/header, the counts below need
-   to be updated to match — otherwise a block boundary can land mid-car and
-   mix two cars' photos together in one panel (or split one car across two).
-   If that happens, check the actual filenames in public/header against
-   these counts before assuming something else is broken.
+   If you add a new car's photos to public/header, add a new entry below
+   with its own IMG-number range (check the actual filenames first) rather
+   than just dropping the files in — otherwise they'll fall through to the
+   generic "Recently Sold" catch-all at the end of the list.
 ========================================================================== */
 const SOLD_VEHICLES = [
   {
     id: 'mercedes-350sl',
-    count: 11,
+    range: [5749, 5850],
     make: 'Mercedes-Benz',
     model: '350 SL',
     generation: 'R107',
@@ -48,7 +51,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'bentley-bentayga-first-edition',
-    count: 23,
+    range: [5875, 5941],
     make: 'Bentley',
     model: 'Bentayga',
     generation: 'First Edition',
@@ -59,7 +62,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'mercedes-slk-amg-sport',
-    count: 22,
+    range: [5945, 6362],
     make: 'Mercedes-Benz',
     model: 'SLK',
     generation: 'R172, AMG Sport',
@@ -70,7 +73,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'ferrari-f40',
-    count: 26,
+    range: [6363, 6685],
     make: 'Ferrari',
     model: 'F40',
     generation: '',
@@ -81,7 +84,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'bentley-continental-gtc',
-    count: 14,
+    range: [6687, 6770],
     make: 'Bentley',
     model: 'Continental GTC',
     generation: 'W12',
@@ -92,7 +95,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'range-rover-evoque-hse',
-    count: 10,
+    range: [6801, 6964],
     make: 'Land Rover',
     model: 'Range Rover Evoque',
     generation: 'HSE',
@@ -103,7 +106,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'bmw-1-series-m135i',
-    count: 5,
+    range: [7127, 7199],
     make: 'BMW',
     model: '1 Series',
     generation: 'M135i',
@@ -114,7 +117,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'aston-martin-vanquish-s',
-    count: 20,
+    range: [7211, 7401],
     make: 'Aston Martin',
     model: 'Vanquish S',
     generation: '',
@@ -125,7 +128,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'mercedes-slk-second',
-    count: 21,
+    range: [7511, 7552],
     make: 'Mercedes-Benz',
     model: 'SLK',
     generation: 'R172',
@@ -136,7 +139,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'ferrari-f40-second',
-    count: 42,
+    range: [7562, 7703],
     make: 'Ferrari',
     model: 'F40',
     generation: '',
@@ -147,7 +150,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'mercedes-a-class-amg-line',
-    count: 12,
+    range: [7779, 7862],
     make: 'Mercedes-Benz',
     model: 'A-Class',
     generation: 'AMG Line',
@@ -158,21 +161,36 @@ const SOLD_VEHICLES = [
   },
 ];
 
+// Pulls the camera roll number out of a filename like "/header/IMG_7527 (1).JPG"
+// so we can bucket each photo by which car's IMG-number range it falls in,
+// instead of relying on its position in the array (see the big comment above
+// SOLD_VEHICLES for why position-based slicing was fragile).
+function extractImgNumber(url) {
+  const match = url.match(/IMG_?(\d+)/i);
+  return match ? parseInt(match[1], 10) : null;
+}
+
 function buildSoldCars(images) {
+  const used = new Set();
   const cars = [];
-  let cursor = 0;
 
   for (const profile of SOLD_VEHICLES) {
-    const carImages = images.slice(cursor, cursor + profile.count);
-    cursor += profile.count;
+    const [min, max] = profile.range;
+    const carImages = images.filter((url) => {
+      const num = extractImgNumber(url);
+      return num !== null && num >= min && num <= max;
+    });
+    carImages.forEach((img) => used.add(img));
     if (carImages.length > 0) {
       cars.push({ ...profile, images: carImages });
     }
   }
 
-  // Any photos beyond the profiles above are shown as one extra entry
+  // Any photo whose number doesn't fall inside a listed range (e.g. a newly
+  // added car nobody's added a range for yet) is shown as one extra entry
   // rather than being silently dropped, so nothing uploaded goes missing.
-  if (cursor < images.length) {
+  const leftover = images.filter((url) => !used.has(url));
+  if (leftover.length > 0) {
     cars.push({
       id: 'additional-sold',
       make: 'Recently Sold',
@@ -181,7 +199,7 @@ function buildSoldCars(images) {
       bodyStyle: '',
       colour: '',
       description: 'Delivered to a delighted client.',
-      images: images.slice(cursor),
+      images: leftover,
     });
   }
 
