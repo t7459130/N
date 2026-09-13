@@ -6,10 +6,11 @@ import { AdminProvider, useAdmin } from '../components/AdminContext';
 /* ==========================================================================
    SOLD VEHICLE PROFILES
    --------------------------------------------------------------------
-   /api/wallpaper-images returns a flat list of photo URLs with no car
-   data attached to them. These profiles were written by looking at the
-   actual photos you sent us, in upload order, and group them back into
-   the individual cars they show:
+   /api/sold-images reads every photo in public/header and returns them
+   as a flat list, naturally sorted by filename (IMG_2 before IMG_10),
+   with no car data attached. These profiles were written by looking at
+   the actual photos you sent us and group them back into the individual
+   cars they show:
 
      1. Mercedes-Benz 350 SL (R107)        — 11 photos
      2. Bentley Bentayga First Edition     — 23 photos
@@ -17,10 +18,14 @@ import { AdminProvider, useAdmin } from '../components/AdminContext';
      4. Ferrari F40                        — 26 photos
                                      Total:   82 photos
 
-   IMPORTANT: this only groups correctly if /api/wallpaper-images keeps
-   returning photos in that same order. If you add more sold photos, add
-   a new entry below (or bump a `count`) to match — otherwise the photo
-   counts will drift out of sync with the cars they belong to.
+   IMPORTANT: this only groups correctly if public/header's filenames sort
+   (naturally, by name) into those same four contiguous blocks of 11/23/22/26
+   photos, in that order. That was true for the original upload, but if you
+   add, remove, or rename photos in public/header, the counts below need to
+   be updated to match — otherwise a block boundary can land mid-car and mix
+   two cars' photos together in one panel (or split one car across two).
+   If that happens, check the actual filenames in public/header against
+   these counts before assuming something else is broken.
 ========================================================================== */
 const SOLD_VEHICLES = [
   {
@@ -118,9 +123,11 @@ function SoldContent() {
   const setPreviewIndex = (carId, index) =>
     setPreviewIndices((prev) => ({ ...prev, [carId]: index }));
 
-  // Load images
+  // Load images — from the dedicated sold-photos endpoint (public/header),
+  // NOT /api/wallpaper-images, which serves the homepage hero carousel from
+  // a different folder and was showing unrelated photos here.
   useEffect(() => {
-    fetch('/api/wallpaper-images')
+    fetch('/api/sold-images')
       .then((res) => res.json())
       .then((data) => setImages(Array.isArray(data) ? data : []))
       .catch(() => setImages([]));
