@@ -1151,8 +1151,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   max-width: 1300px;
   margin: 0 auto;
   padding: 3rem 2rem 5rem;
-  background: #ffffff;
-  color: var(--text);
+  background: #ffffff !important;
+  color: var(--text) !important;
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 3rem;
@@ -1161,7 +1161,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .car-image-viewer {
   position: relative;
-  background: #f5f5f5;
+  background: #f5f5f5 !important;
   overflow: hidden;
   border-radius: 4px;
 }
@@ -1182,8 +1182,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   height: 48px;
   border-radius: 50%;
   border: none;
-  background: rgba(0, 0, 0, 0.55);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.55) !important;
+  color: #ffffff !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1193,7 +1193,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 }
 
 .nav-arrow:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.8) !important;
 }
 
 .nav-arrow.left {
@@ -1205,8 +1205,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 }
 
 .car-details-block {
-  background: #ffffff;
-  color: var(--text);
+  background: #ffffff !important;
+  color: var(--text) !important;
 }
 
 .car-details-block h2 {
@@ -1218,6 +1218,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   margin-bottom: 1.5rem;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--border);
+  color: var(--text) !important;
 }
 
 .car-details-block p {
@@ -1228,7 +1229,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   margin: 0;
   border-bottom: 1px solid var(--border);
   font-size: 0.95rem;
-  color: var(--text);
+  color: var(--text) !important;
+  background: transparent !important;
 }
 
 .car-details-block p strong {
@@ -1236,7 +1238,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   letter-spacing: 1px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-muted) !important;
 }
 
 .car-details-block .description {
@@ -1250,13 +1252,14 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 0.75rem;
+  color: var(--text) !important;
 }
 
 .car-details-block .description p {
   display: block;
   border-bottom: none;
   padding: 0;
-  color: var(--text-muted);
+  color: var(--text-muted) !important;
   line-height: 1.8;
 }
 
@@ -1974,7 +1977,7 @@ footer {
   flex-direction: column;
 }
 
-a.stock-row {
+.stock-row {
   display: flex;
   gap: 2.5rem;
   align-items: flex-start;
@@ -1985,29 +1988,30 @@ a.stock-row {
   transition: opacity 0.2s ease;
 }
 
-.stock-list a.stock-row:first-child {
+.stock-list .stock-row:first-child {
   padding-top: 0;
 }
 
-a.stock-row:hover {
+.stock-row:hover {
   opacity: 0.92;
 }
 
-a.stock-row .stock-image {
+.stock-row .stock-image {
+  position: relative;
   flex: 0 0 260px;
   aspect-ratio: 4 / 3;
   background: #f5f5f5;
   overflow: hidden;
 }
 
-a.stock-row .stock-image img {
+.stock-row .stock-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-a.stock-row .stock-info {
+.stock-row .stock-info {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -2096,7 +2100,7 @@ a.stock-row .stock-info {
   transition: background 0.2s ease;
 }
 
-a.stock-row:hover .stock-cta {
+.stock-row:hover .stock-cta {
   background: #333;
 }
 
@@ -2105,6 +2109,50 @@ a.stock-row:hover .stock-cta {
   padding: 60px 0;
   text-align: center;
   color: #777;
+}
+
+/* SOLD PAGE - reuses the .stock-row panel layout above, one panel per
+   sold vehicle, with a strip of that car's other photos underneath. */
+.sold-row .stock-info {
+  gap: 1.25rem;
+}
+
+.sold-thumbs {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.sold-thumb {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 48px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 2px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.sold-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.sold-thumb:hover {
+  opacity: 0.9;
+}
+
+.sold-thumb.active {
+  opacity: 1;
+  border-color: #111;
 }
 
 @media (max-width: 900px) {
@@ -2116,18 +2164,18 @@ a.stock-row:hover .stock-cta {
     position: static;
   }
 
-  a.stock-row {
+  .stock-row {
     flex-direction: column;
     align-items: stretch;
   }
 
-  a.stock-row .stock-image {
+  .stock-row .stock-image {
     flex: 0 0 auto;
     width: 100%;
     aspect-ratio: 16 / 9;
   }
 
-  a.stock-row .stock-info {
+  .stock-row .stock-info {
     width: 100%;
   }
 }
@@ -2142,7 +2190,7 @@ a.stock-row:hover .stock-cta {
     gap: 0.6rem 0;
   }
 
-  a.stock-row {
+  .stock-row {
     padding: 1.75rem 0 2.25rem;
   }
 
