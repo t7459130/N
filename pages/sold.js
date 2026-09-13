@@ -12,18 +12,25 @@ import { AdminProvider, useAdmin } from '../components/AdminContext';
    the actual photos you sent us and group them back into the individual
    cars they show:
 
-     1. Mercedes-Benz 350 SL (R107)        — 11 photos
-     2. Bentley Bentayga First Edition     — 23 photos
-     3. Mercedes-Benz SLK (R172 AMG Sport) — 22 photos (incl. 1 badge shot)
-     4. Ferrari F40                        — 26 photos
-                                     Total:   82 photos
+      1. Mercedes-Benz 350 SL (R107)          — 11 photos
+      2. Bentley Bentayga First Edition       — 23 photos
+      3. Mercedes-Benz SLK (R172 AMG Sport)   — 22 photos (incl. 1 badge shot)
+      4. Ferrari F40                          — 26 photos
+      5. Bentley Continental GTC              — 14 photos
+      6. Range Rover Evoque HSE               — 10 photos
+      7. BMW 1 Series M135i                   —  5 photos
+      8. Aston Martin Vanquish S              — 20 photos (incl. copies)
+      9. Mercedes-Benz SLK (second example)   — 21 photos (incl. copies)
+     10. Ferrari F40 (second example)         — 42 photos
+     11. Mercedes-Benz A-Class AMG Line       — 12 photos
+                                       Total:   206 photos
 
    IMPORTANT: this only groups correctly if public/header's filenames sort
-   (naturally, by name) into those same four contiguous blocks of 11/23/22/26
-   photos, in that order. That was true for the original upload, but if you
-   add, remove, or rename photos in public/header, the counts below need to
-   be updated to match — otherwise a block boundary can land mid-car and mix
-   two cars' photos together in one panel (or split one car across two).
+   (naturally, by name) into those same eleven contiguous blocks, in that
+   order and with those exact counts. That was true for this upload, but if
+   you add, remove, or rename photos in public/header, the counts below need
+   to be updated to match — otherwise a block boundary can land mid-car and
+   mix two cars' photos together in one panel (or split one car across two).
    If that happens, check the actual filenames in public/header against
    these counts before assuming something else is broken.
 ========================================================================== */
@@ -71,6 +78,83 @@ const SOLD_VEHICLES = [
     colour: 'Rosso Corsa Red',
     description:
       "An icon of the supercar world. This F40 features factory Sabelt racing harnesses, bare composite door cards, a gated manual shifter and its twin-turbocharged V8 on show under the rear clamshell, finished in the marque's signature Rosso Corsa red.",
+  },
+  {
+    id: 'bentley-continental-gtc',
+    count: 14,
+    make: 'Bentley',
+    model: 'Continental GTC',
+    generation: 'W12',
+    bodyStyle: 'Convertible',
+    colour: 'Anthracite Grey with Cream leather',
+    description:
+      'A commanding Continental GTC finished in anthracite grey over cream leather, powered by the effortless twin-turbocharged W12 and equipped with a fully lined fabric roof for refined open-top touring.',
+  },
+  {
+    id: 'range-rover-evoque-hse',
+    count: 10,
+    make: 'Land Rover',
+    model: 'Range Rover Evoque',
+    generation: 'HSE',
+    bodyStyle: 'SUV',
+    colour: 'Corris Grey',
+    description:
+      'A five-door Evoque in HSE specification, finished in Corris Grey with the distinctive coupe-like roofline, machined alloy wheels and premium interior trim the model is known for.',
+  },
+  {
+    id: 'bmw-1-series-m135i',
+    count: 5,
+    make: 'BMW',
+    model: '1 Series',
+    generation: 'M135i',
+    bodyStyle: 'Hatchback',
+    colour: 'Black Sapphire',
+    description:
+      'A pocket-rocket M135i finished in Black Sapphire, with M Sport alloy wheels, uprated brake calipers and the turbocharged six-cylinder performance that made this generation of 1 Series famous.',
+  },
+  {
+    id: 'aston-martin-vanquish-s',
+    count: 20,
+    make: 'Aston Martin',
+    model: 'Vanquish S',
+    generation: '',
+    bodyStyle: 'Coupe',
+    colour: 'Silver metallic',
+    description:
+      "A striking Vanquish S in silver metallic, showcasing Aston Martin's hand-finished coupe styling, naturally-aspirated V12 power and the timeless wing badge front and rear.",
+  },
+  {
+    id: 'mercedes-slk-second',
+    count: 21,
+    make: 'Mercedes-Benz',
+    model: 'SLK',
+    generation: 'R172',
+    bodyStyle: 'Convertible',
+    colour: 'Silver with Black interior',
+    description:
+      'A second SLK example through our hands, finished in silver with black leather and a folding retractable hardtop — a well specified, sporty drop-top for every season.',
+  },
+  {
+    id: 'ferrari-f40-second',
+    count: 42,
+    make: 'Ferrari',
+    model: 'F40',
+    generation: '',
+    bodyStyle: 'Coupe',
+    colour: 'Rosso Corsa Red',
+    description:
+      'A further F40 through our hands, documented in detail from its Sabelt racing harnesses and gated manual shifter to its twin-turbocharged V8 with the engine cover raised — every inch as special as the model deserves.',
+  },
+  {
+    id: 'mercedes-a-class-amg-line',
+    count: 12,
+    make: 'Mercedes-Benz',
+    model: 'A-Class',
+    generation: 'AMG Line',
+    bodyStyle: 'Hatchback',
+    colour: 'Silver with Black AMG Line styling',
+    description:
+      'A sharp A-Class in AMG Line trim, finished in silver with black styling accents and alloy wheels, combining everyday practicality with genuine road presence.',
   },
 ];
 
