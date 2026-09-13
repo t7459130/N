@@ -10,27 +10,36 @@ import { AdminProvider, useAdmin } from '../components/AdminContext';
    as a flat list of URLs, with no car data attached. Every photo in that
    folder is a real camera file named IMG_<number>.<ext> (some with a
    " - Copy" or " (1)" suffix from duplicate saves) — the number itself is
-   sequential from the camera roll, so instead of assuming a fixed photo
-   COUNT per car and slicing the array by position (fragile: any stray,
-   missing, or duplicate file anywhere in the folder shifts every position
-   after it, and silently mixes cars together), each car below is defined
-   by the actual IMG-number RANGE its photos fall in. Every photo is bucketed
-   into whichever car's range contains its number, wherever it happens to
-   land in the array. This only breaks if a photo's number itself falls
-   outside every listed range (it lands in "Recently Sold" as a catch-all)
-   or two cars' number ranges genuinely overlap (they don't, below).
+   sequential from the camera roll, so each car below is defined by the
+   actual IMG-number RANGE its photos fall in, and every photo is bucketed
+   into whichever car's range contains its number (see buildSoldCars below).
+   This is immune to the array's order or to stray/duplicate files elsewhere
+   in the folder — it only breaks if a photo's number falls outside every
+   listed range (it lands in "Recently Sold" as a catch-all) or two ranges
+   genuinely overlap (they don't, below).
 
-      1. Mercedes-Benz 350 SL (R107)          — IMG_5749 to IMG_5850
-      2. Bentley Bentayga First Edition       — IMG_5875 to IMG_5941
-      3. Mercedes-Benz SLK (R172 AMG Sport)   — IMG_5945 to IMG_6362
-      4. Ferrari F40                          — IMG_6363 to IMG_6685
-      5. Bentley Continental GTC              — IMG_6687 to IMG_6770
-      6. Range Rover Evoque HSE               — IMG_6801 to IMG_6964
-      7. BMW 1 Series M135i                   — IMG_7127 to IMG_7199
-      8. Aston Martin Vanquish S              — IMG_7211 to IMG_7401
-      9. Mercedes-Benz SLK (second example)   — IMG_7511 to IMG_7552
-     10. Ferrari F40 (second example)         — IMG_7562 to IMG_7703
-     11. Mercedes-Benz A-Class AMG Line       — IMG_7779 to IMG_7862
+   These 15 cars and their exact ranges were produced by opening every one
+   of the 206 photos in public/header (via generated contact sheets) and
+   visually identifying each vehicle in camera-roll order — replacing an
+   earlier version of this file whose first four entries were carried over
+   from an older, smaller photo set and never re-verified against this
+   folder, which is why they showed the wrong photos.
+
+      1.  Ferrari 488 GTB                     — IMG_5749 to IMG_5784
+      2.  Bentley Mulsanne                    — IMG_5838 to IMG_5850
+      3.  Mercedes-Benz 350 SL (R107)         — IMG_5875 to IMG_5908
+      4.  Bentley Bentayga First Edition      — IMG_5910 to IMG_5971
+      5.  Porsche 911 (classic)               — IMG_5978 to IMG_6001
+      6.  Range Rover Sport                   — IMG_6288 to IMG_6365
+      7.  Aston Martin DB6 (classic)          — IMG_6372 to IMG_6482
+      8.  Jaguar XJ                           — IMG_6503 to IMG_6518
+      9.  Bentley Continental GTC             — IMG_6636 to IMG_6770
+     10.  Range Rover Evoque HSE              — IMG_6801 to IMG_6964
+     11.  BMW 1 Series M135i                  — IMG_7127 to IMG_7199
+     12.  Aston Martin Vanquish S             — IMG_7211 to IMG_7401
+     13.  Mercedes-Benz SLK (R172)            — IMG_7511 to IMG_7552
+     14.  Ferrari F40                         — IMG_7562 to IMG_7703
+     15.  Mercedes-Benz A-Class AMG Line      — IMG_7779 to IMG_7862
 
    If you add a new car's photos to public/header, add a new entry below
    with its own IMG-number range (check the actual filenames first) rather
@@ -39,8 +48,30 @@ import { AdminProvider, useAdmin } from '../components/AdminContext';
 ========================================================================== */
 const SOLD_VEHICLES = [
   {
+    id: 'ferrari-488-gtb',
+    range: [5749, 5784],
+    make: 'Ferrari',
+    model: '488 GTB',
+    generation: '',
+    bodyStyle: 'Coupe',
+    colour: 'Grigio Silverstone metallic',
+    description:
+      'A modern Ferrari icon, this 488 GTB combines a twin-turbocharged V8 with razor-sharp handling, finished in an understated silver-grey over yellow brake calipers and forged alloy wheels.',
+  },
+  {
+    id: 'bentley-mulsanne',
+    range: [5838, 5850],
+    make: 'Bentley',
+    model: 'Mulsanne',
+    generation: '',
+    bodyStyle: 'Saloon',
+    colour: 'Black',
+    description:
+      'The flagship Bentley saloon, finished in black with its unmistakable matrix grille and presence to match — effortless, hand-built luxury motoring at its finest.',
+  },
+  {
     id: 'mercedes-350sl',
-    range: [5749, 5850],
+    range: [5875, 5908],
     make: 'Mercedes-Benz',
     model: '350 SL',
     generation: 'R107',
@@ -51,7 +82,7 @@ const SOLD_VEHICLES = [
   },
   {
     id: 'bentley-bentayga-first-edition',
-    range: [5875, 5941],
+    range: [5910, 5971],
     make: 'Bentley',
     model: 'Bentayga',
     generation: 'First Edition',
@@ -61,37 +92,59 @@ const SOLD_VEHICLES = [
       'One of the exclusive First Edition specification Bentaygas, finished in black with quilted cognac leather, dark wood veneers, a panoramic sunroof and rear-seat entertainment screens throughout.',
   },
   {
-    id: 'mercedes-slk-amg-sport',
-    range: [5945, 6362],
-    make: 'Mercedes-Benz',
-    model: 'SLK',
-    generation: 'R172, AMG Sport',
+    id: 'porsche-911-classic',
+    range: [5978, 6001],
+    make: 'Porsche',
+    model: '911',
+    generation: 'Classic',
     bodyStyle: 'Convertible',
-    colour: 'Silver with Black interior',
+    colour: 'Green',
     description:
-      'A striking SLK finished in silver with AMG Sport styling and sports alloy wheels, paired with a folding retractable hardtop for effortless open-top driving.',
+      'An air-cooled classic 911 finished in a striking green, with its removable targa top and timeless silhouette — as usable today as the day it left the factory.',
   },
   {
-    id: 'ferrari-f40',
-    range: [6363, 6685],
-    make: 'Ferrari',
-    model: 'F40',
+    id: 'range-rover-sport',
+    range: [6288, 6365],
+    make: 'Land Rover',
+    model: 'Range Rover Sport',
     generation: '',
-    bodyStyle: 'Coupe',
-    colour: 'Rosso Corsa Red',
+    bodyStyle: 'SUV',
+    colour: 'White',
     description:
-      "An icon of the supercar world. This F40 features factory Sabelt racing harnesses, bare composite door cards, a gated manual shifter and its twin-turbocharged V8 on show under the rear clamshell, finished in the marque's signature Rosso Corsa red.",
+      'A commanding Range Rover Sport finished in white with dark alloy wheels, pairing everyday usability with genuine off-road capability and presence on the road.',
+  },
+  {
+    id: 'aston-martin-db6',
+    range: [6372, 6482],
+    make: 'Aston Martin',
+    model: 'DB6',
+    generation: 'Classic',
+    bodyStyle: 'Coupe',
+    colour: 'Silver',
+    description:
+      'A beautifully sorted classic Aston Martin DB6, finished in silver with wire wheels, a wood-rimmed steering wheel and black leather interior — grand touring elegance from a golden era.',
+  },
+  {
+    id: 'jaguar-xj',
+    range: [6503, 6518],
+    make: 'Jaguar',
+    model: 'XJ',
+    generation: '',
+    bodyStyle: 'Saloon',
+    colour: 'Silver',
+    description:
+      'A refined Jaguar XJ saloon finished in silver, combining effortless motorway comfort with the sporting character the badge is known for.',
   },
   {
     id: 'bentley-continental-gtc',
-    range: [6687, 6770],
+    range: [6636, 6770],
     make: 'Bentley',
     model: 'Continental GTC',
     generation: 'W12',
     bodyStyle: 'Convertible',
-    colour: 'Anthracite Grey with Cream leather',
+    colour: 'Anthracite Grey',
     description:
-      'A commanding Continental GTC finished in anthracite grey over cream leather, powered by the effortless twin-turbocharged W12 and equipped with a fully lined fabric roof for refined open-top touring.',
+      'A commanding Continental GTC finished in anthracite grey, powered by the effortless twin-turbocharged W12 and equipped with a fully lined fabric roof for refined open-top touring.',
   },
   {
     id: 'range-rover-evoque-hse',
@@ -127,7 +180,7 @@ const SOLD_VEHICLES = [
       "A striking Vanquish S in silver metallic, showcasing Aston Martin's hand-finished coupe styling, naturally-aspirated V12 power and the timeless wing badge front and rear.",
   },
   {
-    id: 'mercedes-slk-second',
+    id: 'mercedes-slk',
     range: [7511, 7552],
     make: 'Mercedes-Benz',
     model: 'SLK',
@@ -135,10 +188,10 @@ const SOLD_VEHICLES = [
     bodyStyle: 'Convertible',
     colour: 'Silver with Black interior',
     description:
-      'A second SLK example through our hands, finished in silver with black leather and a folding retractable hardtop — a well specified, sporty drop-top for every season.',
+      'A striking SLK finished in silver with black leather and a folding retractable hardtop — a well specified, sporty drop-top for every season.',
   },
   {
-    id: 'ferrari-f40-second',
+    id: 'ferrari-f40',
     range: [7562, 7703],
     make: 'Ferrari',
     model: 'F40',
@@ -146,7 +199,7 @@ const SOLD_VEHICLES = [
     bodyStyle: 'Coupe',
     colour: 'Rosso Corsa Red',
     description:
-      'A further F40 through our hands, documented in detail from its Sabelt racing harnesses and gated manual shifter to its twin-turbocharged V8 with the engine cover raised — every inch as special as the model deserves.',
+      "An icon of the supercar world. This F40 features factory Sabelt racing harnesses, a gated manual shifter and its twin-turbocharged V8 on show under the rear clamshell, finished in the marque's signature Rosso Corsa red.",
   },
   {
     id: 'mercedes-a-class-amg-line',
@@ -443,8 +496,7 @@ function SoldContent() {
 
       {/* FOOTER */}
       <footer>
-        <p>Nabil's Surrey Supercars • Surrey, England • +44 7826 456793</p>
-        <p>&copy; 2025 All Rights Reserved</p>
+        <p></p>
       </footer>
     </Layout>
   );
