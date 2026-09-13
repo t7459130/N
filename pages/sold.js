@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import { AdminProvider, useAdmin } from '../components/AdminContext';
@@ -51,7 +51,7 @@ const SOLD_VEHICLES = [
     make: 'Mercedes-Benz',
     model: 'SLK',
     generation: 'R172, AMG Sport',
-    bodyStyle: 'Retractable Hardtop Convertible',
+    bodyStyle: 'Convertible',
     colour: 'Silver with Black interior',
     description:
       'A striking SLK finished in silver with AMG Sport styling and sports alloy wheels, paired with a folding retractable hardtop for effortless open-top driving.',
@@ -99,11 +99,20 @@ function buildSoldCars(images) {
   return cars;
 }
 
+// Split into two even columns for the sidebar's two-column filter lists
+// (matches the pattern used on the Inventory page).
+function splitInTwo(arr) {
+  const mid = Math.ceil(arr.length / 2);
+  return [arr.slice(0, mid), arr.slice(mid)];
+}
+
 function SoldContent() {
   const { isAdmin } = useAdmin();
 
   const [images, setImages] = useState([]);
   const [previewIndices, setPreviewIndices] = useState({});
+  const [selectedMakes, setSelectedMakes] = useState([]);
+  const [selectedBodyStyles, setSelectedBodyStyles] = useState([]);
 
   const getPreviewIndex = (carId) => previewIndices[carId] || 0;
   const setPreviewIndex = (carId, index) =>
@@ -117,7 +126,48 @@ function SoldContent() {
       .catch(() => setImages([]));
   }, []);
 
-  const soldCars = buildSoldCars(images);
+  const soldCars = useMemo(() => buildSoldCars(images), [images]);
+
+  const makes = useMemo(() => {
+    const set = new Set();
+    soldCars.forEach((c) => c.make && set.add(c.make));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [soldCars]);
+
+  const bodyStyles = useMemo(() => {
+    const set = new Set();
+    soldCars.forEach((c) => c.bodyStyle && set.add(c.bodyStyle));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [soldCars]);
+
+  const toggleMake = (make) => {
+    setSelectedMakes((prev) =>
+      prev.includes(make) ? prev.filter((m) => m !== make) : [...prev, make]
+    );
+  };
+
+  const toggleBodyStyle = (style) => {
+    setSelectedBodyStyles((prev) =>
+      prev.includes(style) ? prev.filter((s) => s !== style) : [...prev, style]
+    );
+  };
+
+  const clearFilters = () => {
+    setSelectedMakes([]);
+    setSelectedBodyStyles([]);
+  };
+
+  const filteredCars = useMemo(() => {
+    return soldCars.filter((c) => {
+      const makeOk = selectedMakes.length === 0 || selectedMakes.includes(c.make);
+      const styleOk =
+        selectedBodyStyles.length === 0 || selectedBodyStyles.includes(c.bodyStyle);
+      return makeOk && styleOk;
+    });
+  }, [soldCars, selectedMakes, selectedBodyStyles]);
+
+  const [makeColA, makeColB] = splitInTwo(makes);
+  const [styleColA, styleColB] = splitInTwo(bodyStyles);
 
   return (
     <Layout>
@@ -125,74 +175,160 @@ function SoldContent() {
         <title>Previously Sold Vehicles</title>
       </Head>
 
-      {/* HEADER */}
-      <div className="inventory-header">
-        <h1>Previously Sold</h1>
-        <p>Luxury vehicles delivered across the UK and internationally</p>
-      </div>
-
-      {/* SOLD LIST - one panel per vehicle, matching the Inventory layout */}
       <div className="stock-page">
-        <div className="stock-list">
-          {images.length === 0 ? (
-            <div className="no-vehicles">
-              <p>Loading sold vehicles...</p>
+        <div className="stock-layout">
+          <aside className="stock-sidebar">
+            <button type="button" className="view-full-stock" onClick={clearFilters}>
+              View All Sold Vehicles
+            </button>
+
+            <div className="filter-block">
+              <h3>Search By Manufacturer</h3>
+              <div className="filter-columns">
+                <ul className="filter-list">
+                  {makeColA.map((make) => (
+                    <li key={make}>
+                      <button
+                        type="button"
+                        className={`filter-item${selectedMakes.includes(make) ? ' active' : ''}`}
+                        onClick={() => toggleMake(make)}
+                      >
+                        {make}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <ul className="filter-list">
+                  {makeColB.map((make) => (
+                    <li key={make}>
+                      <button
+                        type="button"
+                        className={`filter-item${selectedMakes.includes(make) ? ' active' : ''}`}
+                        onClick={() => toggleMake(make)}
+                      >
+                        {make}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          ) : (
-            soldCars.map((car) => (
-              <div key={car.id} className="stock-row sold-row">
-                <div className="stock-image">
-                  <img
-                    src={car.images[getPreviewIndex(car.id)] || car.images[0]}
-                    alt={`${car.make} ${car.model}`}
-                  />
-                  <div className="price-tag sold-tag">SOLD</div>
-                </div>
 
-                <div className="stock-info">
-                  <div className="info-title-row">
-                    <h3>{car.make} {car.model}</h3>
-                    {car.bodyStyle && <span className="info-price">{car.bodyStyle}</span>}
-                  </div>
-
-                  <div className="spec-list">
-                    {car.generation && (
-                      <div className="spec-row">
-                        <span className="spec-label">Spec:</span>
-                        <span className="spec-value">{car.generation}</span>
-                      </div>
-                    )}
-                    {car.colour && (
-                      <div className="spec-row">
-                        <span className="spec-label">Colour:</span>
-                        <span className="spec-value">{car.colour}</span>
-                      </div>
-                    )}
-                    <div className="spec-row">
-                      <span className="spec-label">Notes:</span>
-                      <span className="spec-value">{car.description}</span>
-                    </div>
-                  </div>
-
-                  {car.images.length > 1 && (
-                    <div className="sold-thumbs">
-                      {car.images.map((img, i) => (
+            {bodyStyles.length > 0 && (
+              <div className="filter-block">
+                <h3>Search By Bodystyle</h3>
+                <div className="filter-columns">
+                  <ul className="filter-list">
+                    {styleColA.map((style) => (
+                      <li key={style}>
                         <button
-                          key={i}
                           type="button"
-                          className={`sold-thumb${i === getPreviewIndex(car.id) ? ' active' : ''}`}
-                          onClick={() => setPreviewIndex(car.id, i)}
-                          aria-label={`View photo ${i + 1} of ${car.make} ${car.model}`}
+                          className={`filter-item${selectedBodyStyles.includes(style) ? ' active' : ''}`}
+                          onClick={() => toggleBodyStyle(style)}
                         >
-                          <img src={img} alt="" />
+                          {style}
                         </button>
-                      ))}
-                    </div>
-                  )}
+                      </li>
+                    ))}
+                  </ul>
+                  <ul className="filter-list">
+                    {styleColB.map((style) => (
+                      <li key={style}>
+                        <button
+                          type="button"
+                          className={`filter-item${selectedBodyStyles.includes(style) ? ' active' : ''}`}
+                          onClick={() => toggleBodyStyle(style)}
+                        >
+                          {style}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            ))
-          )}
+            )}
+          </aside>
+
+          <div className="stock-main">
+            <div className="stock-toolbar">
+              <span className="result-count">
+                {images.length === 0 ? '' : `${filteredCars.length} sold`}
+              </span>
+            </div>
+
+            {images.length === 0 ? (
+              <div className="loading">Loading sold vehicles...</div>
+            ) : filteredCars.length === 0 ? (
+              <div className="no-vehicles">
+                <p>No sold vehicles match your current filters</p>
+                <button type="button" className="view-full-stock inline" onClick={clearFilters}>
+                  View All Sold Vehicles
+                </button>
+              </div>
+            ) : (
+              <div className="stock-list">
+                {filteredCars.map((car) => (
+                  <div key={car.id} className="stock-row sold-row">
+                    <div className="stock-image">
+                      <img
+                        src={car.images[getPreviewIndex(car.id)] || car.images[0]}
+                        alt={`${car.make} ${car.model}`}
+                      />
+                      <div className="price-tag sold-tag">SOLD</div>
+                    </div>
+
+                    <div className="stock-info">
+                      <div className="info-title-row">
+                        <h3>{car.make} {car.model}</h3>
+                        <span className="info-price">SOLD</span>
+                      </div>
+
+                      <div className="spec-list">
+                        {car.generation && (
+                          <div className="spec-row">
+                            <span className="spec-label">Spec:</span>
+                            <span className="spec-value">{car.generation}</span>
+                          </div>
+                        )}
+                        {car.bodyStyle && (
+                          <div className="spec-row">
+                            <span className="spec-label">Body:</span>
+                            <span className="spec-value">{car.bodyStyle}</span>
+                          </div>
+                        )}
+                        {car.colour && (
+                          <div className="spec-row">
+                            <span className="spec-label">Colour:</span>
+                            <span className="spec-value">{car.colour}</span>
+                          </div>
+                        )}
+                        <div className="spec-row">
+                          <span className="spec-label">Notes:</span>
+                          <span className="spec-value">{car.description}</span>
+                        </div>
+                      </div>
+
+                      {car.images.length > 1 && (
+                        <div className="sold-thumbs">
+                          {car.images.map((img, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              className={`sold-thumb${i === getPreviewIndex(car.id) ? ' active' : ''}`}
+                              onClick={() => setPreviewIndex(car.id, i)}
+                              aria-label={`View photo ${i + 1} of ${car.make} ${car.model}`}
+                            >
+                              <img src={img} alt="" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

@@ -142,12 +142,12 @@ function CarDetail() {
         .car-detail-page {
           min-height: 60vh;
           padding: 3rem 2rem;
-          background: linear-gradient(135deg, #000000 0%, #000000 100%);
+          background: #ffffff;
         }
 
         .status-text {
           text-align: center;
-          color: #b0b0b0;
+          color: #777777;
           font-size: 1.1rem;
           padding: 4rem 0;
         }
@@ -170,8 +170,8 @@ function CarDetail() {
           position: relative;
           border-radius: 8px;
           overflow: hidden;
-          border: 1px solid #2a2f4a;
-          background: #000;
+          border: 1px solid #e0e0e0;
+          background: #f5f5f5;
         }
 
         .main-image-frame img {
@@ -186,8 +186,8 @@ function CarDetail() {
           top: 50%;
           transform: translateY(-50%);
           background: rgba(0, 0, 0, 0.55);
-          border: 1px solid #2a2f4a;
-          color: #f5f5f5;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          color: #ffffff;
           width: 46px;
           height: 46px;
           border-radius: 50%;
@@ -208,8 +208,8 @@ function CarDetail() {
 
         .nav-arrow:hover {
           background: rgba(0, 0, 0, 0.8);
-          color: #c9a961;
-          border-color: #c9a961;
+          color: #ffffff;
+          border-color: #ffffff;
         }
 
         .thumb-wrap {
@@ -217,31 +217,34 @@ function CarDetail() {
         }
 
         .info-col {
-          background: #000000;
-          border: 1px solid #2a2f4a;
+          background: #ffffff;
+          border: 1px solid #e0e0e0;
           border-radius: 8px;
           padding: 2rem;
         }
 
         .info-col h1 {
-          font-family: 'Playfair Display', serif;
+          font-family: 'Montserrat', sans-serif;
           font-size: 1.8rem;
           font-weight: 700;
-          color: #f5f5f5;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          color: #000000;
           margin-bottom: 0.5rem;
           line-height: 1.3;
         }
 
         .variant {
-          color: #b0b0b0;
+          color: #555555;
           font-weight: 400;
+          text-transform: none;
         }
 
         .price {
-          font-family: 'Playfair Display', serif;
+          font-family: 'Montserrat', sans-serif;
           font-size: 1.8rem;
           font-weight: 700;
-          color: #c9a961;
+          color: #000000;
           margin-bottom: 1.5rem;
         }
 
@@ -250,7 +253,7 @@ function CarDetail() {
           grid-template-columns: 1fr 1fr;
           gap: 1.25rem;
           padding-top: 1.5rem;
-          border-top: 1px solid #2a2f4a;
+          border-top: 1px solid #e0e0e0;
           margin-bottom: 1.5rem;
         }
 
@@ -268,30 +271,32 @@ function CarDetail() {
           font-size: 0.8rem;
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          color: #b0b0b0;
+          color: #777777;
         }
 
         .spec .value {
           font-size: 1rem;
           font-weight: 600;
-          color: #f5f5f5;
+          color: #000000;
         }
 
         .description {
           padding-top: 1.5rem;
-          border-top: 1px solid #2a2f4a;
+          border-top: 1px solid #e0e0e0;
         }
 
         .description h3 {
-          font-family: 'Playfair Display', serif;
+          font-family: 'Montserrat', sans-serif;
           font-size: 1.2rem;
           font-weight: 700;
-          color: #c9a961;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          color: #000000;
           margin-bottom: 0.75rem;
         }
 
         .description p {
-          color: #b0b0b0;
+          color: #555555;
           line-height: 1.8;
           font-size: 0.95rem;
         }
