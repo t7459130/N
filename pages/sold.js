@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Layout from '../components/Layout';
 import { AdminProvider, useAdmin } from '../components/AdminContext';
 
@@ -266,6 +268,75 @@ function splitInTwo(arr) {
   return [arr.slice(0, mid), arr.slice(mid)];
 }
 
+// Compact photo strip for each sold car: shows GALLERY_VISIBLE thumbnails at a
+// time with arrows that step through the rest (cars have up to ~190 photos, so
+// rendering them all at once made the page heavy and out of scale).
+const GALLERY_VISIBLE = 6;
+
+function SoldGallery({ images, current, onSelect, label }) {
+  const total = images ? images.length : 0;
+  const [start, setStart] = useState(() =>
+    Math.max(0, Math.min(current, total - GALLERY_VISIBLE))
+  );
+
+  if (total <= 1) return null;
+
+  const keepInView = (index) =>
+    setStart((s) => {
+      if (index < s) return index;
+      if (index > s + GALLERY_VISIBLE - 1) return Math.max(0, index - GALLERY_VISIBLE + 1);
+      return s;
+    });
+
+  const go = (index) => {
+    onSelect(index);
+    keepInView(index);
+  };
+
+  const step = (dir) => go((current + dir + total) % total);
+
+  return (
+    <div className="sold-gallery">
+      <button
+        type="button"
+        className="sold-arrow"
+        onClick={() => step(-1)}
+        aria-label={`Previous photo of ${label}`}
+      >
+        <FaChevronLeft size={12} />
+      </button>
+
+      <div className="sold-thumbs">
+        {images.slice(start, start + GALLERY_VISIBLE).map((img, i) => {
+          const index = start + i;
+          return (
+            <button
+              key={index}
+              type="button"
+              className={`sold-thumb${index === current ? ' active' : ''}`}
+              onClick={() => go(index)}
+              aria-label={`View photo ${index + 1} of ${label}`}
+            >
+              <img src={img} alt="" loading="lazy" decoding="async" />
+            </button>
+          );
+        })}
+      </div>
+
+      <button
+        type="button"
+        className="sold-arrow"
+        onClick={() => step(1)}
+        aria-label={`Next photo of ${label}`}
+      >
+        <FaChevronRight size={12} />
+      </button>
+
+      <span className="sold-count">{current + 1} / {total}</span>
+    </div>
+  );
+}
+
 function SoldContent() {
   const { isAdmin } = useAdmin();
 
@@ -435,14 +506,15 @@ function SoldContent() {
                       <img
                         src={car.images[getPreviewIndex(car.id)] || car.images[0]}
                         alt={`${car.make} ${car.model}`}
+                        loading="lazy"
+                        decoding="async"
                       />
-                      <div className="price-tag sold-tag">SOLD</div>
                     </div>
 
                     <div className="stock-info">
                       <div className="info-title-row">
                         <h3>{car.make} {car.model}</h3>
-                        <span className="info-price">SOLD</span>
+                        <span className="info-price">Sold</span>
                       </div>
 
                       <div className="spec-list">
@@ -458,33 +530,23 @@ function SoldContent() {
                             <span className="spec-value">{car.bodyStyle}</span>
                           </div>
                         )}
-                        {car.colour && (
-                          <div className="spec-row">
+                        <div className="spec-row spec-row-cta">
+                          <div className="spec-row-inner">
                             <span className="spec-label">Colour:</span>
-                            <span className="spec-value">{car.colour}</span>
+                            <span className="spec-value">{car.colour || '—'}</span>
                           </div>
-                        )}
-                        <div className="spec-row">
-                          <span className="spec-label">Notes:</span>
-                          <span className="spec-value">{car.description}</span>
+                          <Link href="/Inventory" className="stock-cta">
+                            View Current Stock
+                          </Link>
                         </div>
                       </div>
 
-                      {car.images.length > 1 && (
-                        <div className="sold-thumbs">
-                          {car.images.map((img, i) => (
-                            <button
-                              key={i}
-                              type="button"
-                              className={`sold-thumb${i === getPreviewIndex(car.id) ? ' active' : ''}`}
-                              onClick={() => setPreviewIndex(car.id, i)}
-                              aria-label={`View photo ${i + 1} of ${car.make} ${car.model}`}
-                            >
-                              <img src={img} alt="" />
-                            </button>
-                          ))}
-                        </div>
-                      )}
+                      <SoldGallery
+                        images={car.images}
+                        current={getPreviewIndex(car.id)}
+                        onSelect={(index) => setPreviewIndex(car.id, index)}
+                        label={`${car.make} ${car.model}`}
+                      />
                     </div>
                   </div>
                 ))}
