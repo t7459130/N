@@ -6,24 +6,9 @@ import {
   FaPhone,
   FaSearch,
   FaChevronRight,
-  FaYoutube,
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
 } from 'react-icons/fa';
 import SearchOverlay from './SearchOverlay';
-
-const PHONE_NUMBER = '+447826456793';
-const PHONE_DISPLAY = '01737 428 863';
-
-const SOCIAL_LINKS = [
-  { href: 'https://www.youtube.com', label: 'YouTube', Icon: FaYoutube },
-  { href: 'https://www.facebook.com', label: 'Facebook', Icon: FaFacebookF },
-  { href: 'https://twitter.com', label: 'Twitter', Icon: FaTwitter },
-  { href: 'https://www.instagram.com', label: 'Instagram', Icon: FaInstagram },
-  { href: 'https://www.linkedin.com', label: 'LinkedIn', Icon: FaLinkedinIn },
-];
+import Footer, { PHONE_DIAL, PHONE_MENU_DISPLAY, SOCIALS } from './Footer';
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
@@ -80,29 +65,24 @@ export default function Layout({ children }) {
     <div className="app">
       {/* HEADER */}
       <header className="site-header">
-        {/* DESKTOP: LEFT (search sits at the far left, then nav links) */}
-        <div className="header-side header-left desktop-only">
+        {/* SEARCH - pinned far left on desktop and mobile */}
+        <div className="header-search-slot">
           <button
-            className="icon-btn header-search-slot"
+            type="button"
+            className="icon-btn"
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
           >
             <FaSearch />
           </button>
+        </div>
+
+        {/* DESKTOP: LEFT */}
+        <div className="header-side header-left desktop-only">
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
-        </div>
-
-        {/* MOBILE: LEFT (search icon, matching the Romans layout) */}
-        <div className="header-mobile-left mobile-only">
-          <button
-            className="icon-btn header-search-slot"
-            onClick={() => setSearchOpen(true)}
-            aria-label="Search"
-          >
-            <FaSearch />
-          </button>
+          <Link href="/FinanceAndWarranty">Finance &amp; Warranty</Link>
         </div>
 
         {/* CENTER - MOBILE LOGO */}
@@ -117,7 +97,9 @@ export default function Layout({ children }) {
         {/* CENTER LOGOS (DESKTOP ONLY) */}
         <div className="header-center desktop-logos">
           <div className="logo-box">
-            {desktopLogoBatches[Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length].map((logo, i) => (
+            {desktopLogoBatches[
+              Math.floor(currentLogoIndex / 4) % desktopLogoBatches.length
+            ].map((logo, i) => (
               <img key={i} src={logo} alt="logo" />
             ))}
           </div>
@@ -125,53 +107,68 @@ export default function Layout({ children }) {
 
         {/* DESKTOP: RIGHT */}
         <div className="header-side header-right desktop-only">
+          <Link href="/sold">Sold</Link>
           <Link href="/NewsAndEvents">Insights</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
-          <a href={`tel:${PHONE_NUMBER}`} className="icon-btn phone-icon-only" aria-label="Call us">
+          <a
+            href={`tel:${PHONE_DIAL}`}
+            className="icon-btn"
+            aria-label="Call us"
+          >
             <FaPhone />
           </a>
-          <button className="icon-btn" onClick={() => setOpen(!open)}>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
+          >
             {open ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        {/* MOBILE: RIGHT (PHONE + MENU) */}
+        {/* MOBILE: RIGHT (MENU) */}
         <div className="header-mobile-right mobile-only">
-          <a href={`tel:${PHONE_NUMBER}`} className="icon-btn phone-icon-only" aria-label="Call us">
-            <FaPhone />
-          </a>
-          <button className="icon-btn" onClick={() => setOpen(!open)}>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={() => setOpen(!open)}
+            aria-label="Menu"
+          >
             {open ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
-        {/* MOBILE / DESKTOP DROPDOWN MENU */}
-        <nav
-          ref={menuRef}
-          className={`mobile-menu ${open ? 'open' : ''}`}
-        >
+        {/* DROPDOWN MENU (desktop + mobile) */}
+        <nav ref={menuRef} className={`mobile-menu ${open ? 'open' : ''}`}>
           <div className="mobile-menu-links">
-            <Link href="/" onClick={() => setOpen(false)}>Home</Link>
-            <Link href="/Inventory" onClick={() => setOpen(false)}>Current Stock</Link>
-            <Link href="/Sellyourcar" onClick={() => setOpen(false)}>Sell Your Car</Link>
-            <Link href="/sold" onClick={() => setOpen(false)}>Sold</Link>
-            <Link href="/Financeandwarranty" onClick={() => setOpen(false)}>Finance &amp; Warranty</Link>
-            <Link href="/NewsAndEvents" onClick={() => setOpen(false)}>Insights</Link>
-            <Link href="/About" onClick={() => setOpen(false)}>
-              About Us
-              <FaChevronRight className="nav-chevron" />
+            <Link href="/">Home</Link>
+            <Link href="/Inventory">Current Stock</Link>
+            <Link href="/sold">Sold</Link>
+            <Link href="/Sellyourcar">Sell Your Car</Link>
+            <Link href="/FinanceAndWarranty">Finance &amp; Warranty</Link>
+            <Link href="/NewsAndEvents">Insights</Link>
+            <Link href="/About">
+              About Us <FaChevronRight className="nav-chevron" />
             </Link>
-            <Link href="/contact" onClick={() => setOpen(false)}>Contact Us</Link>
+            <Link href="/contact">Contact Us</Link>
           </div>
 
-          <a href={`tel:${PHONE_NUMBER}`} className="mobile-menu-phone">
-            <FaPhone /> {PHONE_DISPLAY}
+          {/* Shows PHONE_MENU_DISPLAY, dials PHONE_DIAL (both set in Footer.js) */}
+          <a href={`tel:${PHONE_DIAL}`} className="mobile-menu-phone">
+            <FaPhone /> {PHONE_MENU_DISPLAY}
           </a>
 
           <div className="mobile-menu-socials">
-            {SOCIAL_LINKS.map(({ href, label, Icon }) => (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+            {SOCIALS.map(({ label, href, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+              >
                 <Icon />
               </a>
             ))}
@@ -187,6 +184,9 @@ export default function Layout({ children }) {
 
       {/* PAGE CONTENT */}
       <main>{children}</main>
+
+      {/* FOOTER (every page) */}
+      <Footer />
     </div>
   );
 }
