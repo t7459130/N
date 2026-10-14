@@ -134,7 +134,7 @@ export default function Home() {
           WELCOME
       ========================= */}
       <section className="welcome-section">
-        <h2>Welcome to Excellence</h2>
+        <h2>Welcome to Titan Global Auto Group LTD</h2>
         <p>
           Discover an exclusive selection of premium luxury vehicles sourced from across the world. Each car is hand-picked, meticulously inspected, and presented to the highest standards.
         </p>
