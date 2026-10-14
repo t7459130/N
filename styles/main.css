@@ -2409,3 +2409,57 @@ footer.site-footer {
     text-align: center;
   }
 }
+
+/* HOMEPAGE "LATEST ARRIVALS" - on phones the tiles become a horizontal swipe
+   carousel: one tile fills the width, swipe left for the next. The dots are
+   hidden on desktop, where the normal grid is used. */
+.car-dots {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .inventory .car-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .inventory .car-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .inventory .car-grid .car-card {
+    flex: 0 0 100%;
+    height: auto;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .car-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .car-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #cccccc;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .car-dot.active {
+    background: #000000;
+    transform: scale(1.25);
+  }
+}

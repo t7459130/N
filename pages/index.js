@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Layout from "../components/Layout";
 import Link from "next/link";
 import ThumbnailStrip from "../components/ThumbnailStrip";
@@ -9,15 +9,39 @@ export default function Home() {
   const [heroImages, setHeroImages] = useState([]);
   const [heroIndex, setHeroIndex] = useState(0);
 
-  const [soldImages, setSoldImages] = useState([]);
-  const [soldIndex, setSoldIndex] = useState(0);
-
   // Tracks which image is being previewed per car (keyed by car id),
   // so scrolling the thumbnail strip on one card doesn't affect others.
   const [previewIndices, setPreviewIndices] = useState({});
   const getPreviewIndex = (carId) => previewIndices[carId] || 0;
   const setPreviewIndex = (carId, index) =>
     setPreviewIndices((prev) => ({ ...prev, [carId]: index }));
+
+  // PHONE CAROUSEL: on small screens the Latest Arrivals grid becomes a
+  // horizontal swipe strip (one tile at a time, see main.css). These keep the
+  // little dots under it in sync with whichever tile is showing.
+  const carGridRef = useRef(null);
+  const [activeCar, setActiveCar] = useState(0);
+
+  const getCarStep = () => {
+    const el = carGridRef.current;
+    if (!el || !el.firstElementChild) return 0;
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    return el.firstElementChild.getBoundingClientRect().width + gap;
+  };
+
+  const handleCarScroll = () => {
+    const el = carGridRef.current;
+    const step = getCarStep();
+    if (!el || !step) return;
+    setActiveCar(Math.round(el.scrollLeft / step));
+  };
+
+  const scrollToCar = (index) => {
+    const el = carGridRef.current;
+    const step = getCarStep();
+    if (!el || !step) return;
+    el.scrollTo({ left: index * step, behavior: "smooth" });
+  };
 
   // Marks <body> so the transparent, full-screen hero header (styled in
   // main.css under `body.home-page`) only applies on this page.
@@ -61,23 +85,6 @@ export default function Home() {
   }, []);
 
   /* =========================
-     LOAD SOLD IMAGES
-  ========================= */
-  useEffect(() => {
-    const loadSold = async () => {
-      try {
-        const res = await fetch("/api/wallpaper-images");
-        const data = await res.json();
-        setSoldImages(Array.isArray(data) ? data : []);
-      } catch {
-        setSoldImages([]);
-      }
-    };
-
-    loadSold();
-  }, []);
-
-  /* =========================
      HERO ROTATION
   ========================= */
   useEffect(() => {
@@ -89,19 +96,6 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [heroImages]);
-
-  /* =========================
-     SOLD ROTATION
-  ========================= */
-  useEffect(() => {
-    if (!soldImages.length) return;
-
-    const interval = setInterval(() => {
-      setSoldIndex((prev) => (prev + 1) % soldImages.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [soldImages]);
 
   return (
     <Layout>
@@ -134,29 +128,10 @@ export default function Home() {
           WELCOME
       ========================= */}
       <section className="welcome-section">
-        <h2>Welcome to Titan Global Auto Group LTD</h2>
+        <h2>Welcome to Excellence</h2>
         <p>
           Discover an exclusive selection of premium luxury vehicles sourced from across the world. Each car is hand-picked, meticulously inspected, and presented to the highest standards.
         </p>
-      </section>
-
-      {/* =========================
-          SOLD
-      ========================= */}
-      <section className="sold-section">
-        <h2>Previously Sold</h2>
-
-        {soldImages.length > 0 && (
-          <div className="sold-tile">
-            <img
-              src={soldImages[soldIndex]}
-              alt="Sold Luxury Vehicle"
-            />
-            <p>
-              A curated collection of exceptional vehicles delivered to discerning clients across the UK and internationally. Each transaction represents our commitment to finding the perfect match between car and owner.
-            </p>
-          </div>
-        )}
       </section>
 
       {/* =========================
@@ -170,7 +145,7 @@ export default function Home() {
             <p style={{ fontSize: '1.1rem' }}>No vehicles currently available</p>
           </div>
         ) : (
-          <div className="car-grid">
+          <div className="car-grid" ref={carGridRef} onScroll={handleCarScroll}>
             {cars.slice(0, 8).map((car) => (
               <Link key={car._id} href={`/car/${car._id}`} className="car-card">
 
@@ -212,6 +187,19 @@ export default function Home() {
                 </div>
 
               </Link>
+            ))}
+          </div>
+        )}
+
+        {cars.length > 1 && (
+          <div className="car-dots" aria-hidden="true">
+            {cars.slice(0, 8).map((car, i) => (
+              <button
+                key={car._id}
+                type="button"
+                className={`car-dot${i === activeCar ? " active" : ""}`}
+                onClick={() => scrollToCar(i)}
+              />
             ))}
           </div>
         )}
