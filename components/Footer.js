@@ -8,19 +8,30 @@ import {
 } from 'react-icons/fa';
 
 /* ==========================================================================
-   SITE DETAILS - edit these in one place and the footer updates everywhere.
-   (Layout.js can import PHONE_DIAL / PHONE_DISPLAY from this file too, so the
-   burger-menu number always matches.)
+   SITE DETAILS - edit these in one place and the whole site updates.
+   Footer, burger menu, header phone icon and the Contact page all read from
+   here.
 ========================================================================== */
 export const COMPANY_NAME = 'Titan Global Auto Group';
 
-// What a tap/click on the number actually dials (digits only)
-export const PHONE_DIAL = '07553509308';
-// How the number is shown on screen in the footer
-export const PHONE_DISPLAY = '07553 509308';
-// How the number is shown in the burger menu's black phone bar. Clicking it
-// still dials PHONE_DIAL, so this can be a different-looking number if you want.
-export const PHONE_MENU_DISPLAY = PHONE_DISPLAY;
+// What a tap/click on ANY phone number on the site dials
+export const PHONE_DIAL = '+447553509308';
+
+// The real mobile number, shown as-is (Contact page "Mobile" card)
+export const PHONE_MOBILE_DISPLAY = '07553 509308';
+
+// Landline-style numbers that are SHOWN on the site. Tapping either of them
+// still dials PHONE_DIAL above. Paste the full numbers between the quotes,
+// e.g. '020 1234 5678'.
+//   - PHONE_020    -> shown in the footer and the burger menu. While empty it
+//                     falls back to the mobile number.
+//   - PHONE_01344  -> shown on the Contact page. While empty that card is hidden.
+const PHONE_020 = '';
+const PHONE_01344 = '';
+
+export const PHONE_DISPLAY = PHONE_020 || PHONE_MOBILE_DISPLAY; // footer
+export const PHONE_MENU_DISPLAY = PHONE_DISPLAY; // burger menu
+export const PHONE_LANDLINE_DISPLAY = PHONE_01344; // contact page
 
 // Wordmark: big word, thin rule, small line underneath
 const LOGO_MAIN = 'Titan';

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import {
+  PHONE_DIAL,
+  PHONE_MOBILE_DISPLAY,
+  PHONE_LANDLINE_DISPLAY,
+} from '../components/Footer';
 
 const Typewriter = ({ text, speed = 60 }) => {
   const [displayed, setDisplayed] = useState('');
@@ -67,10 +72,19 @@ const ContactUs = () => {
               </p>
             </div>
 
+            {PHONE_LANDLINE_DISPLAY && (
+              <div className="contact-card">
+                <h3>📞 Landline</h3>
+                <p>
+                  <a href={`tel:${PHONE_DIAL}`}>{PHONE_LANDLINE_DISPLAY}</a>
+                </p>
+              </div>
+            )}
+
             <div className="contact-card">
-              <h3>📞 Phone</h3>
+              <h3>📱 Mobile</h3>
               <p>
-                <a href="tel:+447826456793">+44 7826 456793</a>
+                <a href={`tel:${PHONE_DIAL}`}>{PHONE_MOBILE_DISPLAY}</a>
               </p>
             </div>
           </div>
