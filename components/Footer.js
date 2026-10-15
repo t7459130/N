@@ -20,18 +20,15 @@ export const PHONE_DIAL = '+447553509308';
 // The real mobile number, shown as-is (Contact page "Mobile" card)
 export const PHONE_MOBILE_DISPLAY = '07553 509308';
 
-// Landline-style numbers that are SHOWN on the site. Tapping either of them
-// still dials PHONE_DIAL above. Paste the full numbers between the quotes,
-// e.g. '020 1234 5678'.
-//   - PHONE_020    -> shown in the footer and the burger menu. While empty it
-//                     falls back to the mobile number.
-//   - PHONE_01344  -> shown on the Contact page. While empty that card is hidden.
+// Landline-style number that is SHOWN on the site (footer, burger menu and the
+// Contact page "Landline" card). Tapping it still dials PHONE_DIAL above.
+// Paste the full number between the quotes, e.g. '020 1234 5678'. While empty
+// it falls back to the mobile number.
 const PHONE_020 = '020 1150 9308';
-const PHONE_01344 = '01344 509308';
 
 export const PHONE_DISPLAY = PHONE_020 || PHONE_MOBILE_DISPLAY; // footer
 export const PHONE_MENU_DISPLAY = PHONE_DISPLAY; // burger menu
-export const PHONE_LANDLINE_DISPLAY = PHONE_01344; // contact page
+export const PHONE_LANDLINE_DISPLAY = PHONE_020; // contact page
 
 // Wordmark: big word, thin rule, small line underneath
 const LOGO_MAIN = 'Titan';

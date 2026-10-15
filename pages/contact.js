@@ -67,8 +67,13 @@ const ContactUs = () => {
           <div className="contact-grid">
             <div className="contact-card">
               <h3>📧 Email</h3>
-              <p>
+              <p style={{ overflowWrap: 'anywhere' }}>
                 <a href="mailto:sales@titanglobalautogroup.com">sales@titanglobalautogroup.com</a>
+              </p>
+              <p style={{ overflowWrap: 'anywhere' }}>
+                <a href="mailto:customerrelations@titanglobalautogroup.com">
+                  customerrelations@titanglobalautogroup.com
+                </a>
               </p>
             </div>
 

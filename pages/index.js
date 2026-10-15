@@ -3,6 +3,11 @@ import Layout from "../components/Layout";
 import Link from "next/link";
 import ThumbnailStrip from "../components/ThumbnailStrip";
 
+// Latest Arrivals tiles: while this is false they point at /404 instead of the
+// car page. The car page itself (pages/car/[carId].js) is untouched - set this
+// to true to switch the tile links back on.
+const CAR_PAGE_LINKS_ENABLED = false;
+
 export default function Home() {
   const [cars, setCars] = useState([]);
 
@@ -128,7 +133,7 @@ export default function Home() {
           WELCOME
       ========================= */}
       <section className="welcome-section">
-        <h2>Welcome to Excellence</h2>
+        <h2>Welcome to Titan Global Auto Group LTD</h2>
         <p>
           Discover an exclusive selection of premium luxury vehicles sourced from across the world. Each car is hand-picked, meticulously inspected, and presented to the highest standards.
         </p>
@@ -147,7 +152,11 @@ export default function Home() {
         ) : (
           <div className="car-grid" ref={carGridRef} onScroll={handleCarScroll}>
             {cars.slice(0, 8).map((car) => (
-              <Link key={car._id} href={`/car/${car._id}`} className="car-card">
+              <Link
+                key={car._id}
+                href={CAR_PAGE_LINKS_ENABLED ? `/car/${car._id}` : "/404"}
+                className="car-card"
+              >
 
                 <div className="car-image-wrapper">
                   <img
