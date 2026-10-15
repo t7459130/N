@@ -2464,52 +2464,6 @@ footer.site-footer {
   }
 }
 
-/* HOMEPAGE HERO - show the WHOLE car while keeping the full-screen layout.
-   The photo is shown uncropped (contain) on top of a blurred, enlarged copy
-   of itself, so there are no black bars. The headline moves to the bottom so
-   it no longer sits on top of the car. */
-.hero-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: blur(32px) brightness(0.6);
-  transform: scale(1.15);
-  z-index: 0;
-}
-
-body.home-page .hero-img {
-  object-fit: contain;
-}
-
-body.home-page .banner {
-  align-items: flex-end;
-}
-
-body.home-page .banner::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 45%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
-  z-index: 1;
-  pointer-events: none;
-}
-
-body.home-page .banner-text {
-  padding-bottom: 4rem;
-}
-
-@media (max-width: 768px) {
-  body.home-page .banner-text {
-    padding-bottom: 1.75rem;
-  }
-}
-
 /* TESTIMONIALS - stars + location + sample tag */
 .testimonial-stars {
   color: var(--accent);

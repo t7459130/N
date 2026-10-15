@@ -97,9 +97,6 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [heroImages]);
 
-  const heroSrc =
-    heroImages.length > 0 ? heroImages[heroIndex] : "/images/carwallpaper.webp";
-
   return (
     <Layout>
 
@@ -107,11 +104,19 @@ export default function Home() {
           HERO
       ========================= */}
       <section className="banner">
-        {/* A blurred, enlarged copy fills the screen behind the photo so the
-            real photo can be shown whole (object-fit: contain) - no cropping
-            and no black bars. */}
-        <img src={heroSrc} alt="" aria-hidden="true" className="hero-bg" />
-        <img src={heroSrc} alt="Luxury Cars" className="hero-img" />
+        {heroImages.length > 0 ? (
+          <img
+            src={heroImages[heroIndex]}
+            alt="Luxury Cars"
+            className="hero-img"
+          />
+        ) : (
+          <img
+            src="/images/carwallpaper.webp"
+            alt="Luxury Cars"
+            className="hero-img"
+          />
+        )}
 
         <div className="banner-text">
           <h1>Luxury Car Dealership</h1>

@@ -108,7 +108,7 @@ export default function Layout({ children }) {
         {/* DESKTOP: RIGHT */}
         <div className="header-side header-right desktop-only">
           <Link href="/sold">Sold</Link>
-          <Link href="/NewsAndEvents">Insights</Link>
+          <Link href="/Testimonials">Reviews</Link>
           <Link href="/About">About</Link>
           <Link href="/contact">Contact</Link>
           <a
@@ -148,7 +148,7 @@ export default function Layout({ children }) {
             <Link href="/sold">Sold</Link>
             <Link href="/Sellyourcar">Sell Your Car</Link>
             <Link href="/FinanceAndWarranty">Finance &amp; Warranty</Link>
-            <Link href="/NewsAndEvents">Insights</Link>
+            <Link href="/Testimonials">Reviews</Link>
             <Link href="/About">
               About Us <FaChevronRight className="nav-chevron" />
             </Link>
