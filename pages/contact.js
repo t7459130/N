@@ -68,7 +68,7 @@ const ContactUs = () => {
             <div className="contact-card">
               <h3>📧 Email</h3>
               <p>
-                <a href="mailto:info@dealership.com">info@dealership.com</a>
+                <a href="mailto:sales@titanglobalautogroup.com">sales@titanglobalautogroup.com</a>
               </p>
             </div>
 

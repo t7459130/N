@@ -26,8 +26,8 @@ export const PHONE_MOBILE_DISPLAY = '07553 509308';
 //   - PHONE_020    -> shown in the footer and the burger menu. While empty it
 //                     falls back to the mobile number.
 //   - PHONE_01344  -> shown on the Contact page. While empty that card is hidden.
-const PHONE_020 = '';
-const PHONE_01344 = '';
+const PHONE_020 = '020 1150 9308';
+const PHONE_01344 = '01344 509308';
 
 export const PHONE_DISPLAY = PHONE_020 || PHONE_MOBILE_DISPLAY; // footer
 export const PHONE_MENU_DISPLAY = PHONE_DISPLAY; // burger menu

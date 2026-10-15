@@ -82,7 +82,7 @@ export default function Layout({ children }) {
           <Link href="/">Home</Link>
           <Link href="/Inventory">Stock</Link>
           <Link href="/Sellyourcar">Sell</Link>
-          <Link href="/FinanceAndWarranty">Finance &amp; Warranty</Link>
+          <Link href="/Financeandwarranty">Finance &amp; Warranty</Link>
         </div>
 
         {/* CENTER - MOBILE LOGO */}
@@ -147,7 +147,7 @@ export default function Layout({ children }) {
             <Link href="/Inventory">Current Stock</Link>
             <Link href="/sold">Sold</Link>
             <Link href="/Sellyourcar">Sell Your Car</Link>
-            <Link href="/FinanceAndWarranty">Finance &amp; Warranty</Link>
+            <Link href="/Financeandwarranty">Finance &amp; Warranty</Link>
             <Link href="/Testimonials">Reviews</Link>
             <Link href="/About">
               About Us <FaChevronRight className="nav-chevron" />
