@@ -97,6 +97,9 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [heroImages]);
 
+  const heroSrc =
+    heroImages.length > 0 ? heroImages[heroIndex] : "/images/carwallpaper.webp";
+
   return (
     <Layout>
 
@@ -104,19 +107,11 @@ export default function Home() {
           HERO
       ========================= */}
       <section className="banner">
-        {heroImages.length > 0 ? (
-          <img
-            src={heroImages[heroIndex]}
-            alt="Luxury Cars"
-            className="hero-img"
-          />
-        ) : (
-          <img
-            src="/images/carwallpaper.webp"
-            alt="Luxury Cars"
-            className="hero-img"
-          />
-        )}
+        {/* A blurred, enlarged copy fills the screen behind the photo so the
+            real photo can be shown whole (object-fit: contain) - no cropping
+            and no black bars. */}
+        <img src={heroSrc} alt="" aria-hidden="true" className="hero-bg" />
+        <img src={heroSrc} alt="Luxury Cars" className="hero-img" />
 
         <div className="banner-text">
           <h1>Luxury Car Dealership</h1>
@@ -128,7 +123,7 @@ export default function Home() {
           WELCOME
       ========================= */}
       <section className="welcome-section">
-        <h2>Welcome to Titan Global Auto Group LTD</h2>
+        <h2>Welcome to Excellence</h2>
         <p>
           Discover an exclusive selection of premium luxury vehicles sourced from across the world. Each car is hand-picked, meticulously inspected, and presented to the highest standards.
         </p>
@@ -166,9 +161,11 @@ export default function Home() {
                   </h3>
 
                   <div className="car-meta">
-                    <span>{car.mileage?.toLocaleString()} miles</span>
-                    <span>{car.fuelType}</span>
-                    <span>{car.transmission}</span>
+                    {car.year && <span>Year: {car.year}</span>}
+                    {car.colour && <span>Colour: {car.colour}</span>}
+                    {car.mileage != null && (
+                      <span>Mileage: {Number(car.mileage).toLocaleString()}</span>
+                    )}
                   </div>
 
                   <button className="view-btn">
