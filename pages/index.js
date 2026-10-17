@@ -122,11 +122,6 @@ export default function Home() {
             className="hero-img"
           />
         )}
-
-        <div className="banner-text">
-          <h1>Luxury Car Dealership</h1>
-          <p>Performance. Prestige. Perfection.</p>
-        </div>
       </section>
 
       {/* =========================
