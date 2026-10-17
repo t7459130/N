@@ -21,8 +21,9 @@
 h1, h2, h3,
 .section-title {
   font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.15em;
 }
 
 body {
@@ -413,11 +414,11 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .banner-text h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 3.5rem;
-  font-weight: 800;
+  font-size: 2.6rem;
+  font-weight: 500;
   margin-bottom: 1rem;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-  letter-spacing: -1px;
+  letter-spacing: 0.12em;
 }
 
 .banner-text p {
@@ -438,18 +439,45 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .welcome-section h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: var(--accent);
+  font-size: 2.4rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  line-height: 1.3;
+  margin-bottom: 2.25rem;
+  color: var(--text);
+}
+
+.welcome-section h2 .welcome-eyebrow {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  margin-bottom: 0.6rem;
 }
 
 .welcome-section p {
   font-size: 1.1rem;
   color: var(--text-muted);
-  line-height: 1.8;
-  max-width: 800px;
+  line-height: 2;
+  max-width: 1000px;
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .welcome-section h2 {
+    font-size: 1.35rem;
+    letter-spacing: 0.16em;
+  }
+
+  .welcome-section h2 .welcome-eyebrow {
+    font-size: 1rem;
+    letter-spacing: 0.26em;
+  }
+
+  .welcome-section p {
+    font-size: 1rem;
+    line-height: 1.9;
+  }
 }
 
 /* SOLD SECTION */
@@ -461,8 +489,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .sold-section h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 500;
   margin-bottom: 2rem;
   text-align: center;
   color: var(--accent);
@@ -505,8 +533,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .section-title {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 500;
   text-align: center;
   margin-bottom: 3rem;
   color: var(--accent);
@@ -564,7 +592,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   color: var(--on-accent);
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.95rem;
 }
 
@@ -583,8 +611,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .car-info h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
   color: var(--text);
 }
 
@@ -646,8 +674,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 .sell-header h1,
 .finance-header h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 500;
   color: var(--accent);
   margin-bottom: 0.5rem;
 }
@@ -714,7 +742,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   color: var(--on-accent);
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .inventory-info {
@@ -727,8 +755,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .inventory-info h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.05rem;
+  font-weight: 500;
 }
 
 .inventory-specs {
@@ -808,13 +836,13 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .event-content h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
@@ -867,8 +895,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .service-card h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
   color: var(--accent);
 }
 
@@ -907,8 +935,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .contact-hero h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 500;
   color: #ffffff;
   margin-bottom: 1rem;
 }
@@ -935,8 +963,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .contact-section h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 500;
   color: var(--accent);
   margin-bottom: 1rem;
 }
@@ -965,8 +993,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .contact-card h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.05rem;
+  font-weight: 500;
   color: var(--accent);
   margin-bottom: 0.5rem;
 }
@@ -1070,8 +1098,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .form-section h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
   color: var(--accent);
   margin-bottom: 1.5rem;
 }
@@ -1211,8 +1239,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .car-details-block h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 1.5rem;
@@ -1248,7 +1276,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 .car-details-block .description h3 {
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 0.75rem;
@@ -1304,8 +1332,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .finance-block-heading h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 500;
   color: var(--accent);
   margin-bottom: 0.75rem;
 }
@@ -1363,8 +1391,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .finance-card h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
@@ -1387,8 +1415,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .finance-card .plan-example .amount {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.6rem;
+  font-weight: 500;
   color: #111;
 }
 
@@ -1479,8 +1507,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .warranty-card h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.05rem;
+  font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
@@ -1539,7 +1567,7 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 .finance-faq-item h4 {
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.6rem;
@@ -1598,8 +1626,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .lux-hero-content h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 500;
   color: #ffffff;
   margin-bottom: 1rem;
 }
@@ -1628,8 +1656,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .lux-section h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 500;
   color: var(--accent);
   margin-bottom: 1.5rem;
 }
@@ -1649,8 +1677,8 @@ body.home-page .mobile-menu .mobile-menu-socials a:hover {
 
 .testimonials h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 500;
   color: var(--accent);
   text-align: center;
   margin-bottom: 3rem;
@@ -1892,7 +1920,7 @@ footer.site-footer {
   }
 
   .banner-text h1 {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
   }
 
   .banner-text p {
@@ -1900,7 +1928,7 @@ footer.site-footer {
   }
 
   .section-title {
-    font-size: 1.8rem;
+    font-size: 1.45rem;
   }
 
   .car-grid,
@@ -1987,7 +2015,7 @@ footer.site-footer {
   }
 
   .banner-text h1 {
-    font-size: 1.8rem;
+    font-size: 1.45rem;
   }
 
   .car-grid,
@@ -1999,7 +2027,7 @@ footer.site-footer {
   .section-title,
   .contact-hero h1,
   .lux-hero-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .contact-grid {
@@ -2067,7 +2095,7 @@ footer.site-footer {
 
 .stock-page .filter-block h3 {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #111;
@@ -2105,7 +2133,7 @@ footer.site-footer {
 }
 
 .stock-page .filter-item.active {
-  font-weight: 700;
+  font-weight: 600;
   color: #000;
   text-decoration: underline;
 }
@@ -2191,7 +2219,7 @@ footer.site-footer {
 }
 
 .info-title-row h3 {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
