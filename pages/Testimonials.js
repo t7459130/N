@@ -9,7 +9,7 @@ import Layout from '../components/Layout';
    illegal in the UK. While SHOW_SAMPLE_LABEL is true each card shows a small
    "Sample review" tag; set it to false once the reviews are real.
 ========================================================================== */
-const SHOW_SAMPLE_LABEL = true;
+const SHOW_SAMPLE_LABEL = false;
 
 const testimonials = [
   {
