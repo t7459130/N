@@ -28,7 +28,7 @@ const testimonials = [
     id: 3,
     name: 'Mark D.',
     location: 'Leeds',
-    text: 'Brilliant service. Every question I had was answered quickly and the car arrived in better condition than I had hoped. Genuinely the best dealership experience I have had.',
+    text: 'Brilliant service. Every question I had was answered quickly and the car arrived in better condition than I had hoped! Genuinely the best dealership experience I have had.',
   },
   {
     id: 4,
