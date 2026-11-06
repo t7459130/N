@@ -11,11 +11,21 @@
 //      add  RESEND_API_KEY = (the key)  -> Save -> Redeploy.
 //      (For local testing put it in .env.local instead.)
 //
-// Optional: once you've verified titanglobalautogroup.com in Resend you can also
-// add  SELL_FROM_EMAIL = Titan Global Auto Group <noreply@titanglobalautogroup.com>
-// so the emails come from your own domain.
+// Optional environment variables (Vercel -> Settings -> Environment Variables):
+//   SELL_TO_EMAIL    where enquiries are delivered (default titanglobalautogroup@gmail.com).
+//                    While you're on Resend's free sandbox this MUST be the same address
+//                    your Resend account was created with.
+//   SELL_FROM_EMAIL  e.g. Titan Global Auto Group <noreply@titanglobalautogroup.com>
+//                    (only once titanglobalautogroup.com is verified in Resend).
+//   SELL_DEBUG       set to  true  to show Resend's exact error message on the form
+//                    while you're setting things up. Remove it afterwards.
 
-const TO_EMAIL = 'titanglobalautogroup@gmail.com';
+const TO_EMAIL = process.env.SELL_TO_EMAIL || 'titanglobalautogroup@gmail.com';
+const DEBUG = process.env.SELL_DEBUG === 'true';
+
+const SEND_FAILED = 'Sorry, we could not send your details. Please try again or call us.';
+const failMessage = (detail) =>
+  DEBUG && detail ? `${SEND_FAILED} [debug: ${String(detail).slice(0, 400)}]` : SEND_FAILED;
 const FROM_EMAIL =
   process.env.SELL_FROM_EMAIL || 'Titan Global Auto Group <onboarding@resend.dev>';
 
@@ -59,7 +69,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Please enter a valid email address.' });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = (process.env.RESEND_API_KEY || '').trim();
   if (!apiKey) {
     console.error('sell-your-car: RESEND_API_KEY is not set');
     return res.status(500).json({
@@ -111,17 +121,16 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      console.error('sell-your-car: Resend error', response.status, await response.text());
-      return res.status(502).json({
-        error: 'Sorry, we could not send your details. Please try again or call us.',
-      });
+      const detail = await response.text();
+      console.error('sell-your-car: Resend error', response.status, detail);
+      return res
+        .status(502)
+        .json({ error: failMessage(`Resend ${response.status}: ${detail}`) });
     }
 
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('sell-your-car: send failed', err);
-    return res.status(502).json({
-      error: 'Sorry, we could not send your details. Please try again or call us.',
-    });
+    return res.status(502).json({ error: failMessage(`network: ${err.message}`) });
   }
 }
